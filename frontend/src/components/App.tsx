@@ -1,18 +1,34 @@
 import { useEffect, useState } from 'react';
 import Staff from './Staff';
-import { generateStaff } from '../services/vexflow/generateNotes';
+import { generateNotes } from '../services/vexflow/generateNotes';
+import Vex from 'vexflow';
 import './App.css';
 
 function App() {
 
+  // USE useRef
+  let stave: Vex.Stave;
+  let context: Vex.RenderContext;
+
   useEffect(() => {
-    generateStaff();
+      // USE CANVAS?
+      const { Renderer, Stave } = Vex.Flow;
+
+      const div = document.getElementById("staff") as HTMLDivElement;
+      const renderer = new Renderer(div, Renderer.Backends.SVG);
+      context = renderer.getContext();
+
+      stave = new Stave(10, 0, 300);
+      stave.addClef("treble").addTimeSignature("4/4");
+      stave.setContext(context).draw();
   }, []);
 
   const [isGenerating, setIsGenerating] = useState(false);
+  
   const handleClickGenerate = () => {
-    console.log("begin generating");
     setIsGenerating(true);
+    generateNotes(stave, context);
+    console.log(stave);
   }
 
   return (
@@ -22,11 +38,14 @@ function App() {
           Accidental
         </p>      
       </header>
-      <div>        
-        <Staff onClickGenerate={handleClickGenerate} />
+      <div>
+        <h2>Generate</h2>
       </div>
-      {isGenerating && <p>Notes are being generated</p>}
-        <div id="staff"></div>
+      <div>
+        {!isGenerating && <button onClick={handleClickGenerate}>Start</button>}
+        {isGenerating && <button onClick={() => setIsGenerating(false)}>Stop</button>}
+      </div>
+      <Staff />
     </div>
   );
 }

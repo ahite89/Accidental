@@ -1,11 +1,7 @@
-import { StaffProps } from "../types/staff";
-
-
-function Staff({ onClickGenerate }: StaffProps) {
+function Staff() {
     return (
-        <div>
-            <h1>Generate</h1>
-            <button onClick={onClickGenerate}>Start</button>
+        <div className="staff-container">
+            <div id="staff"></div>
         </div>
     );
 }
