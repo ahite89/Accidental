@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Staff from './Staff';
-//import generateNotes from '';
+import { generateNotes } from '../services/vexflow/generateNotes';
 import './App.css';
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
   const handleClickGenerate = () => {
     console.log("begin generating");
     setIsGenerating(true);
-    //generateNotes();
+    generateNotes();
   }
 
   return (
@@ -23,7 +23,7 @@ function App() {
         <Staff onClickGenerate={handleClickGenerate} />
       </div>
       {isGenerating &&
-        <div>
+        <div id="staff">
           <p>I should only be seen if generating</p>
         </div>
       }

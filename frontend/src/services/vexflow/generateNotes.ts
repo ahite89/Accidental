@@ -4,7 +4,7 @@ export const generateNotes = (): any => {
     const { Factory } = Vex.Flow;
 
     const vf = new Factory({
-    renderer: { elementId: 'output', width: 500, height: 200 },
+    renderer: { elementId: 'staff', width: 500, height: 200 },
     });
 
     const score = vf.EasyScore();
