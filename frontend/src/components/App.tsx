@@ -1,4 +1,5 @@
 import React from 'react';
+import Staff from './Staff';
 import './App.css';
 
 function App() {
@@ -9,6 +10,9 @@ function App() {
           Accidental
         </p>      
       </header>
+      <div>
+        <Staff />
+      </div>
     </div>
   );
 }
