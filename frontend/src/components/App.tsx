@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Staff from './Staff';
-import { generateNotes } from '../services/vexflow/generateNotes';
+import { generateStaff } from '../services/vexflow/generateNotes';
 import './App.css';
 
 function App() {
+
+  useEffect(() => {
+    generateStaff();
+  }, []);
 
   const [isGenerating, setIsGenerating] = useState(false);
   const handleClickGenerate = () => {
     console.log("begin generating");
     setIsGenerating(true);
-    generateNotes();
   }
 
   return (
@@ -22,11 +25,8 @@ function App() {
       <div>        
         <Staff onClickGenerate={handleClickGenerate} />
       </div>
-      {isGenerating &&
-        <div id="staff">
-          <p>I should only be seen if generating</p>
-        </div>
-      }
+      {isGenerating && <p>Notes are being generated</p>}
+        <div id="staff"></div>
     </div>
   );
 }

@@ -1,24 +1,21 @@
 import Vex from 'vexflow';
 
-export const generateNotes = (): any => {
-    const { Factory } = Vex.Flow;
+export const generateStaff = (): void => {
+    const { Renderer, Stave } = Vex.Flow;
 
-    const vf = new Factory({
-    renderer: { elementId: 'staff', width: 500, height: 200 },
-    });
+    // Create an SVG renderer and attach it to the DIV element named "boo".
+    const div = document.getElementById("staff") as HTMLDivElement;
+    const renderer = new Renderer(div, Renderer.Backends.SVG);
 
-    const score = vf.EasyScore();
-    const system = vf.System();
+    // Configure the rendering context.
+    renderer.resize(500, 500);
+    const context = renderer.getContext();
 
-    system
-    .addStave({
-        voices: [
-        score.voice(score.notes('C#5/q, B4, A4, G#4', { stem: 'up' })),
-        score.voice(score.notes('C#4/h, C#4', { stem: 'down' })),
-        ],
-    })
-    .addClef('treble')
-    .addTimeSignature('4/4');
+    const stave = new Stave(10, 40, 400);
 
-    vf.draw();
+    // Add a clef and time signature.
+    stave.addClef("treble");
+
+    // Connect it to the rendering context and draw!
+    stave.setContext(context).draw();
 }
