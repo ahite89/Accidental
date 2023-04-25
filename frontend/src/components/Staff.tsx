@@ -1,9 +1,5 @@
-function Staff() {
+export default function Staff() {
     return (
-        <div className="staff-container">
-            <canvas id="staff"></canvas>
-        </div>
+        <div id="staff"></div>
     );
 }
-
-export default Staff;

@@ -1,33 +1,41 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Staff from './Staff';
 import { generateNotes } from '../services/vexflow/generateNotes';
 import Vex from 'vexflow';
 import './App.css';
 
-function App() {
+export default function App() {
 
-  // USE useRef
-  let stave: Vex.Stave;
-  let context: Vex.RenderContext;
+  // Create references to stave and its context
+  const contextRef = useRef<Vex.RenderContext | null>(null);
+  const staveRef = useRef<Vex.Stave | null>(null);
 
   useEffect(() => {
-      const { Renderer, Stave } = Vex.Flow;
+    // Create stave context
+    const { Renderer, Stave } = Vex.Flow;
 
-      const canvas = document.getElementById("staff") as HTMLCanvasElement;
-      const renderer = new Renderer(canvas, Renderer.Backends.SVG);
-      context = renderer.getContext();
+    const staff = document.getElementById("staff") as HTMLDivElement;
+    const renderer = new Renderer(staff, Renderer.Backends.SVG);
+    const context = renderer.getContext();
 
-      stave = new Stave(10, 0, 300);
-      stave.addClef("treble").addTimeSignature("4/4");
-      stave.setContext(context).draw();
+    // Create stave
+    const stave = new Stave(10, 0, 300);
+    stave.addClef("treble").addTimeSignature("4/4");
+    stave.setContext(context);
+    stave.draw();
+  
+    // Set current values of ref objects
+    staveRef.current = stave;
+    contextRef.current = context;
   }, []);
 
   const [isGenerating, setIsGenerating] = useState(false);
   
   const handleClickGenerate = () => {
     setIsGenerating(true);
-    generateNotes(stave, context);
-    console.log(stave);
+    console.log(isGenerating);
+    // maybe while is generating here?
+    generateNotes(staveRef.current, contextRef.current, isGenerating);
   }
 
   return (
@@ -44,9 +52,9 @@ function App() {
         {!isGenerating && <button onClick={handleClickGenerate}>Start</button>}
         {isGenerating && <button onClick={() => setIsGenerating(false)}>Stop</button>}
       </div>
-      <Staff />
+      <div>
+        <Staff />
+      </div>
     </div>
   );
 }
-
-export default App;
