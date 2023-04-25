@@ -11,11 +11,10 @@ function App() {
   let context: Vex.RenderContext;
 
   useEffect(() => {
-      // USE CANVAS?
       const { Renderer, Stave } = Vex.Flow;
 
-      const div = document.getElementById("staff") as HTMLDivElement;
-      const renderer = new Renderer(div, Renderer.Backends.SVG);
+      const canvas = document.getElementById("staff") as HTMLCanvasElement;
+      const renderer = new Renderer(canvas, Renderer.Backends.SVG);
       context = renderer.getContext();
 
       stave = new Stave(10, 0, 300);

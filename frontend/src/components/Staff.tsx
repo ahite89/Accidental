@@ -1,7 +1,7 @@
 function Staff() {
     return (
         <div className="staff-container">
-            <div id="staff"></div>
+            <canvas id="staff"></canvas>
         </div>
     );
 }
