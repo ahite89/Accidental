@@ -12,7 +12,7 @@ type noteProps = {
 export default function App() {
 
   let notationString = 'X:1\nK:F\nx';
-  const noteWaitTime = 1000;
+  const waitTimeInMilliseconds = 1000;
 
   useEffect(() => {
     abcjs.renderAbc("staff", notationString);
@@ -41,10 +41,10 @@ export default function App() {
     // {name: 'A1', duration: '1', timeBetweenNotes: 4000}
 
     const notes: noteProps[] = [
-      {name: 'F', duration: '1/2', timeBetweenNotes: noteWaitTime * 0.5},
-      {name: 'A', duration: '1', timeBetweenNotes: noteWaitTime * 4},
-      {name: 'c', duration: '2', timeBetweenNotes: noteWaitTime * 1},
-      {name: 'e', duration: '4|', timeBetweenNotes: noteWaitTime * 2},
+      {name: 'F', duration: '1/2', timeBetweenNotes: waitTimeInMilliseconds * 0.5},
+      {name: 'A', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 4},
+      {name: 'c', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 1},
+      {name: 'e', duration: '4|', timeBetweenNotes: waitTimeInMilliseconds * 2},
     ]
     notes.forEach((note) => {
       renderNote(note);
