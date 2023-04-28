@@ -1,17 +1,25 @@
-import { useEffect } from "react";
-import abcjs from "abcjs"; 
+import { useEffect, useState } from "react";
+//import abcjs from "abcjs"; 
 
-export default function Staff() {
+interface staffProps {
+    onClickGenerate: () => void;
+}
+
+export default function Staff({ onClickGenerate }: staffProps) {
+
+    //const [notationString, setNotationString] = useState('')
+
     useEffect(() => {
-        const abcjsInit = async () => {
-            const note = 'b4'
-            abcjs.renderAbc("staff", `X:1\nK:F\naaz2BBb''|cDd_d,,f^|\nabBe2g^4`)
-        };
-        abcjsInit();
     }, []);
 
+    
+
     return (
-        <div style={{border: '1px solid gray'}} id="staff"></div>
+        //<div style={{border: '1px solid gray', padding: '10px'}}>
+        //    <button onClick={onClickGenerate}>Make those notes happen!</button>
+        //    <div id="staff"></div>
+        //</div>
+        <div>hi</div>
     );
 }
 
@@ -27,3 +35,5 @@ export default function Staff() {
 // put in a newline regularly
 // if (first beat of current bar note == last beat of previous bar note) => use tie
 // make the newest note a different color?
+// loop => until end of array
+// this can lead to replay functionality, since full string of notes is saved
