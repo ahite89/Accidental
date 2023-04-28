@@ -5,40 +5,51 @@ import './App.css';
 
 type noteProps = {
   name: string,
+  duration: string,
   timeBetweenNotes: number
 }
 
 export default function App() {
 
   let notationString = 'X:1\nK:F\nx';
+  const noteWaitTime = 1000;
 
   useEffect(() => {
     abcjs.renderAbc("staff", notationString);
   }, []);
 
-  const pauseBeforeNextNote = (milliseconds: number) => {
-    new Promise((resolve) => setTimeout(resolve, milliseconds));
-  }
+  const pauseBeforeNextNote = (milliseconds: number): Promise<void> => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+  };
 
-  const renderNote = async (note: noteProps): Promise<void> => {
-    await pauseBeforeNextNote(note.timeBetweenNotes);
-    abcjs.renderAbc("staff", notationString += note.name);
-    console.log(notationString);
-    console.log(note);
-  }
+  const renderNote = (note: noteProps): void => {
+      pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
+        abcjs.renderAbc("staff", notationString += note.name += note.duration);
+        console.log(note);
+      });
+      //console.log(notationString);
+  };
   
   const handleClickGenerate = (): void => {
+    // This doesn't work if the wait times aren't ascending...
+    // The rendered notes end up being out of order
+    // It's clearly a sleep/async/promise issue
+    // Incorrect output from below: 
+    // {name: 'F1/2', duration: '1/2', timeBetweenNotes: 500}
+    // {name: 'c2', duration: '2', timeBetweenNotes: 1000}
+    // {name: 'e4|', duration: '4|', timeBetweenNotes: 2000}
+    // {name: 'A1', duration: '1', timeBetweenNotes: 4000}
+
     const notes: noteProps[] = [
-      {name: 'F', timeBetweenNotes: 2000},
-      {name: 'A', timeBetweenNotes: 1000},
-      {name: 'c', timeBetweenNotes: 4000},
-      {name: 'e', timeBetweenNotes: 1000}
+      {name: 'F', duration: '1/2', timeBetweenNotes: noteWaitTime * 0.5},
+      {name: 'A', duration: '1', timeBetweenNotes: noteWaitTime * 4},
+      {name: 'c', duration: '2', timeBetweenNotes: noteWaitTime * 1},
+      {name: 'e', duration: '4|', timeBetweenNotes: noteWaitTime * 2},
     ]
-    
     notes.forEach((note) => {
-      renderNote(note)
-    }) 
-  }
+      renderNote(note);
+    });
+  };
 
   return (
     <div className="App">
