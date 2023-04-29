@@ -16,10 +16,11 @@ export default function App() {
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
   const renderNote = async (note: noteProps): Promise<void> => {
-      await pauseBeforeNextNote(note.timeBetweenNotes);
-      let noteNameDuration = note.name + note.duration;
-      abcjs.renderAbc("staff", notationString.current += noteNameDuration);
-      console.log(note);
+      await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
+        let noteNameDuration = note.name + note.duration;
+        abcjs.renderAbc("staff", notationString.current += noteNameDuration);
+        console.log(note);
+      });
   };
   
   const handleClickGenerate = (): void => {
