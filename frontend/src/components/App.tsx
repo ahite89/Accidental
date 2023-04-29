@@ -1,33 +1,25 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 //import Staff from './Staff';
+import { noteProps } from '../types/note';
 import abcjs from "abcjs"; 
 import './App.css';
 
-type noteProps = {
-  name: string,
-  duration: string,
-  timeBetweenNotes: number
-}
-
 export default function App() {
 
-  let notationString = 'X:1\nK:F\nx';
-  const waitTimeInMilliseconds = 1000;
+  const notationString = useRef<string>('X:1\nK:F\nx'); // empty staff
+  const waitTimeInMilliseconds = 1000;  // temporary default value
 
   useEffect(() => {
-    abcjs.renderAbc("staff", notationString);
+    abcjs.renderAbc("staff", notationString.current);
   }, []);
 
-  const pauseBeforeNextNote = (milliseconds: number): Promise<void> => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds));
-  };
+  const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-  const renderNote = (note: noteProps): void => {
-      pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
-        abcjs.renderAbc("staff", notationString += note.name += note.duration);
-        console.log(note);
-      });
-      //console.log(notationString);
+  const renderNote = async (note: noteProps): Promise<void> => {
+      await pauseBeforeNextNote(note.timeBetweenNotes);
+      let noteNameDuration = note.name + note.duration;
+      abcjs.renderAbc("staff", notationString.current += noteNameDuration);
+      console.log(note);
   };
   
   const handleClickGenerate = (): void => {
@@ -46,9 +38,17 @@ export default function App() {
       {name: 'c', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 1},
       {name: 'e', duration: '4|', timeBetweenNotes: waitTimeInMilliseconds * 2},
     ]
-    notes.forEach((note) => {
-      renderNote(note);
-    });
+
+    let i = 0;
+    do {
+      renderNote(notes[i]);
+      i++;
+    } while (i < 4);
+    // notes.forEach((note) => {
+    //   pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
+    //     renderNote(note);
+    //   });
+    // });
   };
 
   return (
@@ -59,7 +59,8 @@ export default function App() {
         </h3>      
       </header>
       <div style={{border: '1px solid gray', padding: '10px'}}>
-        <button onClick={handleClickGenerate}>Generate one note at a time</button>
+        <button onClick={handleClickGenerate}>Start Generating</button>
+        <button onClick={handleClickGenerate}>Stop Generating</button>
         <div id="staff"></div>
       </div>
     </div>

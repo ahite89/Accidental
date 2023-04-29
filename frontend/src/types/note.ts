@@ -1,3 +1,5 @@
-export interface NoteProps {
-    name: string;
+export type noteProps = {
+    name: string,
+    duration: string,
+    timeBetweenNotes: number
 }
