@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 //import Staff from './Staff';
 import { noteProps } from '../types/note';
-import abcjs from "abcjs"; 
+import abcjs from "abcjs";
 import './App.css';
 
 export default function App() {
@@ -22,12 +22,30 @@ export default function App() {
         console.log(note);
       });
   };
-  
-  const handleClickGenerate = (): void => {
+
+  const shuffle = (notes: noteProps[]): noteProps[] => {
+    let currentIndex = notes.length,  randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex !== 0) {
+
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [notes[currentIndex], notes[randomIndex]] = [
+        notes[randomIndex], notes[currentIndex]];
+    }
+
+    return notes;
+  }
+
+  const handleClickGenerate = async (): Promise<void> => {
     // This doesn't work if the wait times aren't ascending...
     // The rendered notes end up being out of order
     // It's clearly a sleep/async/promise issue
-    // Incorrect output from below: 
+    // Incorrect output from below:
     // {name: 'F1/2', duration: '1/2', timeBetweenNotes: 500}
     // {name: 'c2', duration: '2', timeBetweenNotes: 1000}
     // {name: 'e4|', duration: '4|', timeBetweenNotes: 2000}
@@ -40,9 +58,11 @@ export default function App() {
       {name: 'e', duration: '4|', timeBetweenNotes: waitTimeInMilliseconds * 2},
     ]
 
+    shuffle(notes);
+
     let i = 0;
     do {
-      renderNote(notes[i]);
+      await renderNote(notes[i]);
       i++;
     } while (i < 4);
     // notes.forEach((note) => {
@@ -57,7 +77,7 @@ export default function App() {
       <header className="App-header">
         <h3>
           Accidental
-        </h3>      
+        </h3>
       </header>
       <div style={{border: '1px solid gray', padding: '10px'}}>
         <button onClick={handleClickGenerate}>Start Generating</button>
