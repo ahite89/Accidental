@@ -2,14 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 //import Staff from './Staff';
 import { noteProps } from '../types/note';
 import abcjs from "abcjs";
+import * as Tone from 'tone'
 import './App.css';
 
 export default function App() {
 
   const notationString = useRef<string>('X:1\nK:F\nx'); // empty staff
-  const waitTimeInMilliseconds = 750;  // temporary default value
+  const waitTimeInMilliseconds = 250;  // temporary default value
 
   const [isGenerating, setIsGenerating] = useState(true);
+  const synth = new Tone.AMSynth().toDestination();
 
   useEffect(() => {
     abcjs.renderAbc("staff", notationString.current);
@@ -17,19 +19,25 @@ export default function App() {
 
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-  let pause: any;
+  const noteDurationMap: Record<string, string> = {
+    '1': '8n',
+    '2': '4n',
+    '3': '4n.',
+    '4': '2n'
+  }
+
   const renderNoteToStaff = async (note: noteProps): Promise<void> => {
-    // switch render function with pause function
-      if (!isGenerating) {
-        clearTimeout(pause);
-      }
-      else {
-        pause = await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
-          let noteNameDuration = note.name + note.duration;
-          abcjs.renderAbc("staff", notationString.current += noteNameDuration);
-          console.log(note);
-        });
-    }
+    // switch render function with pause function?
+    await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
+      let noteNameDuration = note.name + note.duration;
+      abcjs.renderAbc("staff", notationString.current += noteNameDuration);
+      
+      // Subdivisions = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n." | "4t" | "8n" | "8n." | "8t" |
+      // "16n" | "16n." | "16t" | "32n" | "32n." | "32t" | "64n" | "64n." | "64t" | "128n" | "128n." | "128t" |
+      synth.triggerAttackRelease(`${note.name}4`, noteDurationMap[note.duration]);
+      
+      console.log(note);
+    });
   };
 
   const randomizeAndRenderNotes = async (notes: noteProps[]): Promise<void> => {
@@ -49,15 +57,13 @@ export default function App() {
     setIsGenerating(true);
  
     const notes: noteProps[] = [
-      {name: 'F', duration: '1/2', timeBetweenNotes: waitTimeInMilliseconds * 0.5},
-      {name: 'A', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 2},
-      {name: 'c', duration: '3', timeBetweenNotes: waitTimeInMilliseconds * 3},
-      {name: 'e', duration: '1|', timeBetweenNotes: waitTimeInMilliseconds * 1},
-      {name: 'g', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
-      {name: 'e', duration: '1|', timeBetweenNotes: waitTimeInMilliseconds * 1},
-      {name: 'c', duration: '3', timeBetweenNotes: waitTimeInMilliseconds * 3},
-      {name: 'A', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 2},
-      {name: 'F', duration: '1/2', timeBetweenNotes: waitTimeInMilliseconds * 0.5},
+      {name: 'F', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
+      {name: 'G', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 2},
+      {name: 'A', duration: '3', timeBetweenNotes: waitTimeInMilliseconds * 3},
+      {name: 'B', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
+      {name: 'C', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
+      {name: 'D', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
+      {name: 'E', duration: '3', timeBetweenNotes: waitTimeInMilliseconds * 3},
     ]
 
     await randomizeAndRenderNotes(notes);
