@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-//import Staff from './Staff';
+import Staff from './Staff';
 import { noteProps } from '../types/note';
 import abcjs from "abcjs";
 import * as Tone from 'tone'
-import './App.css';
+import './App.scss';
 
 export default function App() {
 
@@ -11,7 +11,7 @@ export default function App() {
   const waitTimeInMilliseconds = 250;  // temporary default value
 
   const [isGenerating, setIsGenerating] = useState(true);
-  const synth = new Tone.AMSynth().toDestination();
+  const synth = new Tone.AMSynth().toDestination();   // default synth sound
 
   useEffect(() => {
     abcjs.renderAbc("staff", notationString.current);
@@ -20,10 +20,15 @@ export default function App() {
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
   const noteDurationMap: Record<string, string> = {
+    '.5': '16n',
+    '.75': '16n.',
     '1': '8n',
+    '1.5': '8n.',
     '2': '4n',
     '3': '4n.',
-    '4': '2n'
+    '4': '2n',
+    '6': '2n.',
+    '8': '1n'
   }
 
   const renderNoteToStaff = async (note: noteProps): Promise<void> => {
@@ -32,7 +37,7 @@ export default function App() {
       let noteNameDuration = note.name + note.duration;
       abcjs.renderAbc("staff", notationString.current += noteNameDuration);
       
-      // Subdivisions = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n." | "4t" | "8n" | "8n." | "8t" |
+      // Tone.js subdivisions = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n." | "4t" | "8n" | "8n." | "8t" |
       // "16n" | "16n." | "16t" | "32n" | "32n." | "32t" | "64n" | "64n." | "64t" | "128n" | "128n." | "128t" |
       synth.triggerAttackRelease(`${note.name}4`, noteDurationMap[note.duration]);
       
@@ -57,6 +62,7 @@ export default function App() {
     setIsGenerating(true);
  
     const notes: noteProps[] = [
+      // Duration: 1 = 8th, 2 = quarter, 3 = dotted quarter, 4 = half, etc.
       {name: 'F', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
       {name: 'G', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 2},
       {name: 'A', duration: '3', timeBetweenNotes: waitTimeInMilliseconds * 3},
@@ -79,9 +85,7 @@ export default function App() {
       <div style={{border: '1px solid gray', padding: '10px'}}>
         <button onClick={handleClickGenerate}>Start Generating</button>
         <button onClick={handleClickStop}>Stop Generating</button>
-        <div className='staff-container'>
-          <div id="staff"></div>
-        </div>
+        <Staff notationString={notationString.current} />
       </div>
     </div>
   );

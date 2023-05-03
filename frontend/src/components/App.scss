@@ -9,15 +9,3 @@
   align-items: center;
   font-size: calc(10px + 2vmin);
 }
-
-.staff-container {
-  display: flex;
-  justify-content: center;
-}
-
-#staff {
-  overflow-x: scroll !important;
-  padding: 15px;
-  max-width: 800px;
-  height: 130px !important;
-}
