@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
 import { noteProps } from '../types/note';
+import { defaultNotes, noteDurationMap } from '../constants/notes';
 import abcjs from "abcjs";
 import * as Tone from 'tone'
 import './App.scss';
@@ -18,18 +19,6 @@ export default function App() {
   }, []);
 
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
-
-  const noteDurationMap: Record<string, string> = {
-    '.5': '16n',
-    '.75': '16n.',
-    '1': '8n',
-    '1.5': '8n.',
-    '2': '4n',
-    '3': '4n.',
-    '4': '2n',
-    '6': '2n.',
-    '8': '1n'
-  }
 
   const renderNoteToStaff = async (note: noteProps): Promise<void> => {
     // switch render function with pause function?
@@ -60,19 +49,7 @@ export default function App() {
 
   const handleClickGenerate = async (): Promise<void> => {
     setIsGenerating(true);
- 
-    const notes: noteProps[] = [
-      // Duration: 1 = 8th, 2 = quarter, 3 = dotted quarter, 4 = half, etc.
-      {name: 'F', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
-      {name: 'G', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 2},
-      {name: 'A', duration: '3', timeBetweenNotes: waitTimeInMilliseconds * 3},
-      {name: 'B', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
-      {name: 'C', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
-      {name: 'D', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
-      {name: 'E', duration: '3', timeBetweenNotes: waitTimeInMilliseconds * 3},
-    ]
-
-    await randomizeAndRenderNotes(notes);
+    await randomizeAndRenderNotes(defaultNotes);
   };
 
   return (
