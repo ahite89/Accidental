@@ -7,7 +7,7 @@ import './App.css';
 export default function App() {
 
   const notationString = useRef<string>('X:1\nK:F\nx'); // empty staff
-  const waitTimeInMilliseconds = 1000;  // temporary default value
+  const waitTimeInMilliseconds = 750;  // temporary default value
 
   const [isGenerating, setIsGenerating] = useState(true);
 
@@ -18,9 +18,8 @@ export default function App() {
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
   let pause: any;
-  const renderNote = async (note: noteProps): Promise<void> => {
+  const renderNoteToStaff = async (note: noteProps): Promise<void> => {
     // switch render function with pause function
-      console.log(isGenerating);
       if (!isGenerating) {
         clearTimeout(pause);
       }
@@ -33,35 +32,22 @@ export default function App() {
     }
   };
 
-  const shuffle = (notes: noteProps[]): noteProps[] => {
+  const randomizeAndRenderNotes = async (notes: noteProps[]): Promise<void> => {
     let currentIndex = notes.length,  randomIndex;
 
-    // While there remain elements to shuffle.
-    while (currentIndex !== 0) {
-
-      // Pick a remaining element.
+    while (isGenerating) {
       randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-
-      // And swap it with the current element.
-      [notes[currentIndex], notes[randomIndex]] = [
-        notes[randomIndex], notes[currentIndex]];
+      await renderNoteToStaff(notes[randomIndex]);
     }
-
-    return notes;
   }
 
   const handleClickStop = () => {
     setIsGenerating(false);
-    //console.log(isGenerating);
   }; 
 
   const handleClickGenerate = async (): Promise<void> => {
-
-    // if (!isGenerating) {
-    //   setIsGenerating(true);
-    // }
-    
+    setIsGenerating(true);
+ 
     const notes: noteProps[] = [
       {name: 'F', duration: '1/2', timeBetweenNotes: waitTimeInMilliseconds * 0.5},
       {name: 'A', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 2},
@@ -74,19 +60,7 @@ export default function App() {
       {name: 'F', duration: '1/2', timeBetweenNotes: waitTimeInMilliseconds * 0.5},
     ]
 
-    //shuffle(notes);
-
-    let i = 0;
-    while (i < notes.length) {
-      console.log(isGenerating);
-      //if (isGenerating) {
-        await renderNote(notes[i]);
-      // }
-      // else {
-      //   break;
-      // }
-      i++;
-    }
+    await randomizeAndRenderNotes(notes);
   };
 
   return (
@@ -99,7 +73,9 @@ export default function App() {
       <div style={{border: '1px solid gray', padding: '10px'}}>
         <button onClick={handleClickGenerate}>Start Generating</button>
         <button onClick={handleClickStop}>Stop Generating</button>
-        <div id="staff"></div>
+        <div className='staff-container'>
+          <div id="staff"></div>
+        </div>
       </div>
     </div>
   );
