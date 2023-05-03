@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 //import Staff from './Staff';
 import { noteProps } from '../types/note';
 import abcjs from "abcjs";
@@ -9,18 +9,28 @@ export default function App() {
   const notationString = useRef<string>('X:1\nK:F\nx'); // empty staff
   const waitTimeInMilliseconds = 1000;  // temporary default value
 
+  const [isGenerating, setIsGenerating] = useState(true);
+
   useEffect(() => {
     abcjs.renderAbc("staff", notationString.current);
   }, []);
 
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
+  let pause: any;
   const renderNote = async (note: noteProps): Promise<void> => {
-      await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
-        let noteNameDuration = note.name + note.duration;
-        abcjs.renderAbc("staff", notationString.current += noteNameDuration);
-        console.log(note);
-      });
+    // switch render function with pause function
+      console.log(isGenerating);
+      if (!isGenerating) {
+        clearTimeout(pause);
+      }
+      else {
+        pause = await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
+          let noteNameDuration = note.name + note.duration;
+          abcjs.renderAbc("staff", notationString.current += noteNameDuration);
+          console.log(note);
+        });
+    }
   };
 
   const shuffle = (notes: noteProps[]): noteProps[] => {
@@ -41,35 +51,42 @@ export default function App() {
     return notes;
   }
 
-  const handleClickGenerate = async (): Promise<void> => {
-    // This doesn't work if the wait times aren't ascending...
-    // The rendered notes end up being out of order
-    // It's clearly a sleep/async/promise issue
-    // Incorrect output from below:
-    // {name: 'F1/2', duration: '1/2', timeBetweenNotes: 500}
-    // {name: 'c2', duration: '2', timeBetweenNotes: 1000}
-    // {name: 'e4|', duration: '4|', timeBetweenNotes: 2000}
-    // {name: 'A1', duration: '1', timeBetweenNotes: 4000}
+  const handleClickStop = () => {
+    setIsGenerating(false);
+    //console.log(isGenerating);
+  }; 
 
+  const handleClickGenerate = async (): Promise<void> => {
+
+    // if (!isGenerating) {
+    //   setIsGenerating(true);
+    // }
+    
     const notes: noteProps[] = [
       {name: 'F', duration: '1/2', timeBetweenNotes: waitTimeInMilliseconds * 0.5},
-      {name: 'A', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 4},
-      {name: 'c', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 1},
-      {name: 'e', duration: '4|', timeBetweenNotes: waitTimeInMilliseconds * 2},
+      {name: 'A', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 2},
+      {name: 'c', duration: '3', timeBetweenNotes: waitTimeInMilliseconds * 3},
+      {name: 'e', duration: '1|', timeBetweenNotes: waitTimeInMilliseconds * 1},
+      {name: 'g', duration: '1', timeBetweenNotes: waitTimeInMilliseconds * 1},
+      {name: 'e', duration: '1|', timeBetweenNotes: waitTimeInMilliseconds * 1},
+      {name: 'c', duration: '3', timeBetweenNotes: waitTimeInMilliseconds * 3},
+      {name: 'A', duration: '2', timeBetweenNotes: waitTimeInMilliseconds * 2},
+      {name: 'F', duration: '1/2', timeBetweenNotes: waitTimeInMilliseconds * 0.5},
     ]
 
-    shuffle(notes);
+    //shuffle(notes);
 
     let i = 0;
-    do {
-      await renderNote(notes[i]);
+    while (i < notes.length) {
+      console.log(isGenerating);
+      //if (isGenerating) {
+        await renderNote(notes[i]);
+      // }
+      // else {
+      //   break;
+      // }
       i++;
-    } while (i < 4);
-    // notes.forEach((note) => {
-    //   pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
-    //     renderNote(note);
-    //   });
-    // });
+    }
   };
 
   return (
@@ -81,7 +98,7 @@ export default function App() {
       </header>
       <div style={{border: '1px solid gray', padding: '10px'}}>
         <button onClick={handleClickGenerate}>Start Generating</button>
-        <button onClick={handleClickGenerate}>Stop Generating</button>
+        <button onClick={handleClickStop}>Stop Generating</button>
         <div id="staff"></div>
       </div>
     </div>
