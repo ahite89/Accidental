@@ -1,5 +1,7 @@
 import { noteProps } from '../types/note';
 
+export const MAX_BEATS_PER_BAR = 8;
+
 export const defaultNotes: noteProps[] = [
     // Duration: 1 = 8th, 2 = quarter, 3 = dotted quarter, 4 = half, etc.
     {name: 'C', duration: 2, timeBetweenNotes: 500},
@@ -24,7 +26,21 @@ export const noteDurationMap: Record<string, string> = {
     '12': '1n.'
 }
 
-export enum keys {
+export enum Scales {
+    Major = 'Major',
+    Minor = 'Minor',
+    HarmonicMinor = 'HarmonicMinor',
+    Dorian = 'Dorian',
+    Phrygian = 'Phrygian',
+    Lydian = 'Lydian',
+    Mixolydian = 'Mixolydian',
+    Locrian = 'Locrian',
+    Chromatic = 'Chromatic',
+    WholeTone = 'WholeTone',
+    Pentatonic = 'Pentatonic'
+}
+
+export enum Keys {
     C = 'C',
     CSharp = 'C#',
     DFlat = 'Db',

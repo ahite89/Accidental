@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
 import { noteProps } from '../types/note';
-import { defaultNotes, noteDurationMap } from '../constants/notes';
+import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs from "abcjs";
 import * as Tone from 'tone'
 import './App.scss';
@@ -10,7 +10,6 @@ export default function App() {
 
   const notationString = useRef<string>('X:1\nK:C\nx'); // empty staff
   const noteDurationCount = useRef<number>(0);  // default to zero beats
-  const maxBeatsPerBar = 8;
   //const waitTimeInMilliseconds = 250;  // temporary default value
 
   const [isGenerating, setIsGenerating] = useState(true);
@@ -27,7 +26,7 @@ export default function App() {
     let barLine = '', noteNameDuration = '';
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
       noteDurationCount.current += note.duration;
-      if (noteDurationCount.current == maxBeatsPerBar) {
+      if (noteDurationCount.current == MAX_BEATS_PER_BAR) {
         barLine = '|';
         noteDurationCount.current = 0;
       }
