@@ -8,8 +8,10 @@ import './App.scss';
 
 export default function App() {
 
-  const notationString = useRef<string>('X:1\nK:F\nx'); // empty staff
-  const waitTimeInMilliseconds = 250;  // temporary default value
+  const notationString = useRef<string>('X:1\nK:C\nx'); // empty staff
+  const noteDurationCount = useRef<number>(0);  // default to zero beats
+  const maxBeatsPerBar = 8;
+  //const waitTimeInMilliseconds = 250;  // temporary default value
 
   const [isGenerating, setIsGenerating] = useState(true);
   const synth = new Tone.AMSynth().toDestination();   // default synth sound
@@ -22,8 +24,14 @@ export default function App() {
 
   const renderNoteToStaff = async (note: noteProps): Promise<void> => {
     // switch render function with pause function?
+    let barLine = '', noteNameDuration = '';
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
-      let noteNameDuration = note.name + note.duration;
+      noteDurationCount.current += note.duration;
+      if (noteDurationCount.current == maxBeatsPerBar) {
+        barLine = '|';
+        noteDurationCount.current = 0;
+      }
+      noteNameDuration = note.name + note.duration.toString() + barLine;
       abcjs.renderAbc("staff", notationString.current += noteNameDuration);
       
       // Tone.js subdivisions = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n." | "4t" | "8n" | "8n." | "8t" |
@@ -62,7 +70,7 @@ export default function App() {
       <div style={{border: '1px solid gray', padding: '10px'}}>
         <button onClick={handleClickGenerate}>Start Generating</button>
         <button onClick={handleClickStop}>Stop Generating</button>
-        <Staff notationString={notationString.current} />
+        <Staff />
       </div>
     </div>
   );

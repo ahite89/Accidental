@@ -1,5 +1,5 @@
 export type noteProps = {
     name: string,
-    duration: string,
+    duration: number,
     timeBetweenNotes: number
 }
