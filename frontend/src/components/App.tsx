@@ -26,12 +26,13 @@ export default function App() {
     let barLine = '', noteNameDuration = '';
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
       noteDurationCount.current += note.duration;
-      if (noteDurationCount.current == MAX_BEATS_PER_BAR) {
+      if (noteDurationCount.current === MAX_BEATS_PER_BAR) {
         barLine = '|';
         noteDurationCount.current = 0;
       }
       noteNameDuration = note.name + note.duration.toString() + barLine;
-      abcjs.renderAbc("staff", notationString.current += noteNameDuration);
+      notationString.current += noteNameDuration;
+      abcjs.renderAbc("staff", notationString.current);
       
       // Tone.js subdivisions = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n." | "4t" | "8n" | "8n." | "8t" |
       // "16n" | "16n." | "16t" | "32n" | "32n." | "32t" | "64n" | "64n." | "64t" | "128n" | "128n." | "128t" |
