@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
+import Interface from './parameters/Interface';
 import { noteProps } from '../types/note';
 import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs from "abcjs";
@@ -72,6 +73,7 @@ export default function App() {
         <button onClick={handleClickStop}>Stop Generating</button>
         <Staff />
       </div>
+      <Interface />
     </div>
   );
 }
