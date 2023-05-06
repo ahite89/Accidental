@@ -1,3 +1,10 @@
 export interface dropDownOptions {
-    options: {label: string, value: string}[]
+    options: dropDownOption[],
+    value: dropDownOption | null,
+    onChange: (option: any) => void
+}
+
+export type dropDownOption = {
+    label: string,
+    value: string
 }

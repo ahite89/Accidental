@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
-import Interface from './parameters/Interface';
 import { noteProps } from '../types/note';
 import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs from "abcjs";
@@ -9,8 +8,8 @@ import './App.scss';
 
 export default function App() {
 
-  const notationString = useRef<string>('X:1\nK:C\nx'); // empty staff
-  const noteDurationCount = useRef<number>(0);  // default to zero beats
+  const notationString = useRef<string>('X:1\nK:C\nM:4/4\nxxxx|xxxx|xxxx|xxxx|'); // empty staff
+  const notesInBarCount = useRef<number>(0);  // default to zero beats
   //const waitTimeInMilliseconds = 250;  // temporary default value
 
   const [isGenerating, setIsGenerating] = useState(true);
@@ -25,14 +24,22 @@ export default function App() {
   const renderNoteToStaff = async (note: noteProps): Promise<void> => {
     // switch render function with pause function?
     let barLine = '', noteNameDuration = '';
+    let blankStaffSpaceExists = notationString.current.indexOf('x') !== -1;
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
-      noteDurationCount.current += note.duration;
-      if (noteDurationCount.current === MAX_BEATS_PER_BAR) {
+      notesInBarCount.current += note.duration;
+      if (notesInBarCount.current === MAX_BEATS_PER_BAR && !blankStaffSpaceExists) {
         barLine = '|';
-        noteDurationCount.current = 0;
+        notesInBarCount.current = 0;  // reset notes per bar count
       }
       noteNameDuration = note.name + note.duration.toString() + barLine;
-      notationString.current += noteNameDuration;
+      if (!blankStaffSpaceExists) {
+        notationString.current += noteNameDuration;
+      }
+      else {
+        // replace blank staff space until filled in with notes
+        notationString.current = notationString.current.replace('x', noteNameDuration);
+      }
+      //notationString.current += noteNameDuration;
       abcjs.renderAbc("staff", notationString.current);
       
       // Tone.js subdivisions = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n." | "4t" | "8n" | "8n." | "8t" |
@@ -64,16 +71,13 @@ export default function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h3>
-          Accidental
-        </h3>
+        <h2>Accidental</h2>
       </header>
-      <div style={{border: '1px solid gray', padding: '10px'}}>
-        <button onClick={handleClickGenerate}>Start Generating</button>
-        <button onClick={handleClickStop}>Stop Generating</button>
+      <div className="p-8">
+        <button onClick={handleClickGenerate}>Start</button>
+        <button onClick={handleClickStop}>Stop</button>
         <Staff />
       </div>
-      <Interface />
     </div>
   );
 }

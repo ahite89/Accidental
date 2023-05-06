@@ -1,11 +1,14 @@
+import { useState } from "react";
 import DropDown from "./Dropdown";
+import { dropDownOption } from "../../types/dropdown";
 
 export default function Interface() {
 
-    type dropDownOption = {
-        label: string,
-        value: string
-    }
+    const [selection, setSelection] = useState(null);
+
+    const handleSelection = (option: any) => {
+        setSelection(option);
+    };
 
     const options: dropDownOption[] = [
         { label: 'C', value: 'c'},
@@ -15,7 +18,7 @@ export default function Interface() {
 
     return (
         <div>
-            <DropDown options={options} />
+            <DropDown options={options} value={selection} onChange={handleSelection} />
         </div>
     );
 }
