@@ -3,29 +3,30 @@ import Staff from './Staff';
 import { noteProps } from '../types/note';
 import { CursorControl } from '../services/cursorcontrol';
 import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
-import abcjs, { TuneObjectArray } from "abcjs";
+import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
 import './App.scss';
 import Interface from './parameters/Interface';
 import Playback from './Playback';
 
 export default function App() {
 
-  const notationString = useRef<string>('X:1\nK:C\nM:4/4\nABCD|CFGE|BFED|AGCF|'); // empty staff
+  const notationString = useRef<string>(`X:1\nK:C\nM:4/4\nQ:1/4=120\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
 
   const [isGenerating, setIsGenerating] = useState(true);
+  
+  // abc inits
   const synth = new abcjs.synth.CreateSynth();
   const cursorControl = new CursorControl(2, 4, null);
   const synthControl = new abcjs.synth.SynthController();
   const audioContext = new AudioContext();
-  const abcOptions = { add_classes: true };
-  const audioParams = { chordsOff: true };
+  const notationOptions: AbcVisualParams = { add_classes: true };
+  const audioParams: AbcVisualParams = { clickListener: () => {console.log("clicked!")} }
   let staffObj: TuneObjectArray;
 
   useEffect(() => {
 
-    if (abcjs.synth.supportsAudio()) {
-      
+    if (abcjs.synth.supportsAudio()) {     
       synthControl.load("#audio",
           cursorControl,
           {
@@ -37,11 +38,11 @@ export default function App() {
           }
       );
 
-      staffObj = abcjs.renderAbc("staff", notationString.current, abcOptions);
+      staffObj = abcjs.renderAbc("staff", notationString.current, notationOptions);
       synth.init({ 
         audioContext: audioContext,
         visualObj: staffObj[0] ,
-        millisecondsPerMeasure: 500,
+        millisecondsPerMeasure: 1000,
         options: {
           pan: [ -0.3, 0.3 ]
         }
@@ -83,24 +84,26 @@ export default function App() {
       // For instance, a quarter note in 4/4 would be .25
       abcjs.synth.playEvent(
         [
-          {"pitch": note.pitchNumber,"volume": 75,"start": 0,"duration": note.duration,"instrument": 23,"gap": 0},
-        ], undefined, 2000 // a measure takes one second.    
+          {"pitch": note.pitchNumber,"volume": 75,"start": 0,"duration": note.duration,"instrument": 1,"gap": 0},
+        ], undefined, 1000 // a measure takes one second.    
       ).then(() => {
           staffObj = abcjs.renderAbc("staff", notationString.current);
           console.log(note);
       });
     });
-
-    synthControl.setTune(staffObj[0], false, audioParams);
   };
 
   const randomizeAndRenderNotes = async (notes: noteProps[]): Promise<void> => {
-    let currentIndex = notes.length,  randomIndex;
+    let currentIndex = notes.length,  randomIndex: number;
 
-    while (isGenerating) {
+    let i = 0;
+    while (i < 10) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       await renderNoteToStaff(notes[randomIndex]);
+      i++;
     }
+
+    synthControl.setTune(staffObj[0], true, audioParams);
   }
 
   const handleClickStop = () => {
