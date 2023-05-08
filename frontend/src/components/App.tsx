@@ -61,12 +61,14 @@ export default function App() {
     // switch render function with pause function?
     let barLine = '', noteNameDuration = '';
     let blankStaffSpaceExists = notationString.current.indexOf('x') !== -1;
+    
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
       notesInBarCount.current += note.duration;
       if (notesInBarCount.current === MAX_BEATS_PER_BAR && !blankStaffSpaceExists) {
         barLine = '|';
         notesInBarCount.current = 0;  // reset notes per bar count
       }
+      
       noteNameDuration = note.name + note.duration.toString() + barLine;
       if (!blankStaffSpaceExists) {
         notationString.current += noteNameDuration;
@@ -75,7 +77,7 @@ export default function App() {
         // replace blank staff space until filled in with notes
         notationString.current = notationString.current.replace('x', noteNameDuration);
       }
-      //notationString.current += noteNameDuration;
+
       //synth.start();
       // For instance, a quarter note in 4/4 would be .25
       abcjs.synth.playEvent(
