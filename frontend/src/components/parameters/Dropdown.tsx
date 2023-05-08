@@ -26,12 +26,16 @@ export default function DropDown({ options, value, onChange }: dropDownOptions) 
 
     return (
         <div className="w-48 relative">
-            <div className="flex justify-between items-center cursor-pointer rounded p-3 shadow bg-white w-full"
+            <div className="flex justify-between items-center cursor-pointer"
                 onClick={handleClick}>
                 {value?.label || 'Select...'}
                 <GoChevronDown className="text-lg" />
             </div>
-            {isOpen && <div className="absolute top-full border rounded p-3 shadow bg-white w-full">{renderedOptions}</div>}
+            {isOpen && 
+                <div className="absolute top-full">
+                    {renderedOptions}
+                </div>
+            }
         </div>
     );
 }

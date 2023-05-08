@@ -6,6 +6,7 @@ export default function Staff() {
         <div className="flex justify-evenly">
           <Interface />
           <div id="staff"></div>
+          <div id="audio"></div>
         </div>
     );
 }
