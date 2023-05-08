@@ -3,25 +3,27 @@ import Staff from './Staff';
 import { noteProps } from '../types/note';
 import { CursorControl } from '../services/cursorcontrol';
 import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
-import abcjs from "abcjs";
+import abcjs, { TuneObjectArray } from "abcjs";
 import './App.scss';
 
 export default function App() {
 
-  const notationString = useRef<string>('X:1\nK:C\nM:4/4\nxxxx|xxxx|xxxx|xxxx|'); // empty staff
+  const notationString = useRef<string>('X:1\nK:C\nM:4/4\nABCD|CFGE|BFED|AGCF|'); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
 
   const [isGenerating, setIsGenerating] = useState(true);
   const synth = new abcjs.synth.CreateSynth();
+  const cursorControl = new CursorControl(2, 4, null);
+  const synthControl = new abcjs.synth.SynthController();
+  const audioContext = new AudioContext();
+  const abcOptions = { add_classes: true };
+  const audioParams = { chordsOff: true };
+  let staffObj: TuneObjectArray;
 
   useEffect(() => {
-    const abcOptions = { add_classes: true };
-    const audioParams = { chordsOff: true };
 
     if (abcjs.synth.supportsAudio()) {
       
-      const cursorControl = new CursorControl(2, 4, null);
-      const synthControl = new abcjs.synth.SynthController();
       synthControl.load("#audio",
           cursorControl,
           {
@@ -33,15 +35,13 @@ export default function App() {
           }
       );
 
-      const audioContext = new AudioContext();
-      const staffObj = abcjs.renderAbc("staff", notationString.current, abcOptions);
+      staffObj = abcjs.renderAbc("staff", notationString.current, abcOptions);
       synth.init({ 
         audioContext: audioContext,
         visualObj: staffObj[0] ,
         millisecondsPerMeasure: 500,
         options: {
-          soundFontUrl: "https:/path/to/soundfont/folder",
-          pan: [ -0.3, 0.3 ] 
+          pan: [ -0.3, 0.3 ]
         }
       }).then(() => {
           synthControl.setTune(staffObj[0], false, audioParams).then(function () {
@@ -75,21 +75,21 @@ export default function App() {
       }
       else {
         // replace blank staff space until filled in with notes
-        notationString.current = notationString.current.replace('x', noteNameDuration);
+        notationString.current = notationString.current.replace('x', noteNameDuration); 
       }
 
-      //synth.start();
       // For instance, a quarter note in 4/4 would be .25
       abcjs.synth.playEvent(
         [
-          {"pitch": note.pitchNumber,"volume": 75,"start": 0,"duration": note.duration,"instrument": 2,"gap": 0},
+          {"pitch": note.pitchNumber,"volume": 75,"start": 0,"duration": note.duration,"instrument": 23,"gap": 0},
         ], undefined, 2000 // a measure takes one second.    
       ).then(() => {
-          abcjs.renderAbc("staff", notationString.current);
+          staffObj = abcjs.renderAbc("staff", notationString.current);
           console.log(note);
       });
-      //synth.triggerAttackRelease(`${note.name}4`, noteDurationMap[note.duration]);    
     });
+
+    synthControl.setTune(staffObj[0], false, audioParams);
   };
 
   const randomizeAndRenderNotes = async (notes: noteProps[]): Promise<void> => {
