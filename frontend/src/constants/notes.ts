@@ -4,13 +4,13 @@ export const MAX_BEATS_PER_BAR = 8;
 
 export const defaultNotes: noteProps[] = [
     // Duration: 1 = 8th, 2 = quarter, 3 = dotted quarter, 4 = half, etc.
-    {name: 'C', pitchNumber: 60, duration: 2, timeBetweenNotes: 500},
-    {name: 'D', pitchNumber: 62, duration: 2, timeBetweenNotes: 500},
-    {name: 'E', pitchNumber: 64, duration: 2, timeBetweenNotes: 500},
-    {name: 'F', pitchNumber: 65, duration: 2, timeBetweenNotes: 500},
-    {name: 'G', pitchNumber: 67, duration: 2, timeBetweenNotes: 500},
-    {name: 'A', pitchNumber: 69, duration: 2, timeBetweenNotes: 500},
-    {name: 'B', pitchNumber: 71, duration: 2, timeBetweenNotes: 500},
+    {name: 'C', pitchNumber: 60, duration: 1, timeBetweenNotes: 500},
+    {name: 'D', pitchNumber: 62, duration: 2, timeBetweenNotes: 1000},
+    {name: 'E', pitchNumber: 64, duration: 3, timeBetweenNotes: 1500},
+    {name: 'F', pitchNumber: 65, duration: 2, timeBetweenNotes: 1000},
+    {name: 'G', pitchNumber: 67, duration: 1, timeBetweenNotes: 500},
+    {name: 'A', pitchNumber: 69, duration: 2, timeBetweenNotes: 1000},
+    {name: 'B', pitchNumber: 71, duration: 4, timeBetweenNotes: 2000},
 ]
 
 export const noteDurationMap: Record<string, string> = {

@@ -1,6 +1,12 @@
 import classNames from "classnames";
+import { ReactNode } from 'react';
 
-export default function Panel({ children, className, ...rest}: any) {
+type PanelProps = {
+    children: ReactNode,
+    className: string
+}
+
+export default function Panel({ children, className, ...rest}: PanelProps) {
     const finalClassNames = classNames(
         'border rounded p-3 shadow bg-white w-full',
         className

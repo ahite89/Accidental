@@ -1,6 +1,6 @@
 export type noteProps = {
     name: string,
-    pitchNumber: number;
+    pitchNumber: number,
     duration: number,
     timeBetweenNotes: number
 }

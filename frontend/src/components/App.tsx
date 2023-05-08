@@ -1,31 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
 import { noteProps } from '../types/note';
 import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs from "abcjs";
-import * as Tone from 'tone'
 import './App.scss';
 
 export default function App() {
 
-  // class Greeter {
-  //   greeting: string;
-   
-  //   constructor(message: string) {
-  //     this.greeting = message;
-  //   }
-   
-  //   greet() {
-  //     return "Hello, " + this.greeting;
-  //   }
-  // }
-
   class CursorControl {
     beatNumber: number;
     beatSubdivisions: number;
-    event: any;
+    event: SyntheticEvent | null;
 
-    constructor(beatNumber: number, beatSubdivisions: number, event: any) {
+    constructor(beatNumber: number, beatSubdivisions: number, event: SyntheticEvent | null) {
       this.beatNumber = beatNumber;
       this.beatSubdivisions = beatSubdivisions;
       this.event = event;
@@ -50,22 +37,17 @@ export default function App() {
 
   const notationString = useRef<string>('X:1\nK:C\nM:4/4\nxxxx|xxxx|xxxx|xxxx|'); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
-  //const waitTimeInMilliseconds = 250;  // temporary default value
 
   const [isGenerating, setIsGenerating] = useState(true);
-  //const synth = new Tone.AMSynth().toDestination();   // default synth sound
   const synth = new abcjs.synth.CreateSynth();
 
   useEffect(() => {
-    //abcjs.renderAbc("staff", notationString.current);
-
-    // given that there are two elements in the DOM with the IDs "paper" and "audio"
     const abcOptions = { add_classes: true };
     const audioParams = { chordsOff: true };
 
     if (abcjs.synth.supportsAudio()) {
       
-      var cursorControl = new CursorControl(2, 4, null);
+      const cursorControl = new CursorControl(2, 4, null);
       const synthControl = new abcjs.synth.SynthController();
       synthControl.load("#audio",
           cursorControl,
@@ -88,14 +70,14 @@ export default function App() {
           soundFontUrl: "https:/path/to/soundfont/folder",
           pan: [ -0.3, 0.3 ] 
         }
-      }).then(function () {
+      }).then(() => {
           synthControl.setTune(staffObj[0], false, audioParams).then(function () {
-          console.log("Audio successfully loaded.")
-        }).catch(function (error) {
-          console.warn("Audio problem:", error);
+            console.log("Audio successfully loaded.")
+        }).catch((error) => {
+            console.warn("Audio problem:", error);
         });
-      }).catch(function (error) {
-        console.warn("Audio problem:", error);
+      }).catch((error) => {
+          console.warn("Audio problem:", error);
       });
     } 
   }, []);
@@ -121,20 +103,19 @@ export default function App() {
         notationString.current = notationString.current.replace('x', noteNameDuration);
       }
       //notationString.current += noteNameDuration;
-      abcjs.renderAbc("staff", notationString.current);
       //synth.start();
+      // For instance, a quarter note in 4/4 would be .25
       abcjs.synth.playEvent(
-        [   // a C chord
-          {"pitch":note.pitchNumber,"volume":75,"start":0,"duration":note.duration,"instrument":0,"gap":0},
-        ],
-        [],
-          1000 // a measure takes one second.    
-      )
+        [
+          {"pitch": note.pitchNumber,"volume": 75,"start": 0,"duration": note.duration,"instrument": 2,"gap": 0},
+        ], undefined, 2000 // a measure takes one second.    
+      ).then(() => {
+          abcjs.renderAbc("staff", notationString.current);
+          console.log(note);
+      });
       // Tone.js subdivisions = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n." | "4t" | "8n" | "8n." | "8t" |
       // "16n" | "16n." | "16t" | "32n" | "32n." | "32t" | "64n" | "64n." | "64t" | "128n" | "128n." | "128t" |
-      //synth.triggerAttackRelease(`${note.name}4`, noteDurationMap[note.duration]);
-      
-      console.log(note);
+      //synth.triggerAttackRelease(`${note.name}4`, noteDurationMap[note.duration]);    
     });
   };
 

@@ -1,7 +1,7 @@
-export interface dropDownOptions {
+export type dropDownOptions = {
     options: dropDownOption[],
     value: dropDownOption | null,
-    onChange: (option: any) => void
+    onChange: (option: dropDownOption) => void
 }
 
 export type dropDownOption = {
