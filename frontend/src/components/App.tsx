@@ -1,39 +1,12 @@
-import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
 import { noteProps } from '../types/note';
+import { CursorControl } from '../services/cursorcontrol';
 import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs from "abcjs";
 import './App.scss';
 
 export default function App() {
-
-  class CursorControl {
-    beatNumber: number;
-    beatSubdivisions: number;
-    event: SyntheticEvent | null;
-
-    constructor(beatNumber: number, beatSubdivisions: number, event: SyntheticEvent | null) {
-      this.beatNumber = beatNumber;
-      this.beatSubdivisions = beatSubdivisions;
-      this.event = event;
-    }
-    
-    onStart() {
-      console.log("The tune has started playing.");
-    }
-
-    onFinished() {
-      console.log("The tune has stopped playing.");
-    }
-
-    onBeat() {
-      console.log("Beat " + this.beatNumber + " is happening.");
-    }
-    
-    onEvent() {
-      console.log("An event is happening", this.event);
-    }
-  };
 
   const notationString = useRef<string>('X:1\nK:C\nM:4/4\nxxxx|xxxx|xxxx|xxxx|'); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
@@ -113,8 +86,6 @@ export default function App() {
           abcjs.renderAbc("staff", notationString.current);
           console.log(note);
       });
-      // Tone.js subdivisions = "1m" | "1n" | "1n." | "2n" | "2n." | "2t" | "4n" | "4n." | "4t" | "8n" | "8n." | "8t" |
-      // "16n" | "16n." | "16t" | "32n" | "32n." | "32t" | "64n" | "64n." | "64t" | "128n" | "128n." | "128t" |
       //synth.triggerAttackRelease(`${note.name}4`, noteDurationMap[note.duration]);    
     });
   };
