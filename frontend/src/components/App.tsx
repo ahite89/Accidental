@@ -5,6 +5,8 @@ import { CursorControl } from '../services/cursorcontrol';
 import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs, { TuneObjectArray } from "abcjs";
 import './App.scss';
+import Interface from './parameters/Interface';
+import Playback from './Playback';
 
 export default function App() {
 
@@ -116,9 +118,13 @@ export default function App() {
         <h2>Accidental</h2>
       </header>
       <div className="p-8">
-        <button onClick={handleClickGenerate}>Start</button>
-        <button onClick={handleClickStop}>Stop</button>
+        <div className="flex justify-center">
+          <button className="mr-4" onClick={handleClickGenerate}>Generate</button>
+          <button onClick={handleClickStop}>Stop</button>
+        </div>
         <Staff />
+        <Playback />
+        <Interface /> 
       </div>
     </div>
   );

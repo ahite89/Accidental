@@ -17,7 +17,7 @@ export default function Interface() {
     ];
 
     return (
-        <div>
+        <div className="flex justify-evenly pt-4">
             <DropDown options={options} value={selection} onChange={handleSelection} />
         </div>
     );
