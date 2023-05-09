@@ -10,7 +10,7 @@ export default function Interface() {
         setSelection(option);
     };
 
-    const options: dropDownOption[] = [
+    const keyOptions: dropDownOption[] = [
         { label: 'C', value: 'c'},
         { label: 'C#', value: 'c-sharp'},
         { label: 'D', value: 'd'},
@@ -20,7 +20,7 @@ export default function Interface() {
 
     return (
         <div className="flex justify-center mt-8">
-            <DropDown options={options} value={selection} onChange={handleSelection}>Key:</DropDown>
+            <DropDown options={keyOptions} value={selection} onChange={handleSelection}>Key:</DropDown>
         </div>
     );
 }

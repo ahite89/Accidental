@@ -7,6 +7,7 @@ import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
 import './App.scss';
 import Interface from './parameters/Interface';
 import Playback from './Playback';
+import Button from './parameters/Button';
 
 export default function App() {
 
@@ -133,8 +134,8 @@ export default function App() {
       </header>
       <div className="p-8">
         <div className="flex justify-center">
-          <button className="mr-4" onClick={handleClickGenerate}>Generate</button>
-          <button onClick={handleClickStop}>Stop</button>
+          <Button className="mr-4" onClick={handleClickGenerate}>Generate</Button>
+          <Button onClick={handleClickStop}>Stop</Button>
         </div>
         <Staff />
         <Playback />

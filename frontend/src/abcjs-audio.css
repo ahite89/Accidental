@@ -1,6 +1,6 @@
 .abcjs-inline-audio {
 	height: 26px;
-	padding: 0 5px;
+	padding: 20px 10px;
 	border-radius: 3px;
 	background-color: #6ea3f3;
 	display: flex;
@@ -74,7 +74,7 @@
 }
 
 .abcjs-inline-audio .abcjs-midi-progress-background {
-	background-color: #424242;
+	background-color: #a0a0a0;
 	height: 10px;
 	border-radius: 5px;
 	border: 2px solid #cccccc;
@@ -124,6 +124,7 @@
 	width: 42px;
 	padding-left: 2px;
 	box-sizing: border-box;
+	color: #424242;
 }
 
 .abcjs-inline-audio .abcjs-loading .abcjs-loading-svg {
