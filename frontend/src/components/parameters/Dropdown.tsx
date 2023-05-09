@@ -1,10 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { dropDownOptions, dropDownOption } from "../../types/dropdown";
 import { GoChevronDown } from "react-icons/go";
+import Panel from "./Panel";
 
-export default function DropDown({ options, value, onChange }: dropDownOptions) {
+export default function DropDown({ options, value, onChange, children }: dropDownOptions) {
 
     const [isOpen, setIsOpen] = useState(false);
+    const divEl = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        const handler = (event: MouseEvent) => {
+            if (!divEl.current?.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('click', handler, true);
+
+        return () => {
+            document.removeEventListener('click', handler);
+        };
+    }, []);
 
     const handleClick = () => {
         setIsOpen(!isOpen);
@@ -25,17 +41,20 @@ export default function DropDown({ options, value, onChange }: dropDownOptions) 
     });
 
     return (
-        <div className="w-48 relative">
-            <div className="flex justify-between items-center cursor-pointer"
-                onClick={handleClick}>
-                {value?.label || 'Select...'}
-                <GoChevronDown className="text-lg" />
+        <>
+            <label className="mr-2 self-center">{children}</label>
+            <div ref={divEl} className="w-28 relative">
+                <Panel className="flex justify-between items-center cursor-pointer"
+                    onClick={handleClick}>
+                    {value?.label || 'Select...'}
+                    <GoChevronDown className="text-lg" />
+                </Panel>
+                {isOpen && 
+                    <Panel className="absolute top-full">
+                        {renderedOptions}
+                    </Panel>
+                }
             </div>
-            {isOpen && 
-                <div className="absolute top-full">
-                    {renderedOptions}
-                </div>
-            }
-        </div>
+        </>
     );
 }

@@ -1,7 +1,7 @@
 export default function Playback() {
     return (
-        <div className="flex justify-evenly pt-4">
-            <div id="audio"></div>
+        <div className="justify-center flex mt-8">
+            <div className="w-96" id="audio"></div>
         </div>
     );
 }

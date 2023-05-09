@@ -16,16 +16,27 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState(true);
   
   // abc inits
+  let staffObj: TuneObjectArray;
   const synth = new abcjs.synth.CreateSynth();
   const cursorControl = new CursorControl(2, 4, null);
   const synthControl = new abcjs.synth.SynthController();
   const audioContext = new AudioContext();
-  const notationOptions: AbcVisualParams = { add_classes: true };
-  const audioParams: AbcVisualParams = { clickListener: () => {console.log("clicked!")} }
-  let staffObj: TuneObjectArray;
+  const notationOptions: AbcVisualParams = { 
+    add_classes: true, 
+    wrap: { 
+      minSpacing: 1.8,
+      maxSpacing: 2.7,
+      preferredMeasuresPerLine: 4
+    }, 
+    viewportHorizontal: true,
+    staffwidth: 800,
+    scrollHorizontal: true 
+  };
+  const audioParams: AbcVisualParams = { 
+    clickListener: () => {console.log("clicked!")} 
+  };
 
   useEffect(() => {
-
     if (abcjs.synth.supportsAudio()) {     
       synthControl.load("#audio",
           cursorControl,
