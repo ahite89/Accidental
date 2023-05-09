@@ -4,7 +4,6 @@ import { NoteProps } from '../types/note';
 import { CursorControl } from '../services/cursorcontrol';
 import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
-import './App.scss';
 import Interface from './parameters/Interface';
 import Playback from './Playback';
 import Button from './parameters/Button';
@@ -74,23 +73,24 @@ export default function App() {
 
   const renderNoteToStaff = async (note: NoteProps): Promise<void> => {
     // switch render function with pause function?
-    let barLine = '', noteNameDuration = '';
-    let blankStaffSpaceExists = notationString.current.indexOf('x') !== -1;
+    let newNote = '';
+    let blankStaffSpaceFilled = notationString.current.indexOf('x') === -1;
     
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
       notesInBarCount.current += note.duration;
-      if (notesInBarCount.current === MAX_BEATS_PER_BAR && !blankStaffSpaceExists) {
-        barLine = '|';
-        notesInBarCount.current = 0;  // reset notes per bar count
-      }
+      newNote = note.name + note.duration.toString();
       
-      noteNameDuration = note.name + note.duration.toString() + barLine;
-      if (!blankStaffSpaceExists) {
-        notationString.current += noteNameDuration;
+      if (blankStaffSpaceFilled) {
+        if (notesInBarCount.current >= MAX_BEATS_PER_BAR) {
+          newNote += '|';
+          notesInBarCount.current = 0;
+        }
+
+        notationString.current += newNote;
       }
       else {
         // replace blank staff space until filled in with notes
-        notationString.current = notationString.current.replace('x', noteNameDuration); 
+        notationString.current = notationString.current.replace('x', newNote); 
       }
 
       // For instance, a quarter note in 4/4 would be .25
@@ -109,7 +109,7 @@ export default function App() {
     let currentIndex = notes.length,  randomIndex: number;
 
     let i = 0;
-    while (i < 10) {
+    while (i < 16) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       await renderNoteToStaff(notes[randomIndex]);
       i++;
@@ -128,9 +128,9 @@ export default function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2>Accidental</h2>
+    <div>
+      <header className="bg-blue-400 flex justify-center p-2">
+        <p className="text-white text-2xl">Accidental</p>
       </header>
       <div className="p-8">
         <div className="flex justify-center">
