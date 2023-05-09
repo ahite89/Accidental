@@ -1,13 +1,13 @@
 import { ReactNode } from 'react';
 
-export type dropDownOptions = {
-    options: dropDownOption[],
-    value: dropDownOption | null,
-    onChange: (option: dropDownOption) => void,
+export type DropDownOptions = {
+    options: DropDownOption[],
+    value: DropDownOption | null,
+    onChange: (option: DropDownOption) => void,
     children?: ReactNode
 }
 
-export type dropDownOption = {
+export type DropDownOption = {
     label: string,
     value: string
 }

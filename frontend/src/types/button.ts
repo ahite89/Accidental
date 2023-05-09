@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export type buttonProps = {
+export type ButtonProps = {
     onClick: () => Promise<void> | void,
     children?: ReactNode,
     className?: string,

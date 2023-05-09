@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { dropDownOptions, dropDownOption } from "../../types/dropdown";
+import { DropDownOptions, DropDownOption } from "../../types/dropdown";
 import { GoChevronDown } from "react-icons/go";
 import Panel from "./Panel";
 
-export default function DropDown({ options, value, onChange, children }: dropDownOptions) {
+export default function DropDown({ options, value, onChange, children }: DropDownOptions) {
 
     const [isOpen, setIsOpen] = useState(false);
     const divEl = useRef<HTMLInputElement>(null);
@@ -26,7 +26,7 @@ export default function DropDown({ options, value, onChange, children }: dropDow
         setIsOpen(!isOpen);
     };
 
-    const handleOptionClick = (option: dropDownOption) => {
+    const handleOptionClick = (option: DropDownOption) => {
         setIsOpen(false);
         onChange(option);
     };

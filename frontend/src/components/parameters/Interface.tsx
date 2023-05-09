@@ -1,16 +1,16 @@
 import { useState } from "react";
 import DropDown from "./Dropdown";
-import { dropDownOption } from "../../types/dropdown";
+import { DropDownOption } from "../../types/dropdown";
 
 export default function Interface() {
 
-    const [selection, setSelection] = useState<dropDownOption | null>(null);
+    const [selection, setSelection] = useState<DropDownOption | null>(null);
 
-    const handleSelection = (option: dropDownOption) => {
+    const handleSelection = (option: DropDownOption) => {
         setSelection(option);
     };
 
-    const keyOptions: dropDownOption[] = [
+    const keyOptions: DropDownOption[] = [
         { label: 'C', value: 'c'},
         { label: 'C#', value: 'c-sharp'},
         { label: 'D', value: 'd'},

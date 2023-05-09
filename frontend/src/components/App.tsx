@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
-import { noteProps } from '../types/note';
+import { NoteProps } from '../types/note';
 import { CursorControl } from '../services/cursorcontrol';
 import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
@@ -72,7 +72,7 @@ export default function App() {
 
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-  const renderNoteToStaff = async (note: noteProps): Promise<void> => {
+  const renderNoteToStaff = async (note: NoteProps): Promise<void> => {
     // switch render function with pause function?
     let barLine = '', noteNameDuration = '';
     let blankStaffSpaceExists = notationString.current.indexOf('x') !== -1;
@@ -105,7 +105,7 @@ export default function App() {
     });
   };
 
-  const randomizeAndRenderNotes = async (notes: noteProps[]): Promise<void> => {
+  const randomizeAndRenderNotes = async (notes: NoteProps[]): Promise<void> => {
     let currentIndex = notes.length,  randomIndex: number;
 
     let i = 0;

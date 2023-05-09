@@ -1,8 +1,8 @@
-import { noteProps } from '../types/note';
+import { NoteProps } from '../types/note';
 
 export const MAX_BEATS_PER_BAR = 8;
 
-export const defaultNotes: noteProps[] = [
+export const defaultNotes: NoteProps[] = [
     // Duration: 1 = 8th, 2 = quarter, 3 = dotted quarter, 4 = half, etc.
     {name: 'C', pitchNumber: 60, duration: 1, timeBetweenNotes: 500},
     {name: 'D', pitchNumber: 62, duration: 2, timeBetweenNotes: 1000},
