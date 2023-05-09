@@ -45,7 +45,6 @@ export default function App() {
             displayRestart: true, 
             displayPlay: true, 
             displayProgress: true, 
-            displayWarp: true
           }
       );
 
@@ -134,8 +133,12 @@ export default function App() {
       </header>
       <div className="p-8">
         <div className="flex justify-center">
-          <Button className="mr-4" onClick={handleClickGenerate}>Generate</Button>
-          <Button onClick={handleClickStop}>Stop</Button>
+          <Button extraStyling="mr-4" primary rounded onClick={handleClickGenerate}>
+            Generate
+          </Button>
+          <Button secondary rounded onClick={handleClickStop}>
+            Stop
+          </Button>
         </div>
         <Staff />
         <Playback />
