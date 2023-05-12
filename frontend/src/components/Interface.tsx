@@ -1,6 +1,6 @@
 import { useState } from "react";
-import DropDown from "./Dropdown";
-import { DropDownOption } from "../../types/dropdown";
+import DropDown from "./parameters/Dropdown";
+import { DropDownOption } from "../types/dropdown";
 
 export default function Interface() {
 

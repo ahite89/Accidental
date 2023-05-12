@@ -4,7 +4,7 @@ import { NoteProps } from '../types/note';
 import { CursorControl } from '../services/cursorcontrol';
 import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
-import Interface from './parameters/Interface';
+import Interface from './Interface';
 import Playback from './Playback';
 import Button from './parameters/Button';
 
