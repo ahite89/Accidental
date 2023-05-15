@@ -47,14 +47,6 @@ enum Keys {
     B = 'B'
 }
 
-export const keyOptions: DropDownOption[] = [
-    { label: Keys.C, value: 'c'},
-    { label: 'C#', value: 'c-sharp'},
-    { label: 'D', value: 'd'},
-    { label: 'D#', value: 'd-sharp'},
-    { label: 'E', value: 'e'}
-];
-
 enum Scales {
     Major = 'Major',
     Minor = 'Minor',
@@ -69,10 +61,18 @@ enum Scales {
     Pentatonic = 'Pentatonic'
 }
 
-export const scaleOptions: DropDownOption[] = [
-    { label: 'Major', value: 'major'},
-    { label: 'Minor', value: 'minor'},
-    { label: 'Dorian', value: 'dorian'},
-    { label: 'Phrygian', value: 'phrygian'},
-    { label: 'Lydian', value: 'lydian'}
-];
+export const keyOptions = (): DropDownOption[] => {
+    const keys = [];
+    for (let key of Object.values(Keys)) {
+        keys.push({ label: key, value: key})
+    }
+    return keys;
+};
+
+export const scaleOptions = (): DropDownOption[] => {
+    const scales = [];
+    for (let scale of Object.values(Scales)) {
+        scales.push({ label: scale, value: scale})
+    }
+    return scales;
+};

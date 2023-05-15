@@ -23,8 +23,8 @@ export default function ControlPanel() {
 
     return (
         <div className={finalClassNames}>
-            <DropDown options={keyOptions} value={keySelection} onChange={handleKeySelection}>Key:</DropDown>
-            <DropDown options={scaleOptions} value={scaleSelection} onChange={handleScaleSelection}>Scale:</DropDown>
+            <DropDown options={keyOptions()} value={keySelection} onChange={handleKeySelection}>Key:</DropDown>
+            <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale:</DropDown>
             {/* Missing: Slider for pitch range, slider for tempo, note duration buttons, custom scale buttons (MUI button groups?) */}
             {/* For note durations - use small buttons for each note, then assemble their values in an object of booleans ({qrt: true}) */}
         </div>
