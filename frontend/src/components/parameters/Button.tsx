@@ -15,7 +15,7 @@ export default function Button({
 }: ButtonProps) {
 
     const classes = className('px-3 py-1.5 border', {
-        'border-blue-400 bg-blue-400 text-white': primary,
+        'border-cyan-500 bg-cyan-500 text-white': primary,
         'border-gray-400 bg-gray-400 text-white': secondary,
         'border-green-400 bg-green-400 text-white': success,
         'border-yellow-400 bg-yellow-400 text-white': warning,

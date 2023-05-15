@@ -2,6 +2,7 @@ import { useState } from "react";
 import classNames from "classnames";
 import DropDown from "./parameters/Dropdown";
 import { DropDownOption } from "../types/dropdown";
+import { keyOptions, scaleOptions } from "../constants/notes";
 
 export default function ControlPanel() {
 
@@ -16,22 +17,6 @@ export default function ControlPanel() {
         setScaleSelection(option);
     };
 
-    const keyOptions: DropDownOption[] = [
-        { label: 'C', value: 'c'},
-        { label: 'C#', value: 'c-sharp'},
-        { label: 'D', value: 'd'},
-        { label: 'D#', value: 'd-sharp'},
-        { label: 'E', value: 'e'}
-    ];
-
-    const scaleOptions: DropDownOption[] = [
-        { label: 'Major', value: 'major'},
-        { label: 'Minor', value: 'minor'},
-        { label: 'Dorian', value: 'dorian'},
-        { label: 'Phrygian', value: 'phrygian'},
-        { label: 'Lydian', value: 'lydian'}
-    ];
-
     const finalClassNames = classNames(
         'border rounded p-2 shadow bg-white w-full flex justify-center mt-8'
     );
@@ -40,6 +25,8 @@ export default function ControlPanel() {
         <div className={finalClassNames}>
             <DropDown options={keyOptions} value={keySelection} onChange={handleKeySelection}>Key:</DropDown>
             <DropDown options={scaleOptions} value={scaleSelection} onChange={handleScaleSelection}>Scale:</DropDown>
+            {/* Missing: Slider for pitch range, slider for tempo, note duration buttons, custom scale buttons (MUI button groups?) */}
+            {/* For note durations - use small buttons for each note, then assemble their values in an object of booleans ({qrt: true}) */}
         </div>
     );
 }

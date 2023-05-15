@@ -1,4 +1,5 @@
 import { NoteProps } from '../types/note';
+import { DropDownOption } from '../types/dropdown';
 
 export const MAX_BEATS_PER_BAR = 8;
 
@@ -26,21 +27,7 @@ export const noteDurationMap: Record<string, string> = {
     '12': '1n.'
 }
 
-export enum Scales {
-    Major = 'Major',
-    Minor = 'Minor',
-    HarmonicMinor = 'HarmonicMinor',
-    Dorian = 'Dorian',
-    Phrygian = 'Phrygian',
-    Lydian = 'Lydian',
-    Mixolydian = 'Mixolydian',
-    Locrian = 'Locrian',
-    Chromatic = 'Chromatic',
-    WholeTone = 'WholeTone',
-    Pentatonic = 'Pentatonic'
-}
-
-export enum Keys {
+enum Keys {
     C = 'C',
     CSharp = 'C#',
     DFlat = 'Db',
@@ -59,3 +46,33 @@ export enum Keys {
     BFlat = 'Bb',
     B = 'B'
 }
+
+export const keyOptions: DropDownOption[] = [
+    { label: Keys.C, value: 'c'},
+    { label: 'C#', value: 'c-sharp'},
+    { label: 'D', value: 'd'},
+    { label: 'D#', value: 'd-sharp'},
+    { label: 'E', value: 'e'}
+];
+
+enum Scales {
+    Major = 'Major',
+    Minor = 'Minor',
+    HarmonicMinor = 'HarmonicMinor',
+    Dorian = 'Dorian',
+    Phrygian = 'Phrygian',
+    Lydian = 'Lydian',
+    Mixolydian = 'Mixolydian',
+    Locrian = 'Locrian',
+    Chromatic = 'Chromatic',
+    WholeTone = 'WholeTone',
+    Pentatonic = 'Pentatonic'
+}
+
+export const scaleOptions: DropDownOption[] = [
+    { label: 'Major', value: 'major'},
+    { label: 'Minor', value: 'minor'},
+    { label: 'Dorian', value: 'dorian'},
+    { label: 'Phrygian', value: 'phrygian'},
+    { label: 'Lydian', value: 'lydian'}
+];

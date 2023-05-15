@@ -1,9 +1,9 @@
 export class CursorControl {
     beatNumber: number;
     beatSubdivisions: number;
-    event: EventTarget | null;
+    event: Event | null;
 
-    constructor(beatNumber: number, beatSubdivisions: number, event: EventTarget | null) {
+    constructor(beatNumber: number, beatSubdivisions: number, event: Event | null) {
       this.beatNumber = beatNumber;
       this.beatSubdivisions = beatSubdivisions;
       this.event = event;
