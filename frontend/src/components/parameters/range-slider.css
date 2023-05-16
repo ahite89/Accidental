@@ -4,33 +4,29 @@
     height: 15vh;
 }
 
-.example-thumb {
+.slider-thumb {
     cursor: pointer;
     position: absolute;
     z-index: 100;
-    background: #ffffff;
-    border: 5px solid #3774ff;
+    background: #3b82f6;
+    color: white;
     border-radius: 100%;
     display: block;
-    box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
-    top: 17px;
-    width: 10px;
-    height: 10px;
-    line-height: 38px;
+    box-shadow: 0 0 4px 0 rgb(0 0 0 / 44%);
+    top: 9px;
+    width: 30px;
+    height: 30px;
     outline: none;
 }
 
-.example-thumb.active {
-    background-color: grey;
-}
-
-.example-track {
+.slider-track {
     position: relative;
     background: #ddd;
     top: 20px;
-    height: 4px;
+    height: 5px;
+    border-radius: 5px;
 }
 
-.example-track-1 {
-    background: #83a9ff;
+.slider-track-1 {
+    background: rgb(6 182 212);
 }

@@ -42,15 +42,15 @@ export default function DropDown({ options, value, onChange, children }: DropDow
 
     return (
         <>
-            <label className="mr-2 self-center">{children}</label>
             <div ref={divEl} className="w-28 relative">
+                <label className="mr-2 self-center">{children}</label>
                 <Panel className="flex justify-between items-center cursor-pointer"
                     onClick={handleClick}>
                     {value?.label || 'Select...'}
                     <GoChevronDown className="text-lg" />
                 </Panel>
                 {isOpen && 
-                    <Panel className="absolute top-full">
+                    <Panel className="absolute top-full z-10">
                         {renderedOptions}
                     </Panel>
                 }

@@ -2,6 +2,9 @@ import { NoteProps } from '../types/note';
 import { DropDownOption } from '../types/dropdown';
 
 export const MAX_BEATS_PER_BAR = 8;
+export const MIN_PITCH_NUMBER = 21;
+export const MAX_PITCH_NUMBER = 108;
+export const MIN_PITCH_DISTANCE = 5;
 
 export const defaultNotes: NoteProps[] = [
     // Duration: 1 = 8th, 2 = quarter, 3 = dotted quarter, 4 = half, etc.
@@ -50,14 +53,15 @@ enum Keys {
 enum Scales {
     Major = 'Major',
     Minor = 'Minor',
-    HarmonicMinor = 'HarmonicMinor',
+    HarmonicMinor = 'Harmonic Minor',
+    NaturalMinor = 'Natural Minor',
     Dorian = 'Dorian',
     Phrygian = 'Phrygian',
     Lydian = 'Lydian',
     Mixolydian = 'Mixolydian',
     Locrian = 'Locrian',
     Chromatic = 'Chromatic',
-    WholeTone = 'WholeTone',
+    WholeTone = 'Whole Tone',
     Pentatonic = 'Pentatonic'
 }
 
