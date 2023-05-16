@@ -28,7 +28,7 @@ export default function DropDown({ options, value, onChange, children }: DropDow
 
     const handleOptionClick = (option: DropDownOption) => {
         setIsOpen(false);
-        onChange(option);
+        onChange(option.value);
     };
 
     const renderedOptions = options.map((option) => {
@@ -42,11 +42,11 @@ export default function DropDown({ options, value, onChange, children }: DropDow
 
     return (
         <>
-            <div ref={divEl} className="w-28 relative">
+            <div ref={divEl} className="w-40 relative">
                 <label className="mr-2 self-center">{children}</label>
                 <Panel className="flex justify-between items-center cursor-pointer"
                     onClick={handleClick}>
-                    {value?.label || 'Select...'}
+                    {value || 'Select...'}
                     <GoChevronDown className="text-lg" />
                 </Panel>
                 {isOpen && 

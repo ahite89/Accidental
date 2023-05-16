@@ -2,8 +2,8 @@ import { ReactNode } from 'react';
 
 export type DropDownOptions = {
     options: DropDownOption[],
-    value: DropDownOption | null,
-    onChange: (option: DropDownOption) => void,
+    value: string | null,
+    onChange: (value: string) => void,
     children?: ReactNode
 }
 

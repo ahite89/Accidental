@@ -8,22 +8,20 @@ import { keyOptions, scaleOptions, instrumentOptions, MIN_PITCH_DISTANCE, MIN_PI
 export default function ControlPanel() {
 
     // Dropdowns
-    const [keySelection, setKeySelection] = useState<DropDownOption>(keyOptions()[0]);
-    const [scaleSelection, setScaleSelection] = useState<DropDownOption>(scaleOptions()[0]);
-    const [instrumentSelection, setInstrumentSelection] = useState<DropDownOption>(instrumentOptions()[0]);
+    const [keySelection, setKeySelection] = useState<string>(keyOptions()[0].value);
+    const [scaleSelection, setScaleSelection] = useState<string>(scaleOptions()[0].value);
+    const [instrumentSelection, setInstrumentSelection] = useState<string>(instrumentOptions()[0].value);
 
-    const handleKeySelection = (option: DropDownOption): void => {
-        setKeySelection(option);
-        // use string instead for option value
+    const handleKeySelection = (key: string): void => {
+        setKeySelection(key);
     };
 
-    const handleScaleSelection = (option: DropDownOption): void => {
-        setScaleSelection(option);
+    const handleScaleSelection = (scale: string): void => {
+        setScaleSelection(scale);
     };
 
-    const handleInstrumentSelection = (option: DropDownOption): void => {
-        setInstrumentSelection(option);
-        console.log(option.label, option.value);
+    const handleInstrumentSelection = (instrument: string): void => {
+        setInstrumentSelection(instrument);
     };
 
     // Sliders
