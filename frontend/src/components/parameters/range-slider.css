@@ -15,9 +15,9 @@
     box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
     top: 17px;
     width: 10px;
-    outline: none;
     height: 10px;
     line-height: 38px;
+    outline: none;
 }
 
 .example-thumb.active {

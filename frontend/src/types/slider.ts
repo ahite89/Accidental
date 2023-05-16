@@ -1,10 +1,8 @@
 export type SliderProps = {
-    min: number,
-    max: number,
+    minDistance: number;
     minValue: number,
     maxValue: number,
-    onChangeMin: (minPitch: number) => void,
-    onChangeMax: (maxPitch: number) => void,
-    minRef: React.MutableRefObject<null>,
-    maxRef: React.MutableRefObject<null>
+    onChangeValues: (values: number[]) => void,
+    minRef?: React.MutableRefObject<null>,
+    maxRef?: React.MutableRefObject<null>
 }

@@ -1,18 +1,24 @@
 import ReactSlider from "react-slider";
 import './range-slider.css';
+import { SliderProps } from "../../types/slider";
 
-export default function RangeSlider() {
+export default function RangeSlider({minDistance, minValue, maxValue, onChangeValues, minRef, maxRef}: SliderProps) {
     return (
         <ReactSlider
             className="horizontal-slider"
             thumbClassName="example-thumb"
             trackClassName="example-track"
-            defaultValue={[0, 100]}
+            defaultValue={[minValue, maxValue]}
             ariaLabel={['Lower thumb', 'Upper thumb']}
             ariaValuetext={state => `Thumb value ${state.valueNow}`}
-            renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+            renderThumb={(props, state) => {
+                return <div {...props}>{state.valueNow}</div>
+            }}
+            onChange={(values) => {                
+                onChangeValues(values);
+            }}
             pearling
-            minDistance={10}
+            minDistance={minDistance}
         />
     );
 }
