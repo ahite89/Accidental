@@ -92,11 +92,18 @@ export default function App() {
         notationString.current = notationString.current.replace('x', newNote); 
       }
 
-      // For instance, a quarter note in 4/4 would be .25
+      // quarter note in 4/4 would be .25
       abcjs.synth.playEvent(
         [
-          {"pitch": note.pitchNumber,"volume": 75,"start": 0,"duration": note.duration,"instrument": 1,"gap": 0},
-        ], undefined, 1000 // a measure takes one second.    
+          {
+            "pitch": note.pitchNumber,
+            "volume": 75,
+            "start": 0,
+            "duration": note.duration,
+            "instrument": 1,
+            "gap": 0
+          },
+        ], [], 1000 // a measure takes one second.    
       ).then(() => {
           staffObj = abcjs.renderAbc("staff", notationString.current);
           console.log(note);
