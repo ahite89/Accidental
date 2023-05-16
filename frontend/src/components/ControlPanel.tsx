@@ -45,18 +45,6 @@ export default function ControlPanel() {
                 {/* Missing: Slider for pitch range, slider for tempo, note duration buttons, custom scale buttons (MUI button groups?) */}
                 {/* For note durations - use small buttons for each note, then assemble their values in an object of booleans ({qrt: true}) */}
             </div>
-            {/* <div className={finalClassNames}>
-                <MultiRangeSlider
-                    min={minPitch}
-                    max={maxPitch}
-                    minValue={minAssignedPitch} 
-                    maxValue={maxAssignedPitch} 
-                    onChangeMin={handleSetMinPitch} 
-                    onChangeMax={handleSetMaxPitch} 
-                    minRef={minPitchRef} 
-                    maxRef={maxPitchRef} 
-                />
-            </div> */}
             <div className={finalClassNames}>
                 <RangeSlider 
                     minDistance={minPitchDistance} 
