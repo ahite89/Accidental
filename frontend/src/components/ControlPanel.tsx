@@ -1,7 +1,6 @@
 import { useState } from "react";
 import classNames from "classnames";
 import DropDown from "./parameters/Dropdown";
-import { DropDownOption } from "../types/dropdown";
 import RangeSlider from "./parameters/RangeSlider";
 import { keyOptions, scaleOptions, instrumentOptions, MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../constants/notes";
 
