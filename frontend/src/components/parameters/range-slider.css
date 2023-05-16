@@ -1,10 +1,10 @@
 .horizontal-slider {
     width: 100%;
     max-width: 500px;
-    height: 100vh;
-    margin: auto;
-  }
-  .example-thumb {
+    height: 15vh;
+}
+
+.example-thumb {
     cursor: pointer;
     position: absolute;
     z-index: 100;
@@ -13,25 +13,24 @@
     border-radius: 100%;
     display: block;
     box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
-  }
-  .example-thumb.active {
-    background-color: grey;
-  }
-  .example-track {
-    position: relative;
-    background: #ddd;
-  }
-  .example-track.example-track-0 {
-    background: #83a9ff;
-  }
-  .horizontal-slider .example-track {
-    top: 20px;
-    height: 4px;
-  }
-  .horizontal-slider .example-thumb {
-    top: 12px;
+    top: 17px;
     width: 10px;
     outline: none;
     height: 10px;
     line-height: 38px;
-  }
+}
+
+.example-thumb.active {
+    background-color: grey;
+}
+
+.example-track {
+    position: relative;
+    background: #ddd;
+    top: 20px;
+    height: 4px;
+}
+
+.example-track-1 {
+    background: #83a9ff;
+}
