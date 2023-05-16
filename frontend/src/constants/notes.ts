@@ -65,10 +65,19 @@ enum Scales {
     Pentatonic = 'Pentatonic'
 }
 
+enum Instruments {
+    Piano,
+    Organ,
+    Flute,
+    Clarinet,
+    Trumpet,
+    Guitar
+}
+
 export const keyOptions = (): DropDownOption[] => {
     const keys = [];
     for (let key of Object.values(Keys)) {
-        keys.push({ label: key, value: key})
+        keys.push({ label: key, value: key })
     }
     return keys;
 };
@@ -76,7 +85,15 @@ export const keyOptions = (): DropDownOption[] => {
 export const scaleOptions = (): DropDownOption[] => {
     const scales = [];
     for (let scale of Object.values(Scales)) {
-        scales.push({ label: scale, value: scale})
+        scales.push({ label: scale, value: scale })
     }
     return scales;
+};
+
+export const instrumentOptions = (): DropDownOption[] => {
+    const instruments = [];
+    for (let instrument of Object.keys(Instruments)) {
+        instruments.push({ label: instrument, value: instrument })
+    }
+    return instruments;
 };

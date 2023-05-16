@@ -3,7 +3,7 @@ import { PanelProps } from "../../types/panel";
 
 export default function Panel({ children, className, ...rest}: PanelProps) {
     const finalClassNames = classNames(
-        'border rounded p-2 shadow bg-white w-full',
+        'border p-2 shadow bg-white w-full',
         className
     );
     
