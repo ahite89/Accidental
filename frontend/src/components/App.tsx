@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
 import { NoteProps } from '../types/note';
 import { CursorControl } from '../services/cursorcontrol';
-import { defaultNotes, noteDurationMap, MAX_BEATS_PER_BAR } from '../constants/notes';
+import { defaultNotes, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
 import ControlPanel from './ControlPanel';
 import Playback from './Playback';
@@ -135,12 +135,12 @@ export default function App() {
 
   return (
     <div>
-      <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-start p-4">
+      <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-start p-4 max-w-lg">
         <p className="text-white text-xl border-white border-2 border-solid p-2 rounded">
         &#9838;ccidental
         </p>
       </header>
-      <div className="p-8 bg-slate-100">
+      <div className="p-8 bg-slate-100 max-w-lg">
         <div className="flex justify-center">
           <Button extraStyling="mr-4 shadow" primary rounded onClick={handleClickGenerate}>
             Generate

@@ -38,26 +38,26 @@ export default function ControlPanel() {
     );
 
     return (
-        <>
-            <div className={finalClassNames}>
-                <div className="flex flex-row">
-                    <DropDown options={keyOptions()} value={keySelection} onChange={handleKeySelection}>Key:</DropDown>
-                    <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale:</DropDown>
-                    <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument:</DropDown>
-                </div>
-                <RangeSlider 
-                    minDistance={MIN_PITCH_DISTANCE} 
-                    minValue={minAssignedPitch}
-                    maxValue={maxAssignedPitch}
-                    onChangeValues={handleSetPitchRange}
-                >
-                    Pitch Range
-                </RangeSlider>
-                {/* Tempo slider */}
-                {/* Volume slider */}
-                {/* Note duration buttons (assemble values in object of bools) */}
-                {/* Custom scale buttons */}
+        <div className={finalClassNames}>
+            <div className="flex flex-row">
+                <DropDown options={keyOptions()} value={keySelection} onChange={handleKeySelection}>Key:</DropDown>
+                <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale:</DropDown>
+                <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument:</DropDown>
             </div>
-        </>
+            <RangeSlider 
+                min={MIN_PITCH_NUMBER}
+                max={MAX_PITCH_NUMBER}
+                minDistance={MIN_PITCH_DISTANCE}
+                minValue={minAssignedPitch}
+                maxValue={maxAssignedPitch}
+                onChangeValues={handleSetPitchRange}
+            >
+                Pitch Range
+            </RangeSlider>
+            {/* Tempo slider */}
+            {/* Volume slider */}
+            {/* Note duration buttons (assemble values in object of bools) */}
+            {/* Custom scale buttons */}
+        </div>
     );
 }

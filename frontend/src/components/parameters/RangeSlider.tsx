@@ -2,12 +2,14 @@ import ReactSlider from "react-slider";
 import './range-slider.css';
 import { SliderProps } from "../../types/slider";
 
-export default function RangeSlider({minDistance, minValue, maxValue, onChangeValues, children}: SliderProps) {
+export default function RangeSlider({ min, max, minDistance, minValue, maxValue, onChangeValues, children}: SliderProps) {
     return (
         <>
             <label>{children}</label>
             <ReactSlider
                 className="horizontal-slider"
+                min={min}
+                max={max}
                 thumbClassName="slider-thumb"
                 trackClassName="slider-track"
                 defaultValue={[minValue, maxValue]}
