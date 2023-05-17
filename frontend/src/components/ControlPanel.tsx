@@ -34,15 +34,15 @@ export default function ControlPanel() {
     };
 
     const finalClassNames = classNames(
-        'border rounded p-2 shadow bg-white w-full flex flex-col items-center mt-8'
+        'border rounded p-2 shadow bg-white flex flex-col items-center mx-2 my-10'
     );
 
     return (
         <div className={finalClassNames}>
             <div className="flex flex-row">
-                <DropDown options={keyOptions()} value={keySelection} onChange={handleKeySelection}>Key:</DropDown>
-                <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale:</DropDown>
-                <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument:</DropDown>
+                <DropDown options={keyOptions()} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
+                <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
+                <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
             </div>
             <RangeSlider 
                 min={MIN_PITCH_NUMBER}

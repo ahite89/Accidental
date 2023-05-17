@@ -135,12 +135,12 @@ export default function App() {
 
   return (
     <div>
-      <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-start p-4 max-w-lg">
+      <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-start px-10 py-4">
         <p className="text-white text-xl border-white border-2 border-solid p-2 rounded">
         &#9838;ccidental
         </p>
       </header>
-      <div className="p-8 bg-slate-100 max-w-lg">
+      <div className="p-8 bg-slate-100">
         <div className="flex justify-center">
           <Button extraStyling="mr-4 shadow" primary rounded onClick={handleClickGenerate}>
             Generate
