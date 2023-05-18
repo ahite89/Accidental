@@ -7,5 +7,6 @@ export type SliderProps = {
     minValue: number,
     maxValue: number,
     onChangeValues: (values: number[]) => void,
+    map: Record<number | string, number | string>,
     children?: ReactNode
 }

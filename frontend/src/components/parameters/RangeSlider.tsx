@@ -2,7 +2,7 @@ import ReactSlider from "react-slider";
 import './range-slider.css';
 import { SliderProps } from "../../types/slider";
 
-export default function RangeSlider({ min, max, minDistance, minValue, maxValue, onChangeValues, children}: SliderProps) {
+export default function RangeSlider({ min, max, minDistance, minValue, maxValue, onChangeValues, map, children}: SliderProps) {
     return (
         <>
             <label>{children}</label>
@@ -16,7 +16,7 @@ export default function RangeSlider({ min, max, minDistance, minValue, maxValue,
                 ariaLabel={['Lower thumb', 'Upper thumb']}
                 ariaValuetext={state => `Thumb value ${state.valueNow}`}
                 renderThumb={(props, state) => {
-                    return <div {...props}>{state.valueNow}</div>
+                    return <div {...props}>{map[state.valueNow]}</div>
                 }}
                 onChange={(values) => {                
                     onChangeValues(values);
