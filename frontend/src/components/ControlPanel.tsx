@@ -2,6 +2,7 @@ import { useState } from "react";
 import classNames from "classnames";
 import DropDown from "./parameters/Dropdown";
 import RangeSlider from "./parameters/RangeSlider";
+import Button from "./parameters/Button";
 import { keyOptions } from "../constants/keys";
 import { scaleOptions } from "../constants/scales";
 import { instrumentOptions } from "../constants/instruments";
@@ -9,7 +10,7 @@ import { pitchNumberMap } from "../constants/maps";
 import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../constants/notes";
 import { ControlPanelProps } from "../types/controlPanel";
 
-export default function ControlPanel({ selection, handleSelection }: ControlPanelProps) {
+export default function ControlPanel({ selection, handleSelection, handleUpdateStaff }: ControlPanelProps) {
 
     // Dropdowns
     const [scaleSelection, setScaleSelection] = useState<string>(scaleOptions()[0].value);
@@ -55,6 +56,7 @@ export default function ControlPanel({ selection, handleSelection }: ControlPane
             >
                 Pitch Range
             </RangeSlider>
+            <Button save rounded onClick={handleUpdateStaff}>Save Changes</Button>
             {/* Tempo slider */}
             {/* Volume slider */}
             {/* Note duration buttons (assemble values in object of bools) */}

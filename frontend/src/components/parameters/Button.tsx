@@ -5,8 +5,7 @@ export default function Button({
     children,
     primary,
     secondary,
-    success,
-    warning, 
+    save, 
     outline,
     rounded,
     extraStyling,
@@ -17,14 +16,12 @@ export default function Button({
     const classes = className('px-3 py-1.5 border', {
         'border-cyan-500 bg-cyan-500 text-white': primary,
         'border-gray-400 bg-gray-400 text-white': secondary,
-        'border-green-400 bg-green-400 text-white': success,
-        'border-yellow-400 bg-yellow-400 text-white': warning,
+        'border-blue-500 bg-blue-500 text-white': save,
         'rounded-full': rounded,
         'bg-white': outline,
         'text-blue-400': outline && primary,
         'text-gray-400': outline && secondary,
-        'text-green-400': outline && success,
-        'text-yellow-400': outline && warning
+        'text-green-400': outline && save,
     }, extraStyling);
 
     return (

@@ -1,4 +1,5 @@
 export type ControlPanelProps = {
     selection: string,
-    handleSelection: (value: string) => void
+    handleSelection: (value: string) => void,
+    handleUpdateStaff: () => void
 }

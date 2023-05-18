@@ -166,8 +166,11 @@ export default function App() {
         </div>
         <Staff />
         <Playback />
-        <Button warning rounded onClick={handleUpdateStaff}>Save Changes</Button>
-        <ControlPanel selection={keySelection} handleSelection={handleKeySelection}/> 
+        <ControlPanel 
+          selection={keySelection} 
+          handleSelection={handleKeySelection} 
+          handleUpdateStaff={handleUpdateStaff} 
+        /> 
       </div>
     </div>
   );
