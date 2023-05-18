@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
 import { NoteProps } from '../types/note';
 import { CursorControl } from '../services/cursorcontrol';
-import { defaultNotes, MAX_BEATS_PER_BAR } from '../constants/notes';
+import { keyOptions, defaultNotes, MAX_BEATS_PER_BAR } from '../constants/notes';
 import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
 import ControlPanel from './ControlPanel';
 import Playback from './Playback';
@@ -10,7 +10,8 @@ import Button from './parameters/Button';
 
 export default function App() {
 
-  const notationString = useRef<string>(`X:1\nK:C\nM:4/4\nQ:1/4=120\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
+  const selectedKey = useRef<string>("K:C");
+  const notationString = useRef<string>(`X:1\n${selectedKey.current}\nM:4/4\nQ:1/4=120\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
 
   const [isGenerating, setIsGenerating] = useState(true);
@@ -133,6 +134,20 @@ export default function App() {
     await randomizeAndRenderNotes(defaultNotes);
   };
 
+  // Control Panel parameters
+  const [keySelection, setKeySelection] = useState<string>(keyOptions()[0].value);
+
+  const handleKeySelection = (key: string): void => {
+    setKeySelection(key);
+    notationString.current = notationString.current.replace(selectedKey.current, `K:${key}`);
+    selectedKey.current = `K:${key}`;
+  };
+
+  const handleUpdateStaff = (): void => {
+    console.log(notationString.current);
+    abcjs.renderAbc("staff", notationString.current);
+  };
+
   return (
     <div>
       <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-start px-10 py-4">
@@ -151,7 +166,8 @@ export default function App() {
         </div>
         <Staff />
         <Playback />
-        <ControlPanel /> 
+        <Button warning rounded onClick={handleUpdateStaff}>Save Changes</Button>
+        <ControlPanel selection={keySelection} handleSelection={handleKeySelection}/> 
       </div>
     </div>
   );
