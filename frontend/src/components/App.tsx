@@ -4,15 +4,19 @@ import { NoteProps } from '../types/note';
 import { CursorControl } from '../services/cursorcontrol';
 import { defaultNotes, MAX_BEATS_PER_BAR } from '../constants/notes';
 import { keyOptions } from '../constants/keys';
-import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
+import { instrumentOptions } from '../constants/instruments';
+import { scaleOptions } from '../constants/scales';
+import { instrumentMap } from '../constants/maps';
+import abcjs, { AbcVisualParams, TuneObjectArray, SynthOptions } from "abcjs";
 import ControlPanel from './ControlPanel';
 import Playback from './Playback';
 import Button from './parameters/Button';
 
 export default function App() {
 
-  const selectedKey = useRef<string>("K:C");
-  const notationString = useRef<string>(`X:1\n${selectedKey.current}\nM:4/4\nQ:1/4=120\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
+  const startingKey = useRef<string>("K:C");
+  const activeInstrument = useRef<number>(0);
+  const notationString = useRef<string>(`X:1\n${startingKey.current}\nM:4/4\nQ:1/4=120\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
 
   const [isGenerating, setIsGenerating] = useState(true);
@@ -34,9 +38,6 @@ export default function App() {
     staffwidth: 800,
     scrollHorizontal: true 
   };
-  const audioParams: AbcVisualParams = { 
-    clickListener: () => {console.log("clicked!")} 
-  };
 
   useEffect(() => {
     if (abcjs.synth.supportsAudio()) {     
@@ -49,17 +50,18 @@ export default function App() {
             displayProgress: true, 
           }
       );
-
+      console.log(activeInstrument.current);
       staffObj = abcjs.renderAbc("staff", notationString.current, notationOptions);
       synth.init({ 
         audioContext: audioContext,
-        visualObj: staffObj[0] ,
-        millisecondsPerMeasure: 1000,
+        visualObj: staffObj[0],
+        millisecondsPerMeasure: 500,   // make dynamic or remove?
         options: {
-          pan: [ -0.3, 0.3 ]
+          pan: [ -0.3, 0.3 ],
+          program: activeInstrument.current  // why no work?
         }
       }).then(() => {
-          synthControl.setTune(staffObj[0], false, audioParams).then(function () {
+          synthControl.setTune(staffObj[0], false).then(function () {
             console.log("Audio successfully loaded.")
         }).catch((error) => {
             console.warn("Audio problem:", error);
@@ -68,7 +70,7 @@ export default function App() {
           console.warn("Audio problem:", error);
       });
     } 
-  }, []);
+  }, [activeInstrument.current]);
 
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -102,7 +104,7 @@ export default function App() {
             "volume": 75,
             "start": 0,
             "duration": note.duration,
-            "instrument": 1,
+            "instrument": activeInstrument.current,
             "gap": 0
           },
         ], [], 1000 // a measure takes one second.    
@@ -117,13 +119,13 @@ export default function App() {
     let currentIndex = notes.length,  randomIndex: number;
 
     let i = 0;
-    while (i < 16) {
+    while (i < 10) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       await renderNoteToStaff(notes[randomIndex]);
       i++;
     }
 
-    synthControl.setTune(staffObj[0], true, audioParams);
+    synthControl.setTune(staffObj[0], true);
   }
 
   const handleClickStop = () => {
@@ -135,15 +137,33 @@ export default function App() {
     await randomizeAndRenderNotes(defaultNotes);
   };
 
-  // Control Panel parameters
+  // CONTROL PANEL PARAMETERS
+
+  // Key
   const [keySelection, setKeySelection] = useState<string>(keyOptions()[0].value);
 
   const handleKeySelection = (key: string): void => {
     setKeySelection(key);
-    notationString.current = notationString.current.replace(selectedKey.current, `K:${key}`);
-    selectedKey.current = `K:${key}`;
+    notationString.current = notationString.current.replace(startingKey.current, `K:${key}`);
+    startingKey.current = `K:${key}`;
   };
 
+  // Scales
+  const [scaleSelection, setScaleSelection] = useState<string>(scaleOptions()[0].value);
+
+  const handleScaleSelection = (scale: string): void => {
+      setScaleSelection(scale);
+  };
+
+  // Instrument
+  const [instrumentSelection, setInstrumentSelection] = useState<string>(instrumentOptions()[0].value);
+  
+  const handleInstrumentSelection = (instrument: string): void => {
+    setInstrumentSelection(instrument);
+    activeInstrument.current = instrumentMap[instrument];
+  };
+
+  // Save changes
   const handleUpdateStaff = (): void => {
     abcjs.renderAbc("staff", notationString.current);
   };
@@ -167,9 +187,13 @@ export default function App() {
         <Staff />
         <Playback />
         <ControlPanel 
-          selection={keySelection} 
-          handleSelection={handleKeySelection} 
-          handleUpdateStaff={handleUpdateStaff} 
+          keySelection={keySelection} 
+          scaleSelection={scaleSelection}
+          instrumentSelection={instrumentSelection}
+          handleKeySelection={handleKeySelection}
+          handleScaleSelection={handleScaleSelection}
+          handleInstrumentSelection={handleInstrumentSelection} 
+          handleUpdateStaff={handleUpdateStaff}
         /> 
       </div>
     </div>

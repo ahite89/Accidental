@@ -10,19 +10,15 @@ import { pitchNumberMap } from "../constants/maps";
 import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../constants/notes";
 import { ControlPanelProps } from "../types/controlPanel";
 
-export default function ControlPanel({ selection, handleSelection, handleUpdateStaff }: ControlPanelProps) {
-
-    // Dropdowns
-    const [scaleSelection, setScaleSelection] = useState<string>(scaleOptions()[0].value);
-    const [instrumentSelection, setInstrumentSelection] = useState<string>(instrumentOptions()[0].value);
-
-    const handleScaleSelection = (scale: string): void => {
-        setScaleSelection(scale);
-    };
-
-    const handleInstrumentSelection = (instrument: string): void => {
-        setInstrumentSelection(instrument);
-    };
+export default function ControlPanel({ 
+        keySelection,
+        scaleSelection,
+        instrumentSelection,
+        handleKeySelection,
+        handleScaleSelection,
+        handleInstrumentSelection,
+        handleUpdateStaff 
+    }: ControlPanelProps) {
 
     // Sliders
     const [minAssignedPitch, setMinAssignedPitch] = useState<number>(MIN_PITCH_NUMBER);
@@ -41,7 +37,7 @@ export default function ControlPanel({ selection, handleSelection, handleUpdateS
     return (
         <div className={finalClassNames}>
             <div className="flex flex-row">
-                <DropDown options={keyOptions()} value={selection} onChange={handleSelection}>Key</DropDown>
+                <DropDown options={keyOptions()} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
                 <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
                 <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
             </div>

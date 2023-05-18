@@ -1,5 +1,9 @@
 export type ControlPanelProps = {
-    selection: string,
-    handleSelection: (value: string) => void,
+    keySelection: string,
+    scaleSelection: string,
+    instrumentSelection: string,
+    handleKeySelection: (key: string) => void,
+    handleScaleSelection: (scale: string) => void,
+    handleInstrumentSelection: (instrument: string) => void,
     handleUpdateStaff: () => void
 }

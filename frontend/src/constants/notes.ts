@@ -1,8 +1,8 @@
 import { NoteProps } from '../types/note';
 
 export const MAX_BEATS_PER_BAR = 8;
-export const MIN_PITCH_NUMBER = 21;
-export const MAX_PITCH_NUMBER = 108;
+export const MIN_PITCH_NUMBER = 36;
+export const MAX_PITCH_NUMBER = 96;
 export const MIN_PITCH_DISTANCE = 5;
 
 export const defaultNotes: NoteProps[] = [
