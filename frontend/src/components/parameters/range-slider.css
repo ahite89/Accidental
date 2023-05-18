@@ -13,10 +13,12 @@
     border-radius: 100%;
     display: block;
     box-shadow: 0 0 4px 0 rgb(0 0 0 / 44%);
-    top: 9px;
-    width: 30px;
-    height: 30px;
+    top: 5px;
+    width: 35px;
+    height: 35px;
     outline: none;
+    text-align: center;
+    line-height: 32px;
 }
 
 .slider-track {

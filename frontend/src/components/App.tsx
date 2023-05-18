@@ -152,7 +152,7 @@ export default function App() {
     <div>
       <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-start px-10 py-4">
         <p className="text-white text-xl border-white border-2 border-solid p-2 rounded">
-        &#9838;ccidental
+          &#9838;ccidental
         </p>
       </header>
       <div className="p-8 bg-slate-100">
