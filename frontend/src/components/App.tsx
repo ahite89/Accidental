@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
 import { NoteProps } from '../types/note';
 import { CursorControl } from '../services/cursorcontrol';
-import { keyOptions, defaultNotes, MAX_BEATS_PER_BAR } from '../constants/notes';
+import { defaultNotes, MAX_BEATS_PER_BAR } from '../constants/notes';
+import { keyOptions } from '../constants/keys';
 import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
 import ControlPanel from './ControlPanel';
 import Playback from './Playback';
@@ -144,7 +145,6 @@ export default function App() {
   };
 
   const handleUpdateStaff = (): void => {
-    console.log(notationString.current);
     abcjs.renderAbc("staff", notationString.current);
   };
 
