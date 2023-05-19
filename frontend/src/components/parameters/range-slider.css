@@ -21,7 +21,7 @@
     line-height: 32px;
 }
 
-.slider-track {
+.multi-slider-track, .slider-track {
     position: relative;
     background: #ddd;
     top: 20px;
@@ -29,6 +29,6 @@
     border-radius: 5px;
 }
 
-.slider-track-1 {
+.multi-slider-track-1, .slider-track-0 {
     background: rgb(6 182 212);
 }

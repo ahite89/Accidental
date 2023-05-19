@@ -11,7 +11,7 @@ export default function MultiRangeSlider({ min, max, minDistance, minValue, maxV
                 min={min}
                 max={max}
                 thumbClassName="slider-thumb"
-                trackClassName="slider-track"
+                trackClassName="multi-slider-track"
                 defaultValue={[minValue, maxValue]}
                 ariaLabel={['Lower thumb', 'Upper thumb']}
                 ariaValuetext={state => `Thumb value ${state.valueNow}`}
