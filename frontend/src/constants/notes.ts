@@ -1,13 +1,5 @@
 import { NoteProps } from '../types/note';
 
-export const MAX_BEATS_PER_BAR = 8;
-export const MIN_PITCH_NUMBER = 36;
-export const MAX_PITCH_NUMBER = 96;
-export const MIN_PITCH_DISTANCE = 5;
-export const MIN_TEMPO = 60;
-export const MAX_TEMPO = 180;
-export const TEMPO_INTERVAL = 4;
-
 export const defaultNotes: NoteProps[] = [
     // Duration: 1 = 8th, 2 = quarter, 3 = dotted quarter, 4 = half, etc.
     {name: 'C', pitchNumber: 60, duration: 1, timeBetweenNotes: 500},
