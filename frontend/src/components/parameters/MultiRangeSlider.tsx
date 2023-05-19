@@ -18,9 +18,7 @@ export default function MultiRangeSlider({ min, max, minDistance, minValue, maxV
                 renderThumb={(props, state) => {
                     return <div {...props}>{map[state.valueNow]}</div>
                 }}
-                onChange={(values) => {                
-                    onChangeValues(values);
-                }}
+                onChange={(values) => onChangeValues(values)}
                 pearling
                 minDistance={minDistance}
             />

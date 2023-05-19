@@ -15,9 +15,11 @@ export default function ControlPanel({
         keySelection,
         scaleSelection,
         instrumentSelection,
+        tempoSelection,
         handleKeySelection,
         handleScaleSelection,
         handleInstrumentSelection,
+        handleTempoSelection,
         handleUpdateStaff 
     }: ControlPanelProps) {
 
@@ -57,8 +59,8 @@ export default function ControlPanel({
             <RangeSlider
                 min={60}
                 max={180}
-                value={120}
-                onChangeValue={undefined}
+                value={tempoSelection}
+                onChangeValue={handleTempoSelection}
             >
                 Tempo
             </RangeSlider>

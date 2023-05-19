@@ -18,11 +18,7 @@ export default function RangeSlider({ min, max, value, onChangeValue, children}:
                 renderThumb={(props, state) => {
                     return <div {...props}>{state.valueNow}</div>
                 }}
-                onChange={(value) => {
-                    if (onChangeValue) {            
-                        onChangeValue(value);
-                    }
-                }}
+                onChange={(value) => onChangeValue(value)}
                 pearling
             />
         </>

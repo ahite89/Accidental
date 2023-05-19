@@ -16,7 +16,8 @@ export default function App() {
 
   const startingKey = useRef<string>("K:C");
   const activeInstrument = useRef<number>(0);
-  const notationString = useRef<string>(`X:1\n${startingKey.current}\nM:4/4\nQ:1/4=120\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
+  const activeTempo = useRef<number>(100);
+  const notationString = useRef<string>(`X:1\n${startingKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
 
   const [isGenerating, setIsGenerating] = useState(true);
@@ -163,6 +164,15 @@ export default function App() {
     activeInstrument.current = instrumentMap[instrument];
   };
 
+  // Tempo
+  const [tempoSelection, setTempoSelection] = useState<number>(100);
+
+  const handleTempoSelection = (tempo: number): void => {
+    setTempoSelection(tempo);
+    notationString.current = notationString.current.replace(activeTempo.current.toString(), tempo.toString());
+    activeTempo.current = tempo;
+  };
+
   // Save changes
   const handleUpdateStaff = (): void => {
     abcjs.renderAbc("staff", notationString.current);
@@ -190,9 +200,11 @@ export default function App() {
           keySelection={keySelection} 
           scaleSelection={scaleSelection}
           instrumentSelection={instrumentSelection}
+          tempoSelection={tempoSelection}
           handleKeySelection={handleKeySelection}
           handleScaleSelection={handleScaleSelection}
-          handleInstrumentSelection={handleInstrumentSelection} 
+          handleInstrumentSelection={handleInstrumentSelection}
+          handleTempoSelection={handleTempoSelection}
           handleUpdateStaff={handleUpdateStaff}
         /> 
       </div>
