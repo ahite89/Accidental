@@ -4,15 +4,15 @@ export interface SliderProps {
     min: number,
     max: number,
     value: number,
+    interval: number,
     onChangeValue: (value: number) => void,
     children?: ReactNode
 }
 
-// NEED TO OMIT SOME PROPS FROM THIS INHERITANCE (VALUE, ONCHANGEVALUE)
-export interface MultiSliderProps extends Omit<SliderProps, 'value' | 'onChangeValue'> {
+export interface MultiSliderProps extends Omit<SliderProps, 'value' | 'interval' | 'onChangeValue'> {
     minDistance: number,
     minValue: number,
     maxValue: number,
     onChangeValues: (values: number[]) => void,
-    map: Record<number | string, number | string>,
+    map: Record<number | string, number | string>
 }

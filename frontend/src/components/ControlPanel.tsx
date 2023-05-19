@@ -8,7 +8,7 @@ import { keyOptions } from "../constants/keys";
 import { scaleOptions } from "../constants/scales";
 import { instrumentOptions } from "../constants/instruments";
 import { pitchNumberMap } from "../constants/maps";
-import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../constants/notes";
+import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER, MIN_TEMPO, MAX_TEMPO, TEMPO_INTERVAL } from "../constants/notes";
 import { ControlPanelProps } from "../types/controlPanel";
 
 export default function ControlPanel({ 
@@ -57,10 +57,11 @@ export default function ControlPanel({
             </MultiRangeSlider>
             {/* Tempo slider */}
             <RangeSlider
-                min={60}
-                max={180}
+                min={MIN_TEMPO}
+                max={MAX_TEMPO}
                 value={tempoSelection}
                 onChangeValue={handleTempoSelection}
+                interval={TEMPO_INTERVAL}
             >
                 Tempo
             </RangeSlider>

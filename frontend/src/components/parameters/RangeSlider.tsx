@@ -2,7 +2,7 @@ import ReactSlider from "react-slider";
 import './range-slider.css';
 import { SliderProps } from "../../types/slider";
 
-export default function RangeSlider({ min, max, value, onChangeValue, children}: SliderProps) {
+export default function RangeSlider({ min, max, value, interval, onChangeValue, children}: SliderProps) {
     return (
         <>
             <label>{children}</label>
@@ -19,6 +19,7 @@ export default function RangeSlider({ min, max, value, onChangeValue, children}:
                     return <div {...props}>{state.valueNow}</div>
                 }}
                 onChange={(value) => onChangeValue(value)}
+                step={interval}
                 pearling
             />
         </>
