@@ -1,4 +1,4 @@
-export type NoteProps = {
+export interface NoteProps {
     name: string,
     pitchNumber: number,
     duration: number,

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import classNames from "classnames";
 import DropDown from "./parameters/Dropdown";
+import MultiRangeSlider from "./parameters/MultiRangeSlider";
 import RangeSlider from "./parameters/RangeSlider";
 import Button from "./parameters/Button";
 import { keyOptions } from "../constants/keys";
@@ -41,7 +42,7 @@ export default function ControlPanel({
                 <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
                 <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
             </div>
-            <RangeSlider 
+            <MultiRangeSlider 
                 min={MIN_PITCH_NUMBER}
                 max={MAX_PITCH_NUMBER}
                 minDistance={MIN_PITCH_DISTANCE}
@@ -51,12 +52,20 @@ export default function ControlPanel({
                 map={pitchNumberMap}
             >
                 Pitch Range
-            </RangeSlider>
-            <Button save rounded onClick={handleUpdateStaff}>Save Changes</Button>
+            </MultiRangeSlider>
             {/* Tempo slider */}
+            <RangeSlider
+                min={60}
+                max={180}
+                value={120}
+                onChangeValue={undefined}
+            >
+                Tempo
+            </RangeSlider>
             {/* Volume slider */}
             {/* Note duration buttons (assemble values in object of bools) */}
             {/* Custom scale buttons */}
+            <Button save rounded onClick={handleUpdateStaff}>Save Changes</Button>
         </div>
     );
 }

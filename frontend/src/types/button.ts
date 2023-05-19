@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export type ButtonProps = {
+export interface ButtonProps {
     onClick: () => Promise<void> | void,
     children: ReactNode,
     primary?: boolean,

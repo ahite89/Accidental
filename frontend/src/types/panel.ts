@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export type PanelProps = {
+export interface PanelProps {
     children?: ReactNode,
     className: string,
     [x: string]: any

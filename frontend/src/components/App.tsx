@@ -7,7 +7,7 @@ import { keyOptions } from '../constants/keys';
 import { instrumentOptions } from '../constants/instruments';
 import { scaleOptions } from '../constants/scales';
 import { instrumentMap } from '../constants/maps';
-import abcjs, { AbcVisualParams, TuneObjectArray, SynthOptions } from "abcjs";
+import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
 import ControlPanel from './ControlPanel';
 import Playback from './Playback';
 import Button from './parameters/Button';

@@ -1,8 +1,8 @@
 import ReactSlider from "react-slider";
 import './range-slider.css';
-import { SliderProps } from "../../types/slider";
+import { MultiSliderProps } from "../../types/slider";
 
-export default function RangeSlider({ min, max, value, onChangeValue, children}: SliderProps) {
+export default function MultiRangeSlider({ min, max, minDistance, minValue, maxValue, onChangeValues, map, children}: MultiSliderProps) {
     return (
         <>
             <label>{children}</label>
@@ -12,18 +12,17 @@ export default function RangeSlider({ min, max, value, onChangeValue, children}:
                 max={max}
                 thumbClassName="slider-thumb"
                 trackClassName="slider-track"
-                defaultValue={value}
-                ariaLabel={'Thumb'}
+                defaultValue={[minValue, maxValue]}
+                ariaLabel={['Lower thumb', 'Upper thumb']}
                 ariaValuetext={state => `Thumb value ${state.valueNow}`}
                 renderThumb={(props, state) => {
-                    return <div {...props}>{state.valueNow}</div>
+                    return <div {...props}>{map[state.valueNow]}</div>
                 }}
-                onChange={(value) => {
-                    if (onChangeValue) {            
-                        onChangeValue(value);
-                    }
+                onChange={(values) => {                
+                    onChangeValues(values);
                 }}
                 pearling
+                minDistance={minDistance}
             />
         </>
     );

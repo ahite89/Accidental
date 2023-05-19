@@ -1,4 +1,4 @@
-export type ControlPanelProps = {
+export interface ControlPanelProps {
     keySelection: string,
     scaleSelection: string,
     instrumentSelection: string,
