@@ -15,12 +15,15 @@ import Button from './parameters/Button';
 
 export default function App() {
 
-  const startingKey = useRef<string>("K:C");
+  // Refs
+  const activeKey = useRef<string>("K:C");
   const activeInstrument = useRef<number>(0);
   const activeTempo = useRef<number>(100);
-  const notationString = useRef<string>(`X:1\n${startingKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
+  const activeVolume = useRef<number>(60);
+  const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
 
+  // State
   const [isGenerating, setIsGenerating] = useState(true);
   
   // abc inits
@@ -52,7 +55,7 @@ export default function App() {
             displayProgress: true, 
           }
       );
-      console.log(activeInstrument.current);
+
       staffObj = abcjs.renderAbc("staff", notationString.current, notationOptions);
       synth.init({ 
         audioContext: audioContext,
@@ -71,15 +74,14 @@ export default function App() {
       }).catch((error) => {
           console.warn("Audio problem:", error);
       });
-    } 
-  }, [activeInstrument.current]);
+    }   // re-initialize synth when params are changed 
+  }, [activeKey.current, activeInstrument.current, activeTempo.current, activeVolume.current]);
 
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
   const renderNoteToStaff = async (note: NoteProps): Promise<void> => {
     // switch render function with pause function?
-    let newNote = '';
-    let blankStaffSpaceFilled = notationString.current.indexOf('x') === -1;
+    let newNote = '', blankStaffSpaceFilled = notationString.current.indexOf('x') === -1;
     
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
       notesInBarCount.current += note.duration;
@@ -97,13 +99,13 @@ export default function App() {
         // replace blank staff space until filled in with notes
         notationString.current = notationString.current.replace('x', newNote); 
       }
-
+      console.log(volumeSelection);
       // quarter note in 4/4 would be .25
       abcjs.synth.playEvent(
         [
           {
             "pitch": note.pitchNumber,
-            "volume": 75,
+            "volume": volumeSelection,
             "start": 0,
             "duration": note.duration,
             "instrument": activeInstrument.current,
@@ -111,7 +113,7 @@ export default function App() {
           },
         ], [], 1000 // a measure takes one second.    
       ).then(() => {
-          staffObj = abcjs.renderAbc("staff", notationString.current);
+          staffObj = abcjs.renderAbc("staff", notationString.current, notationOptions);
           console.log(note);
       });
     });
@@ -127,7 +129,7 @@ export default function App() {
       i++;
     }
 
-    synthControl.setTune(staffObj[0], true);
+    synthControl.setTune(staffObj[0], true);  // why here?
   }
 
   const handleClickStop = () => {
@@ -146,8 +148,8 @@ export default function App() {
 
   const handleKeySelection = (key: string): void => {
     setKeySelection(key);
-    notationString.current = notationString.current.replace(startingKey.current, `K:${key}`);
-    startingKey.current = `K:${key}`;
+    notationString.current = notationString.current.replace(activeKey.current, `K:${key}`);
+    activeKey.current = `K:${key}`;
   };
 
   // Scales
@@ -174,9 +176,17 @@ export default function App() {
     activeTempo.current = tempo;
   };
 
-  // Save changes
+  // Volume
+  const [volumeSelection, setVolumeSelection] = useState<number>(60);
+
+  const handleVolumeSelection = (volume: number): void => {
+    setVolumeSelection(volume);
+    activeVolume.current = volume;
+  };
+
+  // Save param changes
   const handleUpdateStaff = (): void => {
-    abcjs.renderAbc("staff", notationString.current);
+    abcjs.renderAbc("staff", notationString.current, notationOptions);
   };
 
   return (
@@ -202,10 +212,12 @@ export default function App() {
           scaleSelection={scaleSelection}
           instrumentSelection={instrumentSelection}
           tempoSelection={tempoSelection}
+          volumeSelection={volumeSelection}
           handleKeySelection={handleKeySelection}
           handleScaleSelection={handleScaleSelection}
           handleInstrumentSelection={handleInstrumentSelection}
           handleTempoSelection={handleTempoSelection}
+          handleVolumeSelection={handleVolumeSelection}
           handleUpdateStaff={handleUpdateStaff}
         /> 
       </div>

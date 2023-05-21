@@ -4,26 +4,39 @@ import DropDown from "./parameters/Dropdown";
 import MultiRangeSlider from "./parameters/MultiRangeSlider";
 import RangeSlider from "./parameters/RangeSlider";
 import Button from "./parameters/Button";
+import { ControlPanelProps } from "../types/controlPanel";
 import { keyOptions } from "../constants/keys";
 import { scaleOptions } from "../constants/scales";
 import { instrumentOptions } from "../constants/instruments";
 import { pitchNumberMap } from "../constants/maps";
-import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER, MIN_TEMPO, MAX_TEMPO, TEMPO_INTERVAL } from "../constants/integers";
-import { ControlPanelProps } from "../types/controlPanel";
+import { 
+    MIN_PITCH_DISTANCE,
+    MIN_PITCH_NUMBER,
+    MAX_PITCH_NUMBER,
+    MIN_TEMPO,
+    MAX_TEMPO,
+    TEMPO_INTERVAL,
+    MIN_VOLUME,
+    MAX_VOLUME,
+    VOLUME_INTERVAL
+} from "../constants/integers";
 
 export default function ControlPanel({ 
         keySelection,
         scaleSelection,
         instrumentSelection,
         tempoSelection,
+        volumeSelection,
         handleKeySelection,
         handleScaleSelection,
         handleInstrumentSelection,
         handleTempoSelection,
+        handleVolumeSelection,
         handleUpdateStaff 
     }: ControlPanelProps) {
 
     // Sliders
+    // move to app.tsx
     const [minAssignedPitch, setMinAssignedPitch] = useState<number>(MIN_PITCH_NUMBER);
     const [maxAssignedPitch, setMaxAssignedPitch] = useState<number>(MAX_PITCH_NUMBER);
 
@@ -66,6 +79,15 @@ export default function ControlPanel({
                 Tempo
             </RangeSlider>
             {/* Volume slider */}
+            <RangeSlider
+                min={MIN_VOLUME}
+                max={MAX_VOLUME}
+                value={volumeSelection}
+                onChangeValue={handleVolumeSelection}
+                interval={VOLUME_INTERVAL}
+            >
+                Volume
+            </RangeSlider>
             {/* Note duration buttons (assemble values in object of bools) */}
             {/* Custom scale buttons */}
             <Button save rounded onClick={handleUpdateStaff}>Save Changes</Button>
