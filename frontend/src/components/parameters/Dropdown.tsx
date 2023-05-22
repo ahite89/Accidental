@@ -41,20 +41,18 @@ export default function DropDown({ options, value, onChange, children }: DropDow
     });
 
     return (
-        <>
-            <div ref={divEl} className="w-40 relative mr-4">
-                <label>{children}</label>
-                <Panel className="flex justify-between items-center cursor-pointer mt-1"
-                    onClick={handleClick}>
-                    {value || 'Select...'}
-                    <GoChevronDown className="text-lg" />
+        <div ref={divEl} className="w-40 relative mr-4">
+            <label>{children}</label>
+            <Panel extraStyling="flex justify-between items-center cursor-pointer mt-1"
+                onClick={handleClick}>
+                {value || 'Select...'}
+                <GoChevronDown className="text-lg" />
+            </Panel>
+            {isOpen && 
+                <Panel extraStyling="absolute top-full z-10">
+                    {renderedOptions}
                 </Panel>
-                {isOpen && 
-                    <Panel className="absolute top-full z-10">
-                        {renderedOptions}
-                    </Panel>
-                }
-            </div>
-        </>
+            }
+        </div>
     );
 }

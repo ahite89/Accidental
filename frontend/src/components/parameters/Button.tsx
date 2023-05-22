@@ -26,7 +26,7 @@ export default function Button({
 
     return (
         <div>
-            <button className={classes} onClick={onClick}>
+            <button {...rest} className={classes} onClick={onClick}>
                 {children}
             </button>
         </div>

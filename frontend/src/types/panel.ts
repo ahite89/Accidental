@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 export interface PanelProps {
     children?: ReactNode,
-    className: string,
+    extraStyling?: string,
+    clicked?: boolean,
     [x: string]: any
 }
