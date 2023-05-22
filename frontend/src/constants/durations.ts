@@ -1,5 +1,3 @@
-import { PanelProps } from "../types/panel";
-
 enum Durations {
     Sixteenth = '16',
     Eighth = '8',
@@ -8,10 +6,11 @@ enum Durations {
     Whole = '1'
 }
 
-export const durationOptions = (): PanelProps[] => {
+export const durationOptions = (): string[] => {
     const durations = [];
     for (let duration of Object.values(Durations)) {
-        durations.push({ label: duration, value: duration })
+        durations.push(duration)
     }
+    console.log(durations);
     return durations;
 };

@@ -1,17 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
+import abcjs, { TuneObjectArray } from "abcjs";
+
 import Staff from './Staff';
+import ControlPanel from './ControlPanel';
+import Playback from './Playback';
+import Button from './parameters/Button';
+import Selectable from './parameters/Selectable';
+
 import { NoteProps } from '../types/note';
 import { defaultNotes } from '../constants/notes';
 import { MAX_BEATS_PER_BAR } from '../constants/integers';
 import { keyOptions } from '../constants/keys';
 import { instrumentOptions } from '../constants/instruments';
 import { scaleOptions } from '../constants/scales';
+import { durationOptions } from "../constants/durations";
 import { instrumentMap } from '../constants/maps';
-import abcjs, { TuneObjectArray } from "abcjs";
 import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/controls';
-import ControlPanel from './ControlPanel';
-import Playback from './Playback';
-import Button from './parameters/Button';
 
 export default function App() {
 
@@ -172,6 +176,30 @@ export default function App() {
     activeVolume.current = volume;
   };
 
+  // Duration
+  const [durationSelected, setDurationSelected] = useState<boolean>(false);
+  const [durationSelectableStyling, setDurationSelectableStyling] = useState<string>('');
+
+  const handleDurationClick = (): void => {
+      setDurationSelected(!durationSelected);
+      setDurationSelectableStyling('bg-slate-200');
+      // add selected duration to object
+
+  };
+
+  const renderedDurations = durationOptions().map((duration) => {
+    return (
+        // <div className="hover:bg-sky-100 rounded cursor-pointer p-1"
+        //     onClick={() => handleOptionClick(option)} key={option.value}>
+        //     {option.label}
+        // </div>
+        <Selectable selectedStyling={durationSelectableStyling}
+            onClick={handleDurationClick} key={duration}>
+            {duration}
+        </Selectable>
+    );         
+  });
+
   // Save param changes
   const handleUpdateStaff = (): void => {
     abcjs.renderAbc("staff", notationString.current, notationOptions);
@@ -195,6 +223,7 @@ export default function App() {
         </div>
         <Staff />
         <Playback />
+        <div>{renderedDurations}</div>
         <ControlPanel 
           keySelection={keySelection} 
           scaleSelection={scaleSelection}
