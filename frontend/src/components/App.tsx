@@ -1,48 +1,32 @@
 import { useEffect, useRef, useState } from 'react';
 import Staff from './Staff';
 import { NoteProps } from '../types/note';
-import { CursorControl } from '../services/cursorcontrol';
 import { defaultNotes } from '../constants/notes';
 import { MAX_BEATS_PER_BAR } from '../constants/integers';
 import { keyOptions } from '../constants/keys';
 import { instrumentOptions } from '../constants/instruments';
 import { scaleOptions } from '../constants/scales';
 import { instrumentMap } from '../constants/maps';
-import abcjs, { AbcVisualParams, TuneObjectArray } from "abcjs";
+import abcjs, { TuneObjectArray } from "abcjs";
+import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/controls';
 import ControlPanel from './ControlPanel';
 import Playback from './Playback';
 import Button from './parameters/Button';
 
 export default function App() {
 
-  // Refs
+  // REFS //
+
   const activeKey = useRef<string>("K:C");
   const activeInstrument = useRef<number>(0);
   const activeTempo = useRef<number>(100);
   const activeVolume = useRef<number>(60);
   const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
-
-  // State
-  const [isGenerating, setIsGenerating] = useState(true);
   
-  // abc inits
+  // INITIALIZE SYNTH AND STAFF //
+
   let staffObj: TuneObjectArray;
-  const synth = new abcjs.synth.CreateSynth();
-  const cursorControl = new CursorControl(2, 4, null);
-  const synthControl = new abcjs.synth.SynthController();
-  const audioContext = new AudioContext();
-  const notationOptions: AbcVisualParams = { 
-    add_classes: true, 
-    wrap: { 
-      minSpacing: 1.8,
-      maxSpacing: 2.7,
-      preferredMeasuresPerLine: 4
-    }, 
-    viewportHorizontal: true,
-    staffwidth: 800,
-    scrollHorizontal: true 
-  };
 
   useEffect(() => {
     if (abcjs.synth.supportsAudio()) {     
@@ -76,6 +60,10 @@ export default function App() {
       });
     }   // re-initialize synth when params are changed 
   }, [activeKey.current, activeInstrument.current, activeTempo.current, activeVolume.current]);
+
+  // NOTE RENDERING //
+
+  const [isGenerating, setIsGenerating] = useState(true);
 
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
@@ -141,7 +129,7 @@ export default function App() {
     await randomizeAndRenderNotes(defaultNotes);
   };
 
-  // CONTROL PANEL PARAMETERS
+  // CONTROL PANEL PARAMETERS //
 
   // Key
   const [keySelection, setKeySelection] = useState<string>(keyOptions()[0].value);

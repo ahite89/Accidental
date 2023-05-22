@@ -52,7 +52,7 @@ export default function ControlPanel({
 
     return (
         <div className={finalClassNames}>
-            <div className="flex flex-row">
+            <div className="flex flex-row my-8">
                 <DropDown options={keyOptions()} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
                 <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
                 <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
@@ -68,7 +68,6 @@ export default function ControlPanel({
             >
                 Pitch Range
             </MultiRangeSlider>
-            {/* Tempo slider */}
             <RangeSlider
                 min={MIN_TEMPO}
                 max={MAX_TEMPO}
@@ -78,7 +77,6 @@ export default function ControlPanel({
             >
                 Tempo
             </RangeSlider>
-            {/* Volume slider */}
             <RangeSlider
                 min={MIN_VOLUME}
                 max={MAX_VOLUME}
@@ -90,7 +88,7 @@ export default function ControlPanel({
             </RangeSlider>
             {/* Note duration buttons (assemble values in object of bools) */}
             {/* Custom scale buttons */}
-            <Button save rounded onClick={handleUpdateStaff}>Save Changes</Button>
+            <Button save rounded extraStyling="my-8" onClick={handleUpdateStaff}>Save Changes</Button>
         </div>
     );
 }
