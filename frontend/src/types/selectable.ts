@@ -2,7 +2,8 @@ import { ReactNode } from 'react';
 
 export interface SelectableOptions {
     options: SelectableOption[],
-    handleSelectableClick: (value: string, selected: boolean) => void,
+    value: string | null,
+    onSelect: (value: string) => void,
     children?: ReactNode,
 }
 

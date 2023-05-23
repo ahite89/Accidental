@@ -5,8 +5,6 @@ import Staff from './Staff';
 import ControlPanel from './ControlPanel';
 import Playback from './Playback';
 import Button from './parameters/Button';
-import Selectable from './parameters/Selectable';
-import SelectableList from './parameters/SelectableList';
 
 import { NoteProps } from '../types/note';
 import { defaultNotes } from '../constants/notes';
@@ -14,7 +12,7 @@ import { MAX_BEATS_PER_BAR } from '../constants/integers';
 import { keyOptions } from '../constants/keys';
 import { instrumentOptions } from '../constants/instruments';
 import { scaleOptions } from '../constants/scales';
-import { durationOptions } from "../constants/durations";
+// import { durationOptions } from "../constants/durations";
 import { instrumentMap } from '../constants/maps';
 import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/audiovisual';
 
@@ -22,10 +20,11 @@ export default function App() {
 
   // REFS //
 
-  const activeKey = useRef<string>("K:C");
+  const activeKey = useRef<string>('K:C');
   const activeInstrument = useRef<number>(0);
   const activeTempo = useRef<number>(100);
   const activeVolume = useRef<number>(60);
+  const activeDurations = useRef<string[]>(['4']);
   const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
   
@@ -178,23 +177,13 @@ export default function App() {
   };
 
   // Duration
-  const [durationSelected, setDurationSelected] = useState<boolean>(false);
+  const [selectedDurations, setSelectedDurations] = useState<string[]>([]);
 
-  const handleDurationClick = (duration: string): void => {
-      console.log(duration);
-      setDurationSelected(!durationSelected);
-      console.log(durationSelected);
-      // add selected duration to object
+  const handleDurationSelection = (duration: string): void => {
+      setSelectedDurations([...activeDurations.current, duration]);
+      activeDurations.current.push(duration);
+      console.log(selectedDurations, activeDurations.current);
   };
-
-  // const renderedDurations = durationOptions().map((duration) => {
-  //   return (
-  //       <Selectable selectedStyling={durationSelected ? 'bg-slate-200' : 'bg-white'}
-  //           onClick={handleDurationClick} key={duration}>
-  //           {duration}
-  //       </Selectable>
-  //   );         
-  // });
 
   // Save param changes
   const handleUpdateStaff = (): void => {
@@ -219,21 +208,19 @@ export default function App() {
         </div>
         <Staff />
         <Playback />
-        <SelectableList 
-          handleSelectableClick={handleDurationClick} 
-          options={durationOptions()} 
-        />
         <ControlPanel 
           keySelection={keySelection} 
           scaleSelection={scaleSelection}
           instrumentSelection={instrumentSelection}
           tempoSelection={tempoSelection}
           volumeSelection={volumeSelection}
+          selectedDurations={selectedDurations}
           handleKeySelection={handleKeySelection}
           handleScaleSelection={handleScaleSelection}
           handleInstrumentSelection={handleInstrumentSelection}
           handleTempoSelection={handleTempoSelection}
           handleVolumeSelection={handleVolumeSelection}
+          handleDurationSelection={handleDurationSelection}
           handleUpdateStaff={handleUpdateStaff}
         /> 
       </div>

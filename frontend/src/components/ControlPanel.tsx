@@ -5,11 +5,13 @@ import DropDown from "./parameters/Dropdown";
 import MultiRangeSlider from "./parameters/MultiRangeSlider";
 import RangeSlider from "./parameters/RangeSlider";
 import Button from "./parameters/Button";
+import SelectableList from './parameters/SelectableList';
 
 import { ControlPanelProps } from "../types/controlPanel";
 import { keyOptions } from "../constants/keys";
 import { scaleOptions } from "../constants/scales";
 import { instrumentOptions } from "../constants/instruments";
+import { durationOptions } from "../constants/durations";
 import { pitchNumberMap } from "../constants/maps";
 import { 
     MIN_PITCH_DISTANCE,
@@ -29,11 +31,13 @@ export default function ControlPanel({
         instrumentSelection,
         tempoSelection,
         volumeSelection,
+        selectedDurations,
         handleKeySelection,
         handleScaleSelection,
         handleInstrumentSelection,
         handleTempoSelection,
         handleVolumeSelection,
+        handleDurationSelection,
         handleUpdateStaff 
     }: ControlPanelProps) {
 
@@ -57,6 +61,15 @@ export default function ControlPanel({
                 <DropDown options={keyOptions()} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
                 <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
                 <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
+            </div>
+            <div className="flex flex-row my-8">
+                <SelectableList 
+                    options={durationOptions()}
+                    value={selectedDurations[0]}
+                    onSelect={handleDurationSelection}
+                >
+                    Note Durations
+                </SelectableList>
             </div>
             <MultiRangeSlider 
                 min={MIN_PITCH_NUMBER}
@@ -87,9 +100,6 @@ export default function ControlPanel({
             >
                 Volume
             </RangeSlider>
-            <div className="flex flex-row">
-                {/* {renderedDurations} */}
-            </div>
             {/* Note duration buttons (assemble values in object of bools) */}
             {/* Custom scale buttons */}
             <Button save rounded extraStyling="my-8" onClick={handleUpdateStaff}>Save Changes</Button>
