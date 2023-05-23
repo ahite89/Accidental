@@ -23,7 +23,7 @@ export default function App() {
   const activeKey = useRef<string>('K:C');
   const activeInstrument = useRef<number>(0);
   const activeTempo = useRef<number>(100);
-  const activeVolume = useRef<number>(60);
+  const activeVolume = useRef<number>(40);
   const activeDurations = useRef<string[]>(['4']);
   const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
@@ -169,7 +169,7 @@ export default function App() {
   };
 
   // Volume
-  const [volumeSelection, setVolumeSelection] = useState<number>(60);
+  const [volumeSelection, setVolumeSelection] = useState<number>(40);
 
   const handleVolumeSelection = (volume: number): void => {
     setVolumeSelection(volume);

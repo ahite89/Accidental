@@ -6,5 +6,5 @@ export const MIN_TEMPO = 60;
 export const MAX_TEMPO = 180;
 export const TEMPO_INTERVAL = 4;
 export const MIN_VOLUME = 0;
-export const MAX_VOLUME = 100;
+export const MAX_VOLUME = 80;
 export const VOLUME_INTERVAL = 2;

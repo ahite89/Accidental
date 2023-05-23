@@ -20,11 +20,11 @@ export default function SelectableList({ options, onSelect, children }: Selectab
     });
 
     return (
-        <div>
-            <label>{children}</label>
+        <>
+            <label className="mb-2">{children}</label>
             <Selectable>
                 {renderedSelectables}
             </Selectable>
-        </div>
+        </>
     );
 }

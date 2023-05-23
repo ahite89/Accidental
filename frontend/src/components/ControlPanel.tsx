@@ -62,7 +62,7 @@ export default function ControlPanel({
                 <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
                 <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
             </div>
-            <div className="flex flex-row my-8">
+            <div className="flex flex-col items-center my-8">
                 <SelectableList 
                     options={durationOptions()}
                     value={selectedDurations[0]}
