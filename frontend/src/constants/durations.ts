@@ -1,3 +1,5 @@
+import { SelectableOption } from "../types/selectable";
+
 enum Durations {
     Sixteenth = '16',
     Eighth = '8',
@@ -6,11 +8,10 @@ enum Durations {
     Whole = '1'
 }
 
-export const durationOptions = (): string[] => {
+export const durationOptions = (): SelectableOption[] => {
     const durations = [];
     for (let duration of Object.values(Durations)) {
-        durations.push(duration)
+        durations.push({ label: duration, value: duration, selected: false })
     }
-    console.log(durations);
     return durations;
 };

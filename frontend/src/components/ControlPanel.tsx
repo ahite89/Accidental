@@ -87,7 +87,6 @@ export default function ControlPanel({
             >
                 Volume
             </RangeSlider>
-            <label className="mb-4">Durations</label>
             <div className="flex flex-row">
                 {/* {renderedDurations} */}
             </div>

@@ -9,7 +9,7 @@ export default function DropDown({ options, value, onChange, children }: DropDow
     const divEl = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        const handler = (event: MouseEvent) => {
+        const handler = (event: MouseEvent): void => {
             if (!divEl.current?.contains(event.target as Node)) {
                 setIsOpen(false);
             }
@@ -22,11 +22,11 @@ export default function DropDown({ options, value, onChange, children }: DropDow
         };
     }, []);
 
-    const handleClick = () => {
+    const handleClick = (): void => {
         setIsOpen(!isOpen);
     };
 
-    const handleOptionClick = (option: DropDownOption) => {
+    const handleOptionClick = (option: DropDownOption): void => {
         setIsOpen(false);
         onChange(option.value);
     };

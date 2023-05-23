@@ -6,6 +6,7 @@ import ControlPanel from './ControlPanel';
 import Playback from './Playback';
 import Button from './parameters/Button';
 import Selectable from './parameters/Selectable';
+import SelectableList from './parameters/SelectableList';
 
 import { NoteProps } from '../types/note';
 import { defaultNotes } from '../constants/notes';
@@ -15,7 +16,7 @@ import { instrumentOptions } from '../constants/instruments';
 import { scaleOptions } from '../constants/scales';
 import { durationOptions } from "../constants/durations";
 import { instrumentMap } from '../constants/maps';
-import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/controls';
+import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/audiovisual';
 
 export default function App() {
 
@@ -178,27 +179,22 @@ export default function App() {
 
   // Duration
   const [durationSelected, setDurationSelected] = useState<boolean>(false);
-  const [durationSelectableStyling, setDurationSelectableStyling] = useState<string>('');
 
-  const handleDurationClick = (): void => {
+  const handleDurationClick = (duration: string): void => {
+      console.log(duration);
       setDurationSelected(!durationSelected);
-      setDurationSelectableStyling('bg-slate-200');
+      console.log(durationSelected);
       // add selected duration to object
-
   };
 
-  const renderedDurations = durationOptions().map((duration) => {
-    return (
-        // <div className="hover:bg-sky-100 rounded cursor-pointer p-1"
-        //     onClick={() => handleOptionClick(option)} key={option.value}>
-        //     {option.label}
-        // </div>
-        <Selectable selectedStyling={durationSelectableStyling}
-            onClick={handleDurationClick} key={duration}>
-            {duration}
-        </Selectable>
-    );         
-  });
+  // const renderedDurations = durationOptions().map((duration) => {
+  //   return (
+  //       <Selectable selectedStyling={durationSelected ? 'bg-slate-200' : 'bg-white'}
+  //           onClick={handleDurationClick} key={duration}>
+  //           {duration}
+  //       </Selectable>
+  //   );         
+  // });
 
   // Save param changes
   const handleUpdateStaff = (): void => {
@@ -223,7 +219,10 @@ export default function App() {
         </div>
         <Staff />
         <Playback />
-        <div>{renderedDurations}</div>
+        <SelectableList 
+          handleSelectableClick={handleDurationClick} 
+          options={durationOptions()} 
+        />
         <ControlPanel 
           keySelection={keySelection} 
           scaleSelection={scaleSelection}
