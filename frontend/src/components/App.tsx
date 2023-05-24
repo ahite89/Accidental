@@ -179,10 +179,10 @@ export default function App() {
   // Duration
   const [selectedDurations, setSelectedDurations] = useState<string[]>([]);
 
-  const handleDurationSelection = (duration: string): void => {
-      setSelectedDurations([...activeDurations.current, duration]);
-      activeDurations.current.push(duration);
-      console.log(selectedDurations, activeDurations.current);
+  const handleDurationSelection = (duration: string, selected: boolean): void => {
+      setSelectedDurations([...activeDurations.current.filter(x => x !== duration), duration]);
+      activeDurations.current = selectedDurations;
+      console.log(activeDurations.current, selectedDurations);
   };
 
   // Save param changes
