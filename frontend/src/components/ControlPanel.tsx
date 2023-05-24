@@ -65,7 +65,6 @@ export default function ControlPanel({
             <div className="flex flex-col items-center my-8">
                 <SelectableList 
                     options={durationOptions()}
-                    value={selectedDurations[0]}
                     onSelect={handleDurationSelection}
                 >
                     Note Durations

@@ -15,6 +15,7 @@ import { scaleOptions } from '../constants/scales';
 // import { durationOptions } from "../constants/durations";
 import { instrumentMap } from '../constants/maps';
 import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/audiovisual';
+import { SelectableProps } from '../types/selectable';
 
 export default function App() {
 
@@ -24,7 +25,7 @@ export default function App() {
   const activeInstrument = useRef<number>(0);
   const activeTempo = useRef<number>(100);
   const activeVolume = useRef<number>(40);
-  const activeDurations = useRef<string[]>(['4']);
+  const activeDurations = useRef<SelectableProps[]>([]);
   const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
   
@@ -177,12 +178,21 @@ export default function App() {
   };
 
   // Duration
-  const [selectedDurations, setSelectedDurations] = useState<string[]>([]);
+  const [selectedDurations, setSelectedDurations] = useState<SelectableProps[]>([]);
 
-  const handleDurationSelection = (duration: string, selected: boolean): void => {
-      setSelectedDurations([...activeDurations.current.filter(x => x !== duration), duration]);
-      activeDurations.current = selectedDurations;
-      console.log(activeDurations.current, selectedDurations);
+  const handleDurationSelection = (durationObject: SelectableProps): void => {
+    console.log(durationObject);
+    if (durationObject.selected) {
+      console.log("added!");
+      setSelectedDurations([...activeDurations.current, durationObject]);
+    }
+    else {
+      setSelectedDurations([...activeDurations.current.filter(x => x.value === durationObject.value)])
+    }
+
+    activeDurations.current = selectedDurations;
+    //console.log(selectedDurations);
+    //console.log(activeDurations.current, selectedDurations, durationObject.selected);
   };
 
   // Save param changes

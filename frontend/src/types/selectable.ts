@@ -1,22 +1,18 @@
 import { ReactNode } from 'react';
 
 export interface SelectableOptions {
-    options: SelectableOption[],
-    value: string | null,
-    onSelect: (value: string, selected: boolean) => void,
-    children?: ReactNode,
+    options: SelectableProps[],
+    onSelect: (value: SelectableProps) => void,
+    children?: ReactNode
 }
 
 export interface SelectableOption {
-    label: string,
     value: string,
-    selected: boolean,
-    onSelect: (value: string, selected: boolean) => void,
-    styling: string
+    selected?: boolean,
+    onSelect: (value: SelectableProps) => void
 }
 
 export interface SelectableProps {
-    children?: ReactNode,
-    extraStyling?: string,
-    [x: string]: any
+    value: string,
+    selected?: boolean
 }

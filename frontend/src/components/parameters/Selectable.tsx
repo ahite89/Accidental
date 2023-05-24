@@ -1,19 +1,19 @@
 import className from 'classnames';
 import { SelectableOption } from '../../types/selectable';
 
-export default function Selectable({ label, value, styling, selected, onSelect }: SelectableOption) {
+export default function Selectable({ value, selected, onSelect }: SelectableOption) {
     
     const handleOptionClick = (): void => {
-        onSelect(value, !selected);
+        onSelect({value, selected: !selected});
     };
     
     const classes = className(
-        'flex shadow bg-white w-full text-center'    
+        'hover:bg-sky-100 border cursor-pointer p-2 w-10', {'bg-slate-200': selected}
     );
     
     return (
         <div onClick={handleOptionClick} className={classes}>
-            {label}
+            {value}
         </div>
     );
 }
