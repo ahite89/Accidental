@@ -1,5 +1,6 @@
 import className from 'classnames';
 import { SelectableOption } from '../../types/selectable';
+import { noteSymbolMap } from '../../constants/maps';
 
 export default function Selectable({ value, selected, onSelect }: SelectableOption) {
     
@@ -11,12 +12,12 @@ export default function Selectable({ value, selected, onSelect }: SelectableOpti
     // use string array for current instead?
     
     const classes = className(
-        'hover:bg-sky-100 border cursor-pointer p-2 w-10', {'bg-slate-200': selected}
+        'border cursor-pointer p-2 w-16 text-3xl', {'bg-slate-100': selected}
     );
     
     return (
         <div onClick={handleOptionClick} className={classes}>
-            {value}
+            {noteSymbolMap[value]}
         </div>
     );
 }

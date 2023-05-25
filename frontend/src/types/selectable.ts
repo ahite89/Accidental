@@ -7,12 +7,12 @@ export interface SelectableOptions {
 }
 
 export interface SelectableOption {
-    value: string,
+    value: number,
     selected: boolean,
     onSelect: (value: SelectableProps) => void
 }
 
 export interface SelectableProps {
-    value: string,
+    value: number,
     selected: boolean
 }

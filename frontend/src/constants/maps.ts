@@ -11,6 +11,14 @@ export const noteDurationMap: Record<string, string> = {
     '12': '1n.'
 };
 
+export const noteSymbolMap: Record<number, string> = {
+    16: "\uD834\uDD61",
+    8: "\uD834\uDD60",
+    4: "\uD834\uDD5F",
+    2: "\uD834\uDD5E",
+    1: "\uD834\uDD5D"
+};
+
 export const instrumentMap: Record<string, number> = {
     'Grand Piano': 0,
     'Electric Piano': 2,
