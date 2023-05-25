@@ -12,7 +12,7 @@ import { MAX_BEATS_PER_BAR } from '../constants/integers';
 import { keyOptions } from '../constants/keys';
 import { instrumentOptions } from '../constants/instruments';
 import { scaleOptions } from '../constants/scales';
-// import { durationOptions } from "../constants/durations";
+import { durationOptions } from "../constants/durations";
 import { instrumentMap } from '../constants/maps';
 import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/audiovisual';
 import { SelectableProps } from '../types/selectable';
@@ -25,7 +25,7 @@ export default function App() {
   const activeInstrument = useRef<number>(0);
   const activeTempo = useRef<number>(100);
   const activeVolume = useRef<number>(40);
-  const activeDurations = useRef<SelectableProps[]>([]);
+  const activeDurations = useRef<SelectableProps[]>(durationOptions);
   const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
   
@@ -178,21 +178,19 @@ export default function App() {
   };
 
   // Duration
-  const [selectedDurations, setSelectedDurations] = useState<SelectableProps[]>([]);
+  const [selectedDurations, setSelectedDurations] = useState<SelectableProps[]>(durationOptions);
 
-  const handleDurationSelection = (durationObject: SelectableProps): void => {
-    console.log(durationObject);
-    if (durationObject.selected) {
-      console.log("added!");
-      setSelectedDurations([...activeDurations.current, durationObject]);
-    }
-    else {
-      setSelectedDurations([...activeDurations.current.filter(x => x.value === durationObject.value)])
-    }
+  const handleDurationSelection = (durationObject: SelectableProps) => {
+    const updatedDurations = selectedDurations.map((duration) => {
+      if (duration.value == durationObject.value) {
+        return {value: duration.value, selected: !duration.selected};
+      }
+      return duration;
+    });
 
-    activeDurations.current = selectedDurations;
-    //console.log(selectedDurations);
-    //console.log(activeDurations.current, selectedDurations, durationObject.selected);
+    setSelectedDurations(updatedDurations);
+    activeDurations.current = selectedDurations.filter((duration) => duration.selected);
+    console.log(activeDurations.current);
   };
 
   // Save param changes
@@ -230,7 +228,7 @@ export default function App() {
           handleInstrumentSelection={handleInstrumentSelection}
           handleTempoSelection={handleTempoSelection}
           handleVolumeSelection={handleVolumeSelection}
-          handleDurationSelection={handleDurationSelection}
+          onSelect={handleDurationSelection}
           handleUpdateStaff={handleUpdateStaff}
         /> 
       </div>

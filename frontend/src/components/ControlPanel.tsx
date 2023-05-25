@@ -11,7 +11,6 @@ import { ControlPanelProps } from "../types/controlPanel";
 import { keyOptions } from "../constants/keys";
 import { scaleOptions } from "../constants/scales";
 import { instrumentOptions } from "../constants/instruments";
-import { durationOptions } from "../constants/durations";
 import { pitchNumberMap } from "../constants/maps";
 import { 
     MIN_PITCH_DISTANCE,
@@ -37,7 +36,7 @@ export default function ControlPanel({
         handleInstrumentSelection,
         handleTempoSelection,
         handleVolumeSelection,
-        handleDurationSelection,
+        onSelect,
         handleUpdateStaff 
     }: ControlPanelProps) {
 
@@ -64,8 +63,8 @@ export default function ControlPanel({
             </div>
             <div className="flex flex-col items-center my-8">
                 <SelectableList 
-                    options={durationOptions()}
-                    onSelect={handleDurationSelection}
+                    options={selectedDurations}
+                    onSelect={onSelect}
                 >
                     Note Durations
                 </SelectableList>

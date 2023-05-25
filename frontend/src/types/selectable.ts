@@ -8,11 +8,11 @@ export interface SelectableOptions {
 
 export interface SelectableOption {
     value: string,
-    selected?: boolean,
+    selected: boolean,
     onSelect: (value: SelectableProps) => void
 }
 
 export interface SelectableProps {
     value: string,
-    selected?: boolean
+    selected: boolean
 }
