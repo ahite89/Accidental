@@ -228,7 +228,7 @@ export default function App() {
           handleInstrumentSelection={handleInstrumentSelection}
           handleTempoSelection={handleTempoSelection}
           handleVolumeSelection={handleVolumeSelection}
-          onSelect={handleDurationSelection}
+          onSelect={handleDurationSelection}    // make more specific for duration
           handleUpdateStaff={handleUpdateStaff}
         /> 
       </div>
