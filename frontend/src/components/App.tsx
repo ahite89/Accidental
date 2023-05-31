@@ -94,13 +94,12 @@ export default function App() {
         // replace blank staff space until filled in with notes
         notationString.current = notationString.current.replace('x', newNote); 
       }
-      console.log(volumeSelection);
       // quarter note in 4/4 would be .25
       abcjs.synth.playEvent(
         [
           {
             "pitch": note.pitchNumber,
-            "volume": volumeSelection,
+            "volume": activeVolume.current,
             "start": 0,
             "duration": note.duration,
             "instrument": activeInstrument.current,
@@ -140,43 +139,32 @@ export default function App() {
 
   // Key
   const [keySelection, setKeySelection] = useState<string>(keyOptions()[0].value);
-
   const handleKeySelection = (key: string): void => {
     setKeySelection(key);
-    notationString.current = notationString.current.replace(activeKey.current, `K:${key}`);
-    activeKey.current = `K:${key}`;
   };
 
-  // Scales
+  // Scale
   const [scaleSelection, setScaleSelection] = useState<string>(scaleOptions()[0].value);
-
   const handleScaleSelection = (scale: string): void => {
       setScaleSelection(scale);
   };
 
   // Instrument
   const [instrumentSelection, setInstrumentSelection] = useState<string>(instrumentOptions()[0].value);
-  
   const handleInstrumentSelection = (instrument: string): void => {
     setInstrumentSelection(instrument);
-    activeInstrument.current = instrumentMap[instrument];
   };
 
   // Tempo
   const [tempoSelection, setTempoSelection] = useState<number>(100);
-
   const handleTempoSelection = (tempo: number): void => {
     setTempoSelection(tempo);
-    notationString.current = notationString.current.replace(activeTempo.current.toString(), tempo.toString());
-    activeTempo.current = tempo;
   };
 
   // Volume
   const [volumeSelection, setVolumeSelection] = useState<number>(40);
-
   const handleVolumeSelection = (volume: number): void => {
     setVolumeSelection(volume);
-    activeVolume.current = volume;
   };
 
   // Duration
@@ -195,8 +183,19 @@ export default function App() {
     console.log(activeDurations.current);
   };
 
-  // Save param changes
+  // Save control panel changes (check to see if there's a difference first?)
   const handleUpdateStaff = (): void => {
+
+    // Update notation string
+    notationString.current = notationString.current.replace(activeKey.current, `K:${keySelection}`);
+    notationString.current = notationString.current.replace(activeTempo.current.toString(), tempoSelection.toString());
+    
+    // Update refs
+    activeKey.current = `K:${keySelection}`;
+    activeInstrument.current = instrumentMap[instrumentSelection];
+    activeTempo.current = tempoSelection;
+    activeVolume.current = volumeSelection;
+
     abcjs.renderAbc("staff", notationString.current, notationOptions);
     setOpenControlPanel(false);
   };
