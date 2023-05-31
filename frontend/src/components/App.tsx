@@ -70,8 +70,6 @@ export default function App() {
 
   // NOTE RENDERING //
 
-  const [isGenerating, setIsGenerating] = useState(true);
-
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
   const renderNoteToStaff = async (note: NoteProps): Promise<void> => {
@@ -126,11 +124,21 @@ export default function App() {
     synthControl.setTune(staffObj[0], true);  // why here?
   }
 
-  const handleClickStop = () => {
-    setIsGenerating(false);
-  }; 
+  // NOTE RENDERING BUTTONS //
 
-  const handleClickGenerate = async (): Promise<void> => {
+  const [isGenerating, setIsGenerating] = useState(true);
+
+  const handleStopGenerating = () => {
+    setIsGenerating(false);
+  };
+
+  const handleClearStaff = () => {
+    notationString.current = `X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`;
+    abcjs.renderAbc("staff", notationString.current, notationOptions);
+  };
+
+  const handleStartGenerating = async (): Promise<void> => {
+    // Need to disable everything but 'Stop' during generation
     setIsGenerating(true);
     await randomizeAndRenderNotes(defaultNotes);
   };
@@ -189,7 +197,7 @@ export default function App() {
     // Update notation string
     notationString.current = notationString.current.replace(activeKey.current, `K:${keySelection}`);
     notationString.current = notationString.current.replace(activeTempo.current.toString(), tempoSelection.toString());
-    
+
     // Update refs
     activeKey.current = `K:${keySelection}`;
     activeInstrument.current = instrumentMap[instrumentSelection];
@@ -224,12 +232,13 @@ export default function App() {
       </header>
       <div className="p-8 bg-slate-100">
         <div className="flex justify-center">
-          <Button extraStyling="mr-4 shadow" primary rounded onClick={handleClickGenerate}>
+          <Button extraStyling="mr-4 shadow" primary rounded onClick={handleStartGenerating}>
             Generate
           </Button>
-          <Button extraStyling="shadow" secondary rounded onClick={handleClickStop}>
+          <Button extraStyling="mr-4 shadow" secondary rounded onClick={handleStopGenerating}>
             Stop
           </Button>
+          <Button extraStyling="shadow" save rounded onClick={handleClearStaff}>Clear</Button>
         </div>
         <div className="flex justify-center p-4">
           <Button secondary onClick={() => setOpenControlPanel(true)}>CTRLS</Button>
