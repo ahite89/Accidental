@@ -1,6 +1,6 @@
 import ReactSlider from "react-slider";
 import './range-slider.css';
-import { MultiSliderProps } from "../../types/slider";
+import { MultiSliderProps } from "../../interfaces/slider";
 
 export default function MultiRangeSlider({ min, max, minDistance, minValue, maxValue, onChangeValues, map, children}: MultiSliderProps) {
     return (

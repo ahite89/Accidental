@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { DropDownOptions, DropDownOption } from "../../types/dropdown";
+import { DropDownOptions, DropDownOption } from "../../interfaces/dropdown";
 import { GoChevronDown } from "react-icons/go";
 import Panel from "./Panel";
 

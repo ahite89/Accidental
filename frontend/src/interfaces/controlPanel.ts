@@ -12,6 +12,5 @@ export interface ControlPanelProps {
     handleInstrumentSelection: (instrument: string) => void,
     handleTempoSelection: (tempo: number) => void,
     handleVolumeSelection: (volume: number) => void,
-    onSelect: (durationObject: SelectableProps) => void,
-    handleUpdateStaff: () => void
+    onSelect: (durationObject: SelectableProps) => void
 }

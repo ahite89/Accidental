@@ -1,6 +1,6 @@
 import ReactSlider from "react-slider";
 import './range-slider.css';
-import { SliderProps } from "../../types/slider";
+import { SliderProps } from "../../interfaces/slider";
 
 export default function RangeSlider({ min, max, value, interval, onChangeValue, children}: SliderProps) {
     return (

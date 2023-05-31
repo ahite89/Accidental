@@ -1,4 +1,4 @@
-import { NoteProps } from '../types/note';
+import { NoteProps } from '../interfaces/note';
 
 export const defaultNotes: NoteProps[] = [
     // Duration: 1 = 8th, 2 = quarter, 3 = dotted quarter, 4 = half, etc.

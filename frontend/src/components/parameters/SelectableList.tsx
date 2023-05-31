@@ -1,5 +1,5 @@
 import Selectable from './Selectable';
-import { SelectableOption, SelectableOptions } from "../../types/selectable";
+import { SelectableOption, SelectableOptions } from "../../interfaces/selectable";
 
 export default function SelectableList({ options, onSelect, children }: SelectableOptions) {
 

@@ -1,4 +1,4 @@
-import { DropDownOption } from "../types/dropdown";
+import { DropDownOption } from "../interfaces/dropdown";
 
 enum Keys {
     C = 'C',

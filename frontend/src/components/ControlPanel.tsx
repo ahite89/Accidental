@@ -7,7 +7,7 @@ import RangeSlider from "./parameters/RangeSlider";
 import Button from "./parameters/Button";
 import SelectableList from './parameters/SelectableList';
 
-import { ControlPanelProps } from "../types/controlPanel";
+import { ControlPanelProps } from "../interfaces/controlPanel";
 import { keyOptions } from "../constants/keys";
 import { scaleOptions } from "../constants/scales";
 import { instrumentOptions } from "../constants/instruments";
@@ -37,7 +37,6 @@ export default function ControlPanel({
         handleTempoSelection,
         handleVolumeSelection,
         onSelect,
-        handleUpdateStaff 
     }: ControlPanelProps) {
 
     // Sliders
@@ -51,24 +50,25 @@ export default function ControlPanel({
     };
 
     const classes = className(
-        'border rounded p-2 shadow bg-white flex flex-col items-center mx-2 my-10'
+        'p-2 flex flex-col items-center'
     );
 
     return (
         <div className={classes}>
-            <div className="flex flex-row my-8">
+            <div className="flex flex-row mb-8">
                 <DropDown options={keyOptions()} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
                 <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
                 <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
             </div>
-            <div className="flex flex-col items-center my-8">
+            <div className="flex flex-col items-center mb-8">
                 <SelectableList 
                     options={selectedDurations}
                     onSelect={onSelect}
                 >
-                    Note Durations
+                    Duration
                 </SelectableList>
             </div>
+            {/* Custom scale buttons */}
             <MultiRangeSlider 
                 min={MIN_PITCH_NUMBER}
                 max={MAX_PITCH_NUMBER}
@@ -78,7 +78,7 @@ export default function ControlPanel({
                 onChangeValues={handleSetPitchRange}
                 map={pitchNumberMap}
             >
-                Pitch Range
+                Range
             </MultiRangeSlider>
             <RangeSlider
                 min={MIN_TEMPO}
@@ -98,9 +98,6 @@ export default function ControlPanel({
             >
                 Volume
             </RangeSlider>
-            {/* Note duration buttons (assemble values in object of bools) */}
-            {/* Custom scale buttons */}
-            <Button save rounded extraStyling="my-8" onClick={handleUpdateStaff}>Save Changes</Button>
         </div>
     );
 }

@@ -1,4 +1,4 @@
-import { ButtonProps } from "../../types/button";
+import { ButtonProps } from "../../interfaces/button";
 import className from 'classnames';
 
 export default function Button({ 

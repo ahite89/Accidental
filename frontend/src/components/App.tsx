@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import abcjs, { TuneObjectArray } from "abcjs";
+import Modal from 'react-modal';
 
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
 import Playback from './Playback';
 import Button from './parameters/Button';
 
-import { NoteProps } from '../types/note';
+import { NoteProps } from '../interfaces/note';
+import { SelectableProps } from '../interfaces/selectable';
+
 import { defaultNotes } from '../constants/notes';
 import { MAX_BEATS_PER_BAR } from '../constants/integers';
 import { keyOptions } from '../constants/keys';
@@ -15,7 +18,6 @@ import { scaleOptions } from '../constants/scales';
 import { durationOptions } from "../constants/durations";
 import { instrumentMap } from '../constants/maps';
 import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/audiovisual';
-import { SelectableProps } from '../types/selectable';
 
 export default function App() {
 
@@ -196,6 +198,22 @@ export default function App() {
   // Save param changes
   const handleUpdateStaff = (): void => {
     abcjs.renderAbc("staff", notationString.current, notationOptions);
+    setOpenControlPanel(false);
+  };
+
+  // CONTROLS MODAL //
+
+  const [openControlPanel, setOpenControlPanel] = useState<boolean>(false);
+
+  const modalStyling = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    }
   };
 
   return (
@@ -214,23 +232,35 @@ export default function App() {
             Stop
           </Button>
         </div>
-        <Staff />
+        <div className="flex justify-center p-4">
+          <Button secondary onClick={() => setOpenControlPanel(true)}>CTRLS</Button>
+          <Staff />
+        </div>
         <Playback />
-        <ControlPanel 
-          keySelection={keySelection} 
-          scaleSelection={scaleSelection}
-          instrumentSelection={instrumentSelection}
-          tempoSelection={tempoSelection}
-          volumeSelection={volumeSelection}
-          selectedDurations={selectedDurations}
-          handleKeySelection={handleKeySelection}
-          handleScaleSelection={handleScaleSelection}
-          handleInstrumentSelection={handleInstrumentSelection}
-          handleTempoSelection={handleTempoSelection}
-          handleVolumeSelection={handleVolumeSelection}
-          onSelect={handleDurationSelection}    // make more specific for duration
-          handleUpdateStaff={handleUpdateStaff}
-        /> 
+        <Modal
+          isOpen={openControlPanel}
+          ariaHideApp={false}
+          style={modalStyling}
+        >
+          <ControlPanel
+            keySelection={keySelection} 
+            scaleSelection={scaleSelection}
+            instrumentSelection={instrumentSelection}
+            tempoSelection={tempoSelection}
+            volumeSelection={volumeSelection}
+            selectedDurations={selectedDurations}
+            handleKeySelection={handleKeySelection}
+            handleScaleSelection={handleScaleSelection}
+            handleInstrumentSelection={handleInstrumentSelection}
+            handleTempoSelection={handleTempoSelection}
+            handleVolumeSelection={handleVolumeSelection}
+            onSelect={handleDurationSelection}    // make more specific for duration
+          />
+          <div className="flex justify-center mb-4">
+            <Button save extraStyling="mr-4" onClick={handleUpdateStaff}>Save Changes</Button>
+            <Button secondary onClick={() => setOpenControlPanel(false)}>Cancel</Button>
+          </div>
+        </Modal>
       </div>
     </div>
   );

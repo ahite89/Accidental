@@ -1,4 +1,4 @@
-import { SelectableProps } from "../types/selectable";
+import { SelectableProps } from "../interfaces/selectable";
 
 export const durationOptions: SelectableProps[] = [
     {value: 16, selected: false},

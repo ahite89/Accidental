@@ -1,5 +1,5 @@
 import className from 'classnames';
-import { PanelProps } from "../../types/panel";
+import { PanelProps } from "../../interfaces/panel";
 
 export default function Panel({ children, extraStyling, ...rest}: PanelProps) {
     const classes = className(
