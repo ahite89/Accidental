@@ -18,18 +18,17 @@ export default function ControlPanel({
         keySelection,
         scaleSelection,
         instrumentSelection,
-        minPitchSelection,
-        maxPitchSelection,
+        pitchRangeSelection,
         tempoSelection,
         volumeSelection,
         selectedDurations,
         handleKeySelection,
         handleScaleSelection,
         handleInstrumentSelection,
-        handleSetPitchRange,
+        handlePitchRangeSelection,
         handleTempoSelection,
         handleVolumeSelection,
-        onSelect,
+        handleDurationSelection,
     }: ControlPanelProps) {
 
     const classes = className(
@@ -46,7 +45,7 @@ export default function ControlPanel({
             <div className="flex flex-col items-center mb-8">
                 <SelectableList 
                     options={selectedDurations}
-                    onSelect={onSelect}
+                    onSelect={handleDurationSelection}
                 >
                     Durations
                 </SelectableList>
@@ -56,9 +55,8 @@ export default function ControlPanel({
                 min={MIN_PITCH_NUMBER}
                 max={MAX_PITCH_NUMBER}
                 minDistance={MIN_PITCH_DISTANCE}
-                minValue={minPitchSelection}
-                maxValue={maxPitchSelection}
-                onChangeValues={handleSetPitchRange}
+                valueRange={pitchRangeSelection}
+                onChangeValues={handlePitchRangeSelection}
                 map={pitchNumberMap}
             >
                 Range

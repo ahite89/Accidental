@@ -25,8 +25,7 @@ export default function App() {
 
   const activeKey = useRef<string>('K:C');
   const activeInstrument = useRef<number>(0);
-  const activeMinPitch = useRef<number>(MIN_PITCH_NUMBER);
-  const activeMaxPitch = useRef<number>(MAX_PITCH_NUMBER);
+  const activePitchRange = useRef<number[]>([MIN_PITCH_NUMBER, MAX_PITCH_NUMBER]);
   const activeTempo = useRef<number>(100);
   const activeVolume = useRef<number>(40);
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
@@ -68,7 +67,7 @@ export default function App() {
       });
     }   // re-initialize synth when params are changed 
   }, [activeKey.current, activeInstrument.current, activeTempo.current,
-      activeVolume.current, activeMinPitch.current, activeMaxPitch.current]);
+      activeVolume.current, activePitchRange.current]);
 
   // NOTE RENDERING //
 
@@ -166,12 +165,9 @@ export default function App() {
   };
 
   // Range
-  // COMBINE MIN AND MAX INTO ONE ARRAY
-  const [minPitchSelection, setMinPitchSelection] = useState<number>(MIN_PITCH_NUMBER);
-  const [maxPitchSelection, setMaxPitchSelection] = useState<number>(MAX_PITCH_NUMBER);
-  const handleSetPitchRange = (pitchRange: number[]): void => {
-      setMinPitchSelection(pitchRange[0]);
-      setMaxPitchSelection(pitchRange[1]);
+  const [pitchRangeSelection, setPitchRangeSelection] = useState<number[]>([MIN_PITCH_NUMBER, MAX_PITCH_NUMBER]);
+  const handlePitchRangeSelection = (pitchRange: number[]): void => {
+      setPitchRangeSelection([pitchRange[0], pitchRange[1]]);
   };
 
   // Tempo
@@ -212,8 +208,7 @@ export default function App() {
     // Update refs
     activeKey.current = `K:${keySelection}`;
     activeInstrument.current = instrumentMap[instrumentSelection];
-    activeMinPitch.current = minPitchSelection;
-    activeMaxPitch.current = maxPitchSelection;
+    activePitchRange.current = pitchRangeSelection;
     activeTempo.current = tempoSelection;
     activeVolume.current = volumeSelection;
 
@@ -267,18 +262,17 @@ export default function App() {
             keySelection={keySelection} 
             scaleSelection={scaleSelection}
             instrumentSelection={instrumentSelection}
-            minPitchSelection={minPitchSelection}
-            maxPitchSelection={maxPitchSelection}
+            pitchRangeSelection={pitchRangeSelection}
             tempoSelection={tempoSelection}
             volumeSelection={volumeSelection}
             selectedDurations={selectedDurations}
             handleKeySelection={handleKeySelection}
             handleScaleSelection={handleScaleSelection}
             handleInstrumentSelection={handleInstrumentSelection}
-            handleSetPitchRange={handleSetPitchRange}
+            handlePitchRangeSelection={handlePitchRangeSelection}
             handleTempoSelection={handleTempoSelection}
             handleVolumeSelection={handleVolumeSelection}
-            onSelect={handleDurationSelection}    // make more specific for duration
+            handleDurationSelection={handleDurationSelection}
           />
           <div className="flex justify-center mb-4">
             <Button save extraStyling="mr-4" onClick={handleUpdateStaff}>Save Changes</Button>

@@ -2,7 +2,7 @@ import ReactSlider from "react-slider";
 import './range-slider.css';
 import { MultiSliderProps } from "../../interfaces/slider";
 
-export default function MultiRangeSlider({ min, max, minDistance, minValue, maxValue, onChangeValues, map, children}: MultiSliderProps) {
+export default function MultiRangeSlider({ min, max, minDistance, valueRange, onChangeValues, map, children}: MultiSliderProps) {
     return (
         <>
             <label>{children}</label>
@@ -12,7 +12,7 @@ export default function MultiRangeSlider({ min, max, minDistance, minValue, maxV
                 max={max}
                 thumbClassName="slider-thumb"
                 trackClassName="multi-slider-track"
-                defaultValue={[minValue, maxValue]}
+                defaultValue={valueRange}
                 ariaLabel={['Lower thumb', 'Upper thumb']}
                 ariaValuetext={state => `Thumb value ${state.valueNow}`}
                 renderThumb={(props, state) => {

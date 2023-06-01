@@ -11,8 +11,7 @@ export interface SliderProps {
 
 export interface MultiSliderProps extends Omit<SliderProps, 'value' | 'interval' | 'onChangeValue'> {
     minDistance: number,
-    minValue: number,
-    maxValue: number,
+    valueRange: number[],
     onChangeValues: (values: number[]) => void,
     map: Record<number | string, number | string>
 }
