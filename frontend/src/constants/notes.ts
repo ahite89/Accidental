@@ -10,3 +10,11 @@ export const defaultNotes: NoteProps[] = [
     {name: 'A', pitchNumber: 69, duration: 2, timeBetweenNotes: 1000},
     {name: 'B', pitchNumber: 71, duration: 4, timeBetweenNotes: 2000},
 ];
+
+export const noteSymbolMap: Record<number, string> = {
+    16: "\uD834\uDD61",
+    8: "\uD834\uDD60",
+    4: "\uD834\uDD5F",
+    2: "\uD834\uDD5E",
+    1: "\uD834\uDD5D"
+};

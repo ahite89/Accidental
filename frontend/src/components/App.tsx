@@ -11,12 +11,12 @@ import { NoteProps } from '../interfaces/note';
 import { SelectableProps } from '../interfaces/selectable';
 
 import { defaultNotes } from '../constants/notes';
-import { MAX_BEATS_PER_BAR, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from '../constants/integers';
+import { MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from '../constants/pitchRange';
 import { keyOptions } from '../constants/keys';
 import { instrumentOptions } from '../constants/instruments';
 import { scaleOptions } from '../constants/scales';
-import { durationOptions } from "../constants/durations";
-import { instrumentMap } from '../constants/maps';
+import { durationOptions, MAX_BEATS_PER_BAR } from "../constants/durations";
+import { instrumentMap } from '../constants/instruments';
 import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/audiovisual';
 
 export default function App() {
@@ -166,6 +166,7 @@ export default function App() {
   };
 
   // Range
+  // COMBINE MIN AND MAX INTO ONE ARRAY
   const [minPitchSelection, setMinPitchSelection] = useState<number>(MIN_PITCH_NUMBER);
   const [maxPitchSelection, setMaxPitchSelection] = useState<number>(MAX_PITCH_NUMBER);
   const handleSetPitchRange = (pitchRange: number[]): void => {

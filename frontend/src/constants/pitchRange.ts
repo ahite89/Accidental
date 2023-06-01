@@ -1,50 +1,6 @@
-export const noteDurationMap: Record<string, string> = {
-    '.5': '16n',
-    '.75': '16n.',
-    '1': '8n',
-    '1.5': '8n.',
-    '2': '4n',
-    '3': '4n.',
-    '4': '2n',
-    '6': '2n.',
-    '8': '1n',
-    '12': '1n.'
-};
-
-export const noteSymbolMap: Record<number, string> = {
-    16: "\uD834\uDD61",
-    8: "\uD834\uDD60",
-    4: "\uD834\uDD5F",
-    2: "\uD834\uDD5E",
-    1: "\uD834\uDD5D"
-};
-
-export const instrumentMap: Record<string, number> = {
-    'Grand Piano': 0,
-    'Electric Piano': 2,
-    'Organ': 16,
-    'Acoustic Guitar': 24,
-    'Electric Guitar': 27,
-    'Violin': 40,
-    'Viola': 41,
-    'Cello': 42,
-    'Trumpet': 56,
-    'Trombone': 57,
-    'Tuba': 58,
-    'French Horn': 60,
-    'Saxophone': 66,
-    'Oboe': 68,
-    'Bassoon': 70,
-    'Clarinet': 71,
-    'Flute': 73,
-    'Square Lead': 80,
-    'Sawtooth Lead': 81,
-    'Voice Lead': 85,
-    'Warm Pad': 89,
-    'Choir Pad': 91,
-    'Halo Pad': 94
-}
-
+export const MIN_PITCH_NUMBER = 36;
+export const MAX_PITCH_NUMBER = 96;
+export const MIN_PITCH_DISTANCE = 5;
 
 export const pitchNumberMap: Record<number, string> = {
     // 21: 'A0',

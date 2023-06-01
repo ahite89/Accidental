@@ -1,4 +1,3 @@
-import { useState } from "react";
 import className from "classnames";
 
 import DropDown from "./parameters/Dropdown";
@@ -10,18 +9,10 @@ import { ControlPanelProps } from "../interfaces/controlPanel";
 import { keyOptions } from "../constants/keys";
 import { scaleOptions } from "../constants/scales";
 import { instrumentOptions } from "../constants/instruments";
-import { pitchNumberMap } from "../constants/maps";
-import { 
-    MIN_PITCH_DISTANCE,
-    MIN_PITCH_NUMBER,
-    MAX_PITCH_NUMBER,
-    MIN_TEMPO,
-    MAX_TEMPO,
-    TEMPO_INTERVAL,
-    MIN_VOLUME,
-    MAX_VOLUME,
-    VOLUME_INTERVAL
-} from "../constants/integers";
+import { pitchNumberMap } from "../constants/pitchRange";
+import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../constants/pitchRange";
+import { MIN_TEMPO, MAX_TEMPO, TEMPO_INTERVAL } from "../constants/tempo";
+import { MIN_VOLUME, MAX_VOLUME, VOLUME_INTERVAL } from "../constants/volume";
 
 export default function ControlPanel({ 
         keySelection,
@@ -57,7 +48,7 @@ export default function ControlPanel({
                     options={selectedDurations}
                     onSelect={onSelect}
                 >
-                    Duration
+                    Durations
                 </SelectableList>
             </div>
             {/* Custom scale buttons */}

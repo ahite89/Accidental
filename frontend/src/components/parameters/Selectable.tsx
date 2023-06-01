@@ -1,6 +1,6 @@
 import className from 'classnames';
 import { SelectableOption } from '../../interfaces/selectable';
-import { noteSymbolMap } from '../../constants/maps';
+import { noteSymbolMap } from '../../constants/notes';
 
 export default function Selectable({ value, selected, onSelect }: SelectableOption) {
     
