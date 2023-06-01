@@ -11,7 +11,7 @@ import { NoteProps } from '../interfaces/note';
 import { SelectableProps } from '../interfaces/selectable';
 
 import { defaultNotes } from '../constants/notes';
-import { MAX_BEATS_PER_BAR } from '../constants/integers';
+import { MAX_BEATS_PER_BAR, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from '../constants/integers';
 import { keyOptions } from '../constants/keys';
 import { instrumentOptions } from '../constants/instruments';
 import { scaleOptions } from '../constants/scales';
@@ -25,6 +25,8 @@ export default function App() {
 
   const activeKey = useRef<string>('K:C');
   const activeInstrument = useRef<number>(0);
+  const activeMinPitch = useRef<number>(MIN_PITCH_NUMBER);
+  const activeMaxPitch = useRef<number>(MAX_PITCH_NUMBER);
   const activeTempo = useRef<number>(100);
   const activeVolume = useRef<number>(40);
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
@@ -65,7 +67,8 @@ export default function App() {
           console.warn("Audio problem:", error);
       });
     }   // re-initialize synth when params are changed 
-  }, [activeKey.current, activeInstrument.current, activeTempo.current, activeVolume.current]);
+  }, [activeKey.current, activeInstrument.current, activeTempo.current,
+      activeVolume.current, activeMinPitch.current, activeMaxPitch.current]);
 
   // NOTE RENDERING //
 
@@ -162,6 +165,14 @@ export default function App() {
     setInstrumentSelection(instrument);
   };
 
+  // Range
+  const [minPitchSelection, setMinPitchSelection] = useState<number>(MIN_PITCH_NUMBER);
+  const [maxPitchSelection, setMaxPitchSelection] = useState<number>(MAX_PITCH_NUMBER);
+  const handleSetPitchRange = (pitchRange: number[]): void => {
+      setMinPitchSelection(pitchRange[0]);
+      setMaxPitchSelection(pitchRange[1]);
+  };
+
   // Tempo
   const [tempoSelection, setTempoSelection] = useState<number>(100);
   const handleTempoSelection = (tempo: number): void => {
@@ -200,6 +211,8 @@ export default function App() {
     // Update refs
     activeKey.current = `K:${keySelection}`;
     activeInstrument.current = instrumentMap[instrumentSelection];
+    activeMinPitch.current = minPitchSelection;
+    activeMaxPitch.current = maxPitchSelection;
     activeTempo.current = tempoSelection;
     activeVolume.current = volumeSelection;
 
@@ -253,12 +266,15 @@ export default function App() {
             keySelection={keySelection} 
             scaleSelection={scaleSelection}
             instrumentSelection={instrumentSelection}
+            minPitchSelection={minPitchSelection}
+            maxPitchSelection={maxPitchSelection}
             tempoSelection={tempoSelection}
             volumeSelection={volumeSelection}
             selectedDurations={selectedDurations}
             handleKeySelection={handleKeySelection}
             handleScaleSelection={handleScaleSelection}
             handleInstrumentSelection={handleInstrumentSelection}
+            handleSetPitchRange={handleSetPitchRange}
             handleTempoSelection={handleTempoSelection}
             handleVolumeSelection={handleVolumeSelection}
             onSelect={handleDurationSelection}    // make more specific for duration

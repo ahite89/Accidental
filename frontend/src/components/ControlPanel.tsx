@@ -4,7 +4,6 @@ import className from "classnames";
 import DropDown from "./parameters/Dropdown";
 import MultiRangeSlider from "./parameters/MultiRangeSlider";
 import RangeSlider from "./parameters/RangeSlider";
-import Button from "./parameters/Button";
 import SelectableList from './parameters/SelectableList';
 
 import { ControlPanelProps } from "../interfaces/controlPanel";
@@ -28,25 +27,19 @@ export default function ControlPanel({
         keySelection,
         scaleSelection,
         instrumentSelection,
+        minPitchSelection,
+        maxPitchSelection,
         tempoSelection,
         volumeSelection,
         selectedDurations,
         handleKeySelection,
         handleScaleSelection,
         handleInstrumentSelection,
+        handleSetPitchRange,
         handleTempoSelection,
         handleVolumeSelection,
         onSelect,
     }: ControlPanelProps) {
-
-    // Move to app.tsx
-    const [minAssignedPitch, setMinAssignedPitch] = useState<number>(MIN_PITCH_NUMBER);
-    const [maxAssignedPitch, setMaxAssignedPitch] = useState<number>(MAX_PITCH_NUMBER);
-
-    const handleSetPitchRange = (pitchRange: number[]): void => {
-        setMinAssignedPitch(pitchRange[0]);
-        setMaxAssignedPitch(pitchRange[1]);
-    };
 
     const classes = className(
         'p-2 flex flex-col items-center'
@@ -72,8 +65,8 @@ export default function ControlPanel({
                 min={MIN_PITCH_NUMBER}
                 max={MAX_PITCH_NUMBER}
                 minDistance={MIN_PITCH_DISTANCE}
-                minValue={minAssignedPitch}
-                maxValue={maxAssignedPitch}
+                minValue={minPitchSelection}
+                maxValue={maxPitchSelection}
                 onChangeValues={handleSetPitchRange}
                 map={pitchNumberMap}
             >
