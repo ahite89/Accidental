@@ -53,11 +53,10 @@ export default function App() {
         visualObj: staffObj[0],
         millisecondsPerMeasure: 500,   // make dynamic or remove?
         options: {
-          pan: [ -0.3, 0.3 ],
-          program: activeInstrument.current  // why no work?
+          pan: [ -0.3, 0.3 ]
         }
       }).then(() => {
-          synthControl.setTune(staffObj[0], false).then(function () {
+          synthControl.setTune(staffObj[0], false, { program: activeInstrument.current }).then(function () {
             console.log("Audio successfully loaded.")
         }).catch((error) => {
             console.warn("Audio problem:", error);
@@ -121,7 +120,7 @@ export default function App() {
       i++;
     }
 
-    synthControl.setTune(staffObj[0], true);  // why here?
+    synthControl.setTune(staffObj[0], false, { program: activeInstrument.current });
   }
 
   // NOTE RENDERING BUTTONS //
@@ -180,7 +179,7 @@ export default function App() {
 
   const handleDurationSelection = (durationObject: SelectableProps) => {
     const updatedDurations = selectedDurations.map((duration) => {
-      if (duration.value == durationObject.value) {
+      if (duration.value === durationObject.value) {
         return {value: duration.value, selected: !duration.selected};
       }
       return duration;

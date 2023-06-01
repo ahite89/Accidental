@@ -39,8 +39,7 @@ export default function ControlPanel({
         onSelect,
     }: ControlPanelProps) {
 
-    // Sliders
-    // move to app.tsx
+    // Move to app.tsx
     const [minAssignedPitch, setMinAssignedPitch] = useState<number>(MIN_PITCH_NUMBER);
     const [maxAssignedPitch, setMaxAssignedPitch] = useState<number>(MAX_PITCH_NUMBER);
 
