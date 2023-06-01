@@ -11,23 +11,24 @@ import { NoteProps } from '../interfaces/note';
 import { SelectableProps } from '../interfaces/selectable';
 
 import { defaultNotes } from '../constants/notes';
-import { MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from '../constants/pitchRange';
-import { keyOptions } from '../constants/keys';
-import { instrumentOptions } from '../constants/instruments';
-import { scaleOptions } from '../constants/scales';
+import { DEFAULT_PITCH_RANGE } from '../constants/pitchRange';
+import { DEFAULT_KEY } from '../constants/keys';
+import { DEFAULT_INSTRUMENT, instrumentMap } from '../constants/instruments';
+import { DEFAULT_SCALE } from '../constants/scales';
 import { durationOptions, MAX_BEATS_PER_BAR } from "../constants/durations";
-import { instrumentMap } from '../constants/instruments';
+import { DEFAULT_TEMPO } from '../constants/tempo';
+import { DEFAULT_VOLUME } from '../constants/volume';
 import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/audiovisual';
 
 export default function App() {
 
   // REFS //
 
-  const activeKey = useRef<string>('K:C');
-  const activeInstrument = useRef<number>(0);
-  const activePitchRange = useRef<number[]>([MIN_PITCH_NUMBER, MAX_PITCH_NUMBER]);
-  const activeTempo = useRef<number>(100);
-  const activeVolume = useRef<number>(40);
+  const activeKey = useRef<string>(`K:${DEFAULT_KEY}`);
+  const activeInstrument = useRef<number>(instrumentMap[DEFAULT_INSTRUMENT]);
+  const activePitchRange = useRef<number[]>(DEFAULT_PITCH_RANGE);
+  const activeTempo = useRef<number>(DEFAULT_TEMPO);
+  const activeVolume = useRef<number>(DEFAULT_VOLUME);
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
   const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
   const notesInBarCount = useRef<number>(0);  // default to zero beats
@@ -147,37 +148,37 @@ export default function App() {
   // CONTROL PANEL PARAMETERS //
 
   // Key
-  const [keySelection, setKeySelection] = useState<string>(keyOptions()[0].value);
+  const [keySelection, setKeySelection] = useState<string>(DEFAULT_KEY);
   const handleKeySelection = (key: string): void => {
     setKeySelection(key);
   };
 
   // Scale
-  const [scaleSelection, setScaleSelection] = useState<string>(scaleOptions()[0].value);
+  const [scaleSelection, setScaleSelection] = useState<string>(DEFAULT_SCALE);
   const handleScaleSelection = (scale: string): void => {
       setScaleSelection(scale);
   };
 
   // Instrument
-  const [instrumentSelection, setInstrumentSelection] = useState<string>(instrumentOptions()[0].value);
+  const [instrumentSelection, setInstrumentSelection] = useState<string>(DEFAULT_INSTRUMENT);
   const handleInstrumentSelection = (instrument: string): void => {
     setInstrumentSelection(instrument);
   };
 
   // Range
-  const [pitchRangeSelection, setPitchRangeSelection] = useState<number[]>([MIN_PITCH_NUMBER, MAX_PITCH_NUMBER]);
+  const [pitchRangeSelection, setPitchRangeSelection] = useState<number[]>(DEFAULT_PITCH_RANGE);
   const handlePitchRangeSelection = (pitchRange: number[]): void => {
       setPitchRangeSelection([pitchRange[0], pitchRange[1]]);
   };
 
   // Tempo
-  const [tempoSelection, setTempoSelection] = useState<number>(100);
+  const [tempoSelection, setTempoSelection] = useState<number>(DEFAULT_TEMPO);
   const handleTempoSelection = (tempo: number): void => {
     setTempoSelection(tempo);
   };
 
   // Volume
-  const [volumeSelection, setVolumeSelection] = useState<number>(40);
+  const [volumeSelection, setVolumeSelection] = useState<number>(DEFAULT_VOLUME);
   const handleVolumeSelection = (volume: number): void => {
     setVolumeSelection(volume);
   };

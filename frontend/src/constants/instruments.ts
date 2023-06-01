@@ -1,5 +1,7 @@
 import { DropDownOption } from "../interfaces/dropdown";
 
+export const DEFAULT_INSTRUMENT = 'Grand Piano';
+
 enum Instruments {
     GrandPiano = 'Grand Piano',
     ElectricPiano = 'Electric Piano',

@@ -1,5 +1,7 @@
 import { DropDownOption } from "../interfaces/dropdown";
 
+export const DEFAULT_SCALE = 'Major';
+
 enum Scales {
     Major = 'Major',
     Minor = 'Minor',

@@ -1,5 +1,7 @@
 import { DropDownOption } from "../interfaces/dropdown";
 
+export const DEFAULT_KEY = 'C';
+
 enum Keys {
     C = 'C',
     CSharp = 'C#',
