@@ -18,8 +18,8 @@ import { DEFAULT_SCALE } from '../constants/scales';
 import { durationOptions, MAX_BEATS_PER_BAR } from "../constants/durations";
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import { DEFAULT_VOLUME } from '../constants/volume';
-import { VOICE_ONE_DECLARATION, VOICE_ONE_NOTATION } from '../constants/voices';
-import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/audiovisual';
+import * as Voices from '../constants/voices';
+import * as AudioVisual from '../constants/audiovisual';
 
 export default function App() {
 
@@ -34,9 +34,9 @@ export default function App() {
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
 
   // Notation
-  const voicesDeclarationArray = useRef<string[]>([VOICE_ONE_DECLARATION]);
-  const voicesNotationArray = useRef<string[]>([VOICE_ONE_NOTATION]);
-  const notationString = useRef<string>(`X:1\n${activeKey.current}\n${voicesDeclarationArray.current[0]}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${voicesNotationArray.current[0]}`);
+  const voicesDeclarationArray = useRef<string[]>([Voices.VOICE_ONE_DECLARATION]);
+  const voicesNotationArray = useRef<string[]>([Voices.VOICE_ONE_NOTATION]);
+  const notationString = useRef<string>(`X:1\n${activeKey.current}\n${voicesDeclarationArray.current[0]}M:4/4\nQ:1/4=${activeTempo.current.toString()}\n${voicesNotationArray.current[0]}`);
   const notesInBarCount = useRef<number>(0);  // default to zero beats
   
   // INITIALIZE SYNTH AND STAFF //
@@ -45,8 +45,8 @@ export default function App() {
 
   useEffect(() => {
     if (abcjs.synth.supportsAudio()) {     
-      synthControl.load("#audio",
-          cursorControl,
+      AudioVisual.synthControl.load("#audio",
+      AudioVisual.cursorControl,
           {
             displayLoop: true, 
             displayRestart: true, 
@@ -55,16 +55,16 @@ export default function App() {
           }
       );
 
-      staffObj = abcjs.renderAbc("staff", notationString.current, notationOptions);
-      synth.init({ 
-        audioContext: audioContext,
+      staffObj = abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
+      AudioVisual.synth.init({ 
+        audioContext: AudioVisual.audioContext,
         visualObj: staffObj[0],
         millisecondsPerMeasure: 500,   // make dynamic or remove?
         options: {
           pan: [ -0.3, 0.3 ]
         }
       }).then(() => {
-          synthControl.setTune(staffObj[0], false, { program: activeInstrument.current }).then(function () {
+        AudioVisual.synthControl.setTune(staffObj[0], false, { program: activeInstrument.current }).then(function () {
             console.log("Audio successfully loaded.")
         }).catch((error) => {
             console.warn("Audio problem:", error);
@@ -98,7 +98,7 @@ export default function App() {
       }
       else {
         // replace blank staff space until filled in with notes
-        notationString.current = notationString.current.replace('x', newNote); 
+        notationString.current = notationString.current.replace('x', newNote);
       }
       // quarter note in 4/4 would be .25
       abcjs.synth.playEvent(
@@ -113,7 +113,7 @@ export default function App() {
           },
         ], [], 1000 // a measure takes one second.    
       ).then(() => {
-          staffObj = abcjs.renderAbc("staff", notationString.current, notationOptions);
+          staffObj = abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
           console.log(note);
       });
     });
@@ -129,7 +129,7 @@ export default function App() {
       i++;
     }
 
-    synthControl.setTune(staffObj[0], false, { program: activeInstrument.current });
+    AudioVisual.synthControl.setTune(staffObj[0], false, { program: activeInstrument.current });
   }
 
   // NOTE RENDERING BUTTONS //
@@ -142,7 +142,7 @@ export default function App() {
 
   const handleClearStaff = () => {
     notationString.current = `X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`;
-    abcjs.renderAbc("staff", notationString.current, notationOptions);
+    abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
   };
 
   const handleStartGenerating = async (): Promise<void> => {
@@ -219,7 +219,7 @@ export default function App() {
     activeTempo.current = tempoSelection;
     activeVolume.current = volumeSelection;
 
-    abcjs.renderAbc("staff", notationString.current, notationOptions);
+    abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
     setOpenControlPanel(false);
   };
 
@@ -240,10 +240,37 @@ export default function App() {
 
   // VOICES //
 
+  const [voiceCount, setVoiceCount] = useState<number>(1);
+  // state for voice string
+  
   const addVoiceToSystem = (): void => {
-    //notationString.current += ('\n' + voiceTwoString.current);
-    //notationString.current = notationString.current.replace(voicesDeclarationString.current, voicesDeclarationString.current + '\nV:V2 clef=treble');
-    abcjs.renderAbc("staff", notationString.current, notationOptions);
+    if (voiceCount < 4) {
+      switch (voiceCount) {
+        case 1:
+          voicesDeclarationArray.current.push(Voices.VOICE_TWO_DECLARATION);
+          voicesNotationArray.current.push(Voices.VOICE_TWO_NOTATION);
+          break;
+        case 2:
+          voicesDeclarationArray.current.push(Voices.VOICE_THREE_DECLARATION);
+          voicesNotationArray.current.push(Voices.VOICE_THREE_NOTATION);
+          break;
+        case 3:
+          voicesDeclarationArray.current.push(Voices.VOICE_FOUR_DECLARATION);
+          voicesNotationArray.current.push(Voices.VOICE_FOUR_NOTATION);
+          break;
+        default:
+          console.log("Max voices reached");
+      }
+      setVoiceCount(voiceCount + 1);
+      abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
+    }
+  };
+
+  const removeVoiceFromSystem = (): void => {
+    if (voiceCount > 2) {
+      setVoiceCount(voiceCount - 1);
+      abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
+    }
   };
 
   // X:1
@@ -280,6 +307,7 @@ export default function App() {
         </div>
         <div className="flex justify-center my-4">
           <Button save outline onClick={addVoiceToSystem}>Add Voice</Button>
+          <Button save outline onClick={removeVoiceFromSystem}>Remove Voice</Button>
         </div>
         <Playback />
         <Modal
