@@ -18,19 +18,25 @@ import { DEFAULT_SCALE } from '../constants/scales';
 import { durationOptions, MAX_BEATS_PER_BAR } from "../constants/durations";
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import { DEFAULT_VOLUME } from '../constants/volume';
+import { VOICE_ONE_DECLARATION, VOICE_ONE_NOTATION } from '../constants/voices';
 import { synth, synthControl, cursorControl, audioContext, notationOptions } from '../constants/audiovisual';
 
 export default function App() {
 
   // REFS //
 
+  // Params
   const activeKey = useRef<string>(`K:${DEFAULT_KEY}`);
   const activeInstrument = useRef<number>(instrumentMap[DEFAULT_INSTRUMENT]);
   const activePitchRange = useRef<number[]>(DEFAULT_PITCH_RANGE);
   const activeTempo = useRef<number>(DEFAULT_TEMPO);
   const activeVolume = useRef<number>(DEFAULT_VOLUME);
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
-  const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`); // empty staff
+
+  // Notation
+  const voicesDeclarationArray = useRef<string[]>([VOICE_ONE_DECLARATION]);
+  const voicesNotationArray = useRef<string[]>([VOICE_ONE_NOTATION]);
+  const notationString = useRef<string>(`X:1\n${activeKey.current}\n${voicesDeclarationArray.current[0]}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${voicesNotationArray.current[0]}`);
   const notesInBarCount = useRef<number>(0);  // default to zero beats
   
   // INITIALIZE SYNTH AND STAFF //
@@ -232,6 +238,25 @@ export default function App() {
     }
   };
 
+  // VOICES //
+
+  const addVoiceToSystem = (): void => {
+    //notationString.current += ('\n' + voiceTwoString.current);
+    //notationString.current = notationString.current.replace(voicesDeclarationString.current, voicesDeclarationString.current + '\nV:V2 clef=treble');
+    abcjs.renderAbc("staff", notationString.current, notationOptions);
+  };
+
+  // X:1
+  // K:C
+  // V:V1 clef=treble
+  // V:V2 clef=treble
+  // V:Va clef=alto
+  // V:Vc clef=bass
+  // [V:V1] c
+  // [V:V2] E
+  // [V:Va] G,
+  // [V:Vc] C,
+
   return (
     <div>
       <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-start px-10 py-4">
@@ -252,6 +277,9 @@ export default function App() {
         <div className="flex justify-center p-4">
           <Button secondary onClick={() => setOpenControlPanel(true)}>CTRLS</Button>
           <Staff />
+        </div>
+        <div className="flex justify-center my-4">
+          <Button save outline onClick={addVoiceToSystem}>Add Voice</Button>
         </div>
         <Playback />
         <Modal

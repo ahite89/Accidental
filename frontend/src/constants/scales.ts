@@ -14,7 +14,8 @@ enum Scales {
     Locrian = 'Locrian',
     Chromatic = 'Chromatic',
     WholeTone = 'Whole Tone',
-    Pentatonic = 'Pentatonic'
+    Pentatonic = 'Pentatonic',
+    Custom = 'Custom'
 }
 
 export const scaleOptions = (): DropDownOption[] => {

@@ -18,10 +18,10 @@ export default function Button({
         'border-gray-400 bg-gray-400 text-white': secondary,
         'border-blue-500 bg-blue-500 text-white': save,
         'rounded-full': rounded,
-        'bg-white': outline,
-        'text-blue-400': outline && primary,
+        'bg-transparent': outline,
+        'text-cyan-500': outline && primary,
         'text-gray-400': outline && secondary,
-        'text-green-400': outline && save,
+        'text-blue-500': outline && save,
     }, extraStyling);
 
     return (
