@@ -1,6 +1,6 @@
 export const MIN_PITCH_NUMBER = 36;
 export const MAX_PITCH_NUMBER = 96;
-export const DEFAULT_PITCH_RANGE = [MIN_PITCH_NUMBER, MAX_PITCH_NUMBER];
+export const DEFAULT_PITCH_RANGE = [48, 84];
 export const MIN_PITCH_DISTANCE = 5;
 
 export const pitchNumberMap: Record<number, string> = {

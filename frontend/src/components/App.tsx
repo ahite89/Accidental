@@ -9,6 +9,7 @@ import Button from './parameters/Button';
 
 import { NoteProps } from '../interfaces/note';
 import { SelectableProps } from '../interfaces/selectable';
+import { RandomizerParameters } from '../interfaces/controlPanel';
 import { getRandomizedNotes } from '../services/noteRandomizer';
 
 import { DEFAULT_PITCH_RANGE } from '../constants/pitchRange';
@@ -148,7 +149,14 @@ export default function App() {
   const handleStartGenerating = async (): Promise<void> => {
     // Need to disable everything but 'Stop' during generation
     setIsGenerating(true);
-    await randomizeAndRenderNotes(getRandomizedNotes());  // include parameter info as argument
+    const randomizerParameters: RandomizerParameters = {
+      keySelection,
+      scaleSelection,
+      pitchRangeSelection,
+      selectedDurations
+    };
+    // change name to "get correct notes based on parameters" or something
+    await randomizeAndRenderNotes(getRandomizedNotes(randomizerParameters));
   };
 
   // CONTROL PANEL PARAMETERS //

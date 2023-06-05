@@ -18,9 +18,3 @@ export const noteSymbolMap: Record<number, string> = {
     2: "\uD834\uDD5E",
     1: "\uD834\uDD5D"
 };
-
-// Note names for notation (lowest to highest)
-// C,, D,, E,, F,, G,, A,, B,, C, D, E, F, G, A, B, C D E F G A B c d e f g a b c' d' e' f' g' a' b', c''
-// Sharp: ^c (double = ^^)
-// Flat: _B (double = __)
-// Natural: =c

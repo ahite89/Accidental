@@ -16,3 +16,6 @@ export interface ControlPanelProps {
     handleVolumeSelection: (volume: number) => void,
     handleDurationSelection: (durationObject: SelectableProps) => void
 }
+
+export interface RandomizerParameters extends Pick<ControlPanelProps,
+ "keySelection" | "scaleSelection" | "pitchRangeSelection" | "selectedDurations">{};
