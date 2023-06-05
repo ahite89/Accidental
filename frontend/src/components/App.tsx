@@ -9,8 +9,8 @@ import Button from './parameters/Button';
 
 import { NoteProps } from '../interfaces/note';
 import { SelectableProps } from '../interfaces/selectable';
+import { getRandomizedNotes } from '../services/noteRandomizer';
 
-import { defaultNotes } from '../constants/notes';
 import { DEFAULT_PITCH_RANGE } from '../constants/pitchRange';
 import { DEFAULT_KEY } from '../constants/keys';
 import { DEFAULT_INSTRUMENT, instrumentMap } from '../constants/instruments';
@@ -86,7 +86,7 @@ export default function App() {
     
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
       notesInBarCount.current += note.duration;
-      newNote = note.name + note.duration.toString();
+      newNote = note.abcName + note.duration.toString();
       
       if (blankStaffSpaceFilled) {
         if (notesInBarCount.current >= MAX_BEATS_PER_BAR) {
@@ -148,7 +148,7 @@ export default function App() {
   const handleStartGenerating = async (): Promise<void> => {
     // Need to disable everything but 'Stop' during generation
     setIsGenerating(true);
-    await randomizeAndRenderNotes(defaultNotes);
+    await randomizeAndRenderNotes(getRandomizedNotes());  // include parameter info as argument
   };
 
   // CONTROL PANEL PARAMETERS //
@@ -245,6 +245,7 @@ export default function App() {
   
   const addVoiceToSystem = (): void => {
     if (voiceCount < 4) {
+      let voiceNotationString = Voices.VOICE_ONE_DECLARATION;
       switch (voiceCount) {
         case 1:
           voicesDeclarationArray.current.push(Voices.VOICE_TWO_DECLARATION);
