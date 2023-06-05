@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Accidental/static/css/main.716d7afa.css",
+    "main.js": "/Accidental/static/js/main.d875082b.js",
+    "static/js/787.cda612ba.chunk.js": "/Accidental/static/js/787.cda612ba.chunk.js",
+    "index.html": "/Accidental/index.html",
+    "main.716d7afa.css.map": "/Accidental/static/css/main.716d7afa.css.map",
+    "main.d875082b.js.map": "/Accidental/static/js/main.d875082b.js.map",
+    "787.cda612ba.chunk.js.map": "/Accidental/static/js/787.cda612ba.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.716d7afa.css",
+    "static/js/main.d875082b.js"
+  ]
+}
