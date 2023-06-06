@@ -41,16 +41,14 @@ export default function App() {
 
   interface notationData {
     notationString: string,
-    voiceNumber: number
+    voiceNumber: number,
+    volume: number
   }
 
   // Notation
   //const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${VOICE_ONE_NOTATION}`);
   const notationData = useRef<notationData[]>([
-    {notationString: "X:1\nK:C\nCC EE|BAG2|\n", voiceNumber: 1},
-    {notationString: "X:2\nK:D\nDD AA|BBA2|\n", voiceNumber: 2},
-    {notationString: "X:3\nK:F\nFF CG|FDB2|\n", voiceNumber: 3},
-    {notationString: "X:1\nK:E\nCC EE|BAG2|\n", voiceNumber: 4}
+    {notationString: "X:1\nK:C\n", voiceNumber: 1, volume: DEFAULT_VOLUME}
   ]);
   const notesInBarCount = useRef<number>(0);  // default to zero beats
 
@@ -60,12 +58,14 @@ export default function App() {
 
   const addVoiceToSystem = (): void => {
     if (voiceCount < 4) {
+      notationData.current.push({notationString: `X:${voiceCount + 1}\nK:D\n`, voiceNumber: voiceCount + 1, volume: DEFAULT_VOLUME})
       setVoiceCount(voiceCount + 1);
     }
   };
 
   const removeVoiceFromSystem = (): void => {
     if (voiceCount > 1) {
+      notationData.current.pop();
       setVoiceCount(voiceCount - 1);
     }
   };
@@ -90,7 +90,6 @@ export default function App() {
       // need to remove element from dom when applicable
       // re-run when any of the big voice objects has changed
       for (let i = 1; i < voiceCount + 1; i++) {
-        debugger
         staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
         
         AudioVisual.synth.init({ 
@@ -123,10 +122,10 @@ export default function App() {
       newNote = note.abcName + note.duration.toString();
       
       // if (blankStaffSpaceFilled) {
-      //   if (notesInBarCount.current >= MAX_BEATS_PER_BAR) {
-      //     newNote += '|';
-      //     notesInBarCount.current = 0;
-      //   }
+      // if (notesInBarCount.current >= MAX_BEATS_PER_BAR) {
+      //   newNote += '|';
+      //   notesInBarCount.current = 0;
+      // }
 
       notationObj.notationString += newNote;
       // }
@@ -139,10 +138,10 @@ export default function App() {
         [
           {
             "pitch": note.pitchNumber,
-            "volume": activeVolume.current,
+            "volume": notationObj.volume,
             "start": 0,
             "duration": note.duration,
-            "instrument": activeInstrument.current,
+            "instrument": notationObj.voiceNumber,
             "gap": 0
           },
         ], [], 1000 // a measure takes one second.    
@@ -189,9 +188,11 @@ export default function App() {
       pitchRangeSelection,
       selectedDurations
     };
-    //console.log(notationString.current);
+    console.log(notationData.current);
     // change name to "get correct notes based on parameters" or something
     notationData.current.forEach(notationObj => {
+      // probably move getRandomizedNotes function into randomizeAndRender function
+      // so you can access voice specific parameters
       randomizeAndRenderNotes(getRandomizedNotes(randomizerParameters), notationObj);
     });
   };
@@ -300,18 +301,29 @@ export default function App() {
           </Button>
           <Button extraStyling="shadow" save rounded onClick={handleClearStaff}>Clear</Button>
         </div>
-        <div className="flex justify-center p-4">
-          <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 1</Button>
+        <div className="flex flex-col justify-center p-4">
+          <div className="flex flex-row">
+            <Button extraStyling="bg-blue-200" onClick={() => setOpenControlPanel(true)}>Voice 1</Button>
+            <Staff voiceNumber={1} />
+          </div>
           {voiceCount > 1 &&
-            <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 2</Button>
+            <div className="flex flex-row">
+              <Button extraStyling="bg-green-200" onClick={() => setOpenControlPanel(true)}>Voice 2</Button>
+              <Staff voiceNumber={2} />
+            </div>
           }
           {voiceCount > 2 &&
-            <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 3</Button>
+            <div className="flex flex-row">
+              <Button extraStyling="bg-orange-200" onClick={() => setOpenControlPanel(true)}>Voice 3</Button>
+              <Staff voiceNumber={3} />
+            </div>
           }
           {voiceCount > 3 &&
-            <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 4</Button>
+            <div className="flex flex-row">
+              <Button extraStyling="bg-purple-200" onClick={() => setOpenControlPanel(true)}>Voice 4</Button>
+              <Staff voiceNumber={4} />
+            </div>
           }
-          <Staff />
         </div>
         <div className="flex justify-center my-4">
           <Button extraStyling="mr-4" outline onClick={addVoiceToSystem}>Add Voice</Button>
