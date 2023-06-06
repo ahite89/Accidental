@@ -1,4 +1,4 @@
-export default function Staff() {
+export default function Staff() {     // change to STAVES
     return (
       <div>
         <div className="bg-white shadow" id="staff-1"></div>

@@ -62,6 +62,10 @@ export default function App() {
           }
       );
 
+      // use loop here for rendering staves based on number of voices
+      // continue using add/remove voice state
+      // re-run when voice count has changed
+      // re-run when any of the big voice objects has changed
       staffObj = abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
       AudioVisual.synth.init({ 
         audioContext: AudioVisual.audioContext,
@@ -116,7 +120,7 @@ export default function App() {
           },
         ], [], 1000 // a measure takes one second.    
       ).then(() => {
-          staffObj = abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
+          staffObj = abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
           console.log(note);
       });
     });
@@ -145,7 +149,7 @@ export default function App() {
 
   const handleClearStaff = () => {
     notationString.current = `X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`;
-    abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
+    abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
   };
 
   const handleStartGenerating = async (): Promise<void> => {
@@ -230,7 +234,7 @@ export default function App() {
     activeTempo.current = tempoSelection;
     activeVolume.current = volumeSelection;
 
-    abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
+    abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
     setOpenControlPanel(false);
   };
 
@@ -283,7 +287,7 @@ export default function App() {
       voicesNotationString.current = voiceNotationArray.join('');
       voicesDeclarationString.current = voiceDeclarationArray.join('');
 
-      abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
+      abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
     }
   };
 
@@ -301,7 +305,7 @@ export default function App() {
       voicesNotationString.current = voiceNotationArray.join('');
       voicesDeclarationString.current = voiceDeclarationArray.join('');
 
-      abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
+      abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
     }
   };
 
