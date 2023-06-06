@@ -19,7 +19,7 @@ import { DEFAULT_SCALE } from '../constants/scales';
 import { durationOptions, MAX_BEATS_PER_BAR } from "../constants/durations";
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import { DEFAULT_VOLUME } from '../constants/volume';
-import * as Voices from '../constants/voices';
+import { VOICE_ONE_NOTATION } from '../constants/voices';
 import * as AudioVisual from '../constants/audiovisual';
 
 export default function App() {
@@ -30,7 +30,6 @@ export default function App() {
   // KEY, INSTRUMENT, RANGE, VOLUME, DURATIONS
   // TEMPO WILL BE GLOBAL AND REMOVED FROM THE CONTROL PANEL
   // EACH VOICE WILL HAVE THEIR OWN NOTATION STRING
-  // REMOVE ALL OF THE VOICE STUFF BELOW
 
   // Params
   const activeKey = useRef<string>(`K:${DEFAULT_KEY}`);
@@ -41,11 +40,25 @@ export default function App() {
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
 
   // Notation
-  const voicesDeclarationString = useRef<string>(Voices.VOICE_ONE_DECLARATION);
-  const voicesNotationString = useRef<string>(Voices.VOICE_ONE_NOTATION);
-  const notationString = useRef<string>(`X:1\n${activeKey.current}\n${voicesDeclarationString.current}M:4/4\nQ:1/4=${activeTempo.current.toString()}\n${voicesNotationString.current}`);
+  const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${VOICE_ONE_NOTATION}`);
   const notesInBarCount = useRef<number>(0);  // default to zero beats
-  
+
+  // VOICES //
+
+  const [voiceCount, setVoiceCount] = useState<number>(1);  // state used for iterative staff rendering
+
+  const addVoiceToSystem = (): void => {
+    if (voiceCount < 4) {
+      setVoiceCount(voiceCount + 1);
+    }
+  };
+
+  const removeVoiceFromSystem = (): void => {
+    if (voiceCount > 1) {
+      setVoiceCount(voiceCount - 1);
+    }
+  };
+
   // INITIALIZE SYNTH AND STAFF //
 
   let staffObj: TuneObjectArray;
@@ -63,25 +76,27 @@ export default function App() {
       );
 
       // use loop here for rendering staves based on number of voices
-      // continue using add/remove voice state
-      // re-run when voice count has changed
+      // need to remove element from dom when applicable
       // re-run when any of the big voice objects has changed
-      staffObj = abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
-      AudioVisual.synth.init({ 
-        audioContext: AudioVisual.audioContext,
-        visualObj: staffObj[0],
-        millisecondsPerMeasure: 500,   // make dynamic or remove?
-        options: {
-          pan: [ -0.3, 0.3 ]
-        }
-      }).then(() => {
-        AudioVisual.synthControl.setTune(staffObj[0], false, { program: activeInstrument.current });
-      }).catch((error) => {
-          console.warn("Audio problem:", error);
-      });
-    }   // re-initialize synth when params are changed 
+      for (let i = 1; i < voiceCount + 1; i++) {
+        debugger
+        staffObj = abcjs.renderAbc(`staff-${i}`, notationString.current, AudioVisual.notationOptions);
+        AudioVisual.synth.init({ 
+          audioContext: AudioVisual.audioContext,
+          visualObj: staffObj[0],
+          millisecondsPerMeasure: 500,   // make dynamic or remove?
+          options: {
+            pan: [ -0.3, 0.3 ]
+          }
+        }).then(() => {
+          AudioVisual.synthControl.setTune(staffObj[0], false, { program: activeInstrument.current });
+        }).catch((error) => {
+            console.warn("Audio problem:", error);
+        });
+      }
+     }   // re-initialize synth when params are changed 
   }, [activeKey.current, activeInstrument.current, activeTempo.current,
-      activeVolume.current, activePitchRange.current]);
+      activeVolume.current, activePitchRange.current, voiceCount]);
 
   // NOTE RENDERING //
 
@@ -253,62 +268,6 @@ export default function App() {
     }
   };
 
-  // VOICES //
-
-  const [voiceCount, setVoiceCount] = useState<number>(1);
-  const [voiceNotationArray, setVoiceNotationArray] = useState<string[]>([Voices.VOICE_ONE_NOTATION]);
-  const [voiceDeclarationArray, setVoiceDeclarationArray] = useState<string[]>([Voices.VOICE_ONE_DECLARATION]);
-  
-  const addVoiceToSystem = (): void => {
-    if (voiceCount < 4) {
-      switch (voiceCount) {
-        case 1:
-          voiceNotationArray.push(Voices.VOICE_TWO_NOTATION);
-          voiceDeclarationArray.push(Voices.VOICE_TWO_DECLARATION);        
-          break;
-        case 2:
-          voiceNotationArray.push(Voices.VOICE_THREE_NOTATION);
-          voiceDeclarationArray.push(Voices.VOICE_THREE_DECLARATION);         
-          break;
-        case 3:
-          voiceNotationArray.push(Voices.VOICE_FOUR_NOTATION);
-          voiceDeclarationArray.push(Voices.VOICE_FOUR_DECLARATION);          
-          break;
-        default:
-          console.log("Max voices reached");
-      }
-
-      setVoiceNotationArray(voiceNotationArray);
-      setVoiceDeclarationArray(voiceDeclarationArray);
-      setVoiceCount(voiceCount + 1);
-      
-      notationString.current = notationString.current.replace(`${voicesDeclarationString.current}`, voiceDeclarationArray.join(''));
-      notationString.current = notationString.current.replace(`${voicesNotationString.current}`, voiceNotationArray.join(''));
-      voicesNotationString.current = voiceNotationArray.join('');
-      voicesDeclarationString.current = voiceDeclarationArray.join('');
-
-      abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
-    }
-  };
-
-  const removeVoiceFromSystem = (): void => {
-    if (voiceCount > 1) {
-      voiceNotationArray.pop();
-      voiceDeclarationArray.pop();
-      
-      setVoiceNotationArray(voiceNotationArray);
-      setVoiceDeclarationArray(voiceDeclarationArray);
-      setVoiceCount(voiceCount - 1);
-      
-      notationString.current = notationString.current.replace(`${voicesDeclarationString.current}`, voiceDeclarationArray.join(''));
-      notationString.current = notationString.current.replace(`${voicesNotationString.current}`, voiceNotationArray.join(''));
-      voicesNotationString.current = voiceNotationArray.join('');
-      voicesDeclarationString.current = voiceDeclarationArray.join('');
-
-      abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
-    }
-  };
-
   return (
     <div>
       <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-start px-10 py-4">
@@ -328,13 +287,13 @@ export default function App() {
         </div>
         <div className="flex justify-center p-4">
           <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 1</Button>
-          {voiceNotationArray.length > 1 &&
+          {voiceCount > 1 &&
             <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 2</Button>
           }
-          {voiceNotationArray.length > 2 &&
+          {voiceCount > 2 &&
             <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 3</Button>
           }
-          {voiceNotationArray.length > 3 &&
+          {voiceCount > 3 &&
             <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 4</Button>
           }
           <Staff />
