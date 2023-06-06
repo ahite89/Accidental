@@ -6,6 +6,7 @@ import Staff from './Staff';
 import ControlPanel from './ControlPanel';
 import Playback from './Playback';
 import Button from './parameters/Button';
+import RangeSlider from './parameters/RangeSlider';
 
 import { NoteProps } from '../interfaces/note';
 import { SelectableProps } from '../interfaces/selectable';
@@ -17,7 +18,7 @@ import { DEFAULT_KEY } from '../constants/keys';
 import { DEFAULT_INSTRUMENT, instrumentMap } from '../constants/instruments';
 import { DEFAULT_SCALE } from '../constants/scales';
 import { durationOptions, MAX_BEATS_PER_BAR } from "../constants/durations";
-import { DEFAULT_TEMPO } from '../constants/tempo';
+import * as Tempo from "../constants/tempo";
 import { DEFAULT_VOLUME } from '../constants/volume';
 import { VOICE_ONE_NOTATION } from '../constants/voices';
 import * as AudioVisual from '../constants/audiovisual';
@@ -35,7 +36,7 @@ export default function App() {
   const activeKey = useRef<string>(`K:${DEFAULT_KEY}`);
   const activeInstrument = useRef<number>(instrumentMap[DEFAULT_INSTRUMENT]);
   const activePitchRange = useRef<number[]>(DEFAULT_PITCH_RANGE);
-  const activeTempo = useRef<number>(DEFAULT_TEMPO);
+  const activeTempo = useRef<number>(Tempo.DEFAULT_TEMPO);
   const activeVolume = useRef<number>(DEFAULT_VOLUME);
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
 
@@ -224,7 +225,7 @@ export default function App() {
   };
 
   // Tempo
-  const [tempoSelection, setTempoSelection] = useState<number>(DEFAULT_TEMPO);
+  const [tempoSelection, setTempoSelection] = useState<number>(Tempo.DEFAULT_TEMPO);
   const handleTempoSelection = (tempo: number): void => {
     setTempoSelection(tempo);
   };
@@ -292,7 +293,7 @@ export default function App() {
         </p>
       </header>
       <div className="p-8 bg-slate-100">
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-4">
           <Button extraStyling="mr-4 shadow" primary rounded onClick={handleStartGenerating}>
             Generate
           </Button>
@@ -300,6 +301,18 @@ export default function App() {
             Stop
           </Button>
           <Button extraStyling="shadow" save rounded onClick={handleClearStaff}>Clear</Button>
+        </div>
+        <div className="flex justify-center">
+          <RangeSlider
+                min={Tempo.MIN_TEMPO}
+                max={Tempo.MAX_TEMPO}
+                value={tempoSelection}
+                onChangeValue={handleTempoSelection}
+                interval={Tempo.TEMPO_INTERVAL}
+                labelStyling="text-3xl mr-2"
+          >
+            {"\uD834\uDD5F"} =
+          </RangeSlider>
         </div>
         <div className="flex flex-col justify-center p-4">
           <div className="flex flex-row">
@@ -340,14 +353,12 @@ export default function App() {
             scaleSelection={scaleSelection}
             instrumentSelection={instrumentSelection}
             pitchRangeSelection={pitchRangeSelection}
-            tempoSelection={tempoSelection}
             volumeSelection={volumeSelection}
             selectedDurations={selectedDurations}
             handleKeySelection={handleKeySelection}
             handleScaleSelection={handleScaleSelection}
             handleInstrumentSelection={handleInstrumentSelection}
             handlePitchRangeSelection={handlePitchRangeSelection}
-            handleTempoSelection={handleTempoSelection}
             handleVolumeSelection={handleVolumeSelection}
             handleDurationSelection={handleDurationSelection}
           />

@@ -11,7 +11,6 @@ import { scaleOptions } from "../constants/scales";
 import { instrumentOptions } from "../constants/instruments";
 import { pitchNumberMap } from "../constants/pitchRange";
 import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../constants/pitchRange";
-import { MIN_TEMPO, MAX_TEMPO, TEMPO_INTERVAL } from "../constants/tempo";
 import { MIN_VOLUME, MAX_VOLUME, VOLUME_INTERVAL } from "../constants/volume";
 
 export default function ControlPanel({ 
@@ -19,14 +18,12 @@ export default function ControlPanel({
         scaleSelection,
         instrumentSelection,
         pitchRangeSelection,
-        tempoSelection,
         volumeSelection,
         selectedDurations,
         handleKeySelection,
         handleScaleSelection,
         handleInstrumentSelection,
         handlePitchRangeSelection,
-        handleTempoSelection,
         handleVolumeSelection,
         handleDurationSelection,
     }: ControlPanelProps) {
@@ -61,15 +58,6 @@ export default function ControlPanel({
             >
                 Range
             </MultiRangeSlider>
-            <RangeSlider
-                min={MIN_TEMPO}
-                max={MAX_TEMPO}
-                value={tempoSelection}
-                onChangeValue={handleTempoSelection}
-                interval={TEMPO_INTERVAL}
-            >
-                Tempo
-            </RangeSlider>
             <RangeSlider
                 min={MIN_VOLUME}
                 max={MAX_VOLUME}

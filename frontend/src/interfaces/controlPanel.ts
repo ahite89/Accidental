@@ -5,14 +5,12 @@ export interface ControlPanelProps {
     scaleSelection: string,
     instrumentSelection: string,
     pitchRangeSelection: number[],
-    tempoSelection: number,
     volumeSelection: number,
     selectedDurations: SelectableProps[],
     handleKeySelection: (key: string) => void,
     handleScaleSelection: (scale: string) => void,
     handleInstrumentSelection: (instrument: string) => void,
     handlePitchRangeSelection: (pitchRange: number[]) => void,
-    handleTempoSelection: (tempo: number) => void,
     handleVolumeSelection: (volume: number) => void,
     handleDurationSelection: (durationObject: SelectableProps) => void
 }

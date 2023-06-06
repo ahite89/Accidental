@@ -6,6 +6,7 @@ export interface SliderProps {
     value: number,
     interval: number,
     onChangeValue: (value: number) => void,
+    labelStyling?: string,
     children?: ReactNode
 }
 
