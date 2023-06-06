@@ -39,8 +39,19 @@ export default function App() {
   const activeVolume = useRef<number>(DEFAULT_VOLUME);
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
 
+  interface notationData {
+    notationString: string,
+    voiceNumber: number
+  }
+
   // Notation
-  const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${VOICE_ONE_NOTATION}`);
+  //const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${VOICE_ONE_NOTATION}`);
+  const notationData = useRef<notationData[]>([
+    {notationString: "X:1\nK:C\nCC EE|BAG2|\n", voiceNumber: 1},
+    {notationString: "X:2\nK:D\nDD AA|BBA2|\n", voiceNumber: 2},
+    {notationString: "X:3\nK:F\nFF CG|FDB2|\n", voiceNumber: 3},
+    {notationString: "X:1\nK:E\nCC EE|BAG2|\n", voiceNumber: 4}
+  ]);
   const notesInBarCount = useRef<number>(0);  // default to zero beats
 
   // VOICES //
@@ -80,7 +91,8 @@ export default function App() {
       // re-run when any of the big voice objects has changed
       for (let i = 1; i < voiceCount + 1; i++) {
         debugger
-        staffObj = abcjs.renderAbc(`staff-${i}`, notationString.current, AudioVisual.notationOptions);
+        staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
+        
         AudioVisual.synth.init({ 
           audioContext: AudioVisual.audioContext,
           visualObj: staffObj[0],
@@ -102,26 +114,26 @@ export default function App() {
 
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-  const renderNoteToStaff = async (note: NoteProps): Promise<void> => {
+  const renderNoteToStaff = async (note: NoteProps, notationObj: notationData): Promise<void> => {
     // switch render function with pause function?
-    let newNote = '', blankStaffSpaceFilled = notationString.current.indexOf('x') === -1;
+    let newNote = ''; //blankStaffSpaceFilled = notationString.current.indexOf('x') === -1;
     
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
       notesInBarCount.current += note.duration;
       newNote = note.abcName + note.duration.toString();
       
-      if (blankStaffSpaceFilled) {
-        if (notesInBarCount.current >= MAX_BEATS_PER_BAR) {
-          newNote += '|';
-          notesInBarCount.current = 0;
-        }
+      // if (blankStaffSpaceFilled) {
+      //   if (notesInBarCount.current >= MAX_BEATS_PER_BAR) {
+      //     newNote += '|';
+      //     notesInBarCount.current = 0;
+      //   }
 
-        notationString.current += newNote;
-      }
-      else {
-        // replace blank staff space until filled in with notes
-        notationString.current = notationString.current.replace('x', newNote);
-      }
+      notationObj.notationString += newNote;
+      // }
+      // else {
+      //   // replace blank staff space until filled in with notes
+      //   notation = notation.replace('x', newNote);
+      // }
       // quarter note in 4/4 would be .25
       abcjs.synth.playEvent(
         [
@@ -135,19 +147,20 @@ export default function App() {
           },
         ], [], 1000 // a measure takes one second.    
       ).then(() => {
-          staffObj = abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
+          staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
+          //staffObj = abcjs.renderAbc("staff-2", notationString.current[0], AudioVisual.notationOptions);
           console.log(note);
       });
     });
   };
 
-  const randomizeAndRenderNotes = async (notes: NoteProps[]): Promise<void> => {
+  const randomizeAndRenderNotes = async (notes: NoteProps[], notationObj: notationData): Promise<void> => {
     let currentIndex = notes.length,  randomIndex: number;
 
     let i = 0;
     while (i < 10) {
       randomIndex = Math.floor(Math.random() * currentIndex);
-      await renderNoteToStaff(notes[randomIndex]);
+      await renderNoteToStaff(notes[randomIndex], notationObj);
       i++;
     }
 
@@ -163,8 +176,8 @@ export default function App() {
   };
 
   const handleClearStaff = () => {
-    notationString.current = `X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`;
-    abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
+    //notationString.current[0] = `X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`;
+    //abcjs.renderAbc("staff-1", notationString.current[0], AudioVisual.notationOptions);
   };
 
   const handleStartGenerating = async (): Promise<void> => {
@@ -176,9 +189,11 @@ export default function App() {
       pitchRangeSelection,
       selectedDurations
     };
-    console.log(notationString.current);
+    //console.log(notationString.current);
     // change name to "get correct notes based on parameters" or something
-    await randomizeAndRenderNotes(getRandomizedNotes(randomizerParameters));
+    notationData.current.forEach(notationObj => {
+      randomizeAndRenderNotes(getRandomizedNotes(randomizerParameters), notationObj);
+    });
   };
 
   // CONTROL PANEL PARAMETERS //
@@ -239,8 +254,8 @@ export default function App() {
   const handleUpdateStaff = (): void => {
 
     // Update notation string
-    notationString.current = notationString.current.replace(activeKey.current, `K:${keySelection}`);
-    notationString.current = notationString.current.replace(activeTempo.current.toString(), tempoSelection.toString());
+    //notationString.current[0] = notationString.current[0].replace(activeKey.current, `K:${keySelection}`);
+    //notationString.current[0] = notationString.current[0].replace(activeTempo.current.toString(), tempoSelection.toString());
 
     // Update refs
     activeKey.current = `K:${keySelection}`;
@@ -249,7 +264,7 @@ export default function App() {
     activeTempo.current = tempoSelection;
     activeVolume.current = volumeSelection;
 
-    abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
+    //abcjs.renderAbc("staff-1", notationString.current[0], AudioVisual.notationOptions);
     setOpenControlPanel(false);
   };
 
