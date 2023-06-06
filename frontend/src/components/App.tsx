@@ -26,6 +26,12 @@ export default function App() {
 
   // REFS //
 
+  // NEW PLAN: EACH VOICE WILL HAVE THEIR OWN PARAMS AS A BIG OBJECT
+  // KEY, INSTRUMENT, RANGE, VOLUME, DURATIONS
+  // TEMPO WILL BE GLOBAL AND REMOVED FROM THE CONTROL PANEL
+  // EACH VOICE WILL HAVE THEIR OWN NOTATION STRING
+  // REMOVE ALL OF THE VOICE STUFF BELOW
+
   // Params
   const activeKey = useRef<string>(`K:${DEFAULT_KEY}`);
   const activeInstrument = useRef<number>(instrumentMap[DEFAULT_INSTRUMENT]);
@@ -45,7 +51,7 @@ export default function App() {
   let staffObj: TuneObjectArray;
 
   useEffect(() => {
-    if (abcjs.synth.supportsAudio()) {     
+    if (abcjs.synth.supportsAudio()) {   
       AudioVisual.synthControl.load("#audio",
       AudioVisual.cursorControl,
           {
@@ -56,7 +62,7 @@ export default function App() {
           }
       );
 
-      staffObj = abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
+      staffObj = abcjs.renderAbc("staff-1", notationString.current, AudioVisual.notationOptions);
       AudioVisual.synth.init({ 
         audioContext: AudioVisual.audioContext,
         visualObj: staffObj[0],
@@ -65,11 +71,7 @@ export default function App() {
           pan: [ -0.3, 0.3 ]
         }
       }).then(() => {
-        AudioVisual.synthControl.setTune(staffObj[0], false, { program: activeInstrument.current }).then(function () {
-            console.log("Audio successfully loaded.")
-        }).catch((error) => {
-            console.warn("Audio problem:", error);
-        });
+        AudioVisual.synthControl.setTune(staffObj[0], false, { program: activeInstrument.current });
       }).catch((error) => {
           console.warn("Audio problem:", error);
       });
