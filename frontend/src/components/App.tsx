@@ -35,9 +35,9 @@ export default function App() {
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
 
   // Notation
-  const voicesDeclarationArray = useRef<string[]>([Voices.VOICE_ONE_DECLARATION]);
-  const voicesNotationArray = useRef<string[]>([Voices.VOICE_ONE_NOTATION]);
-  const notationString = useRef<string>(`X:1\n${activeKey.current}\n${voicesDeclarationArray.current[0]}M:4/4\nQ:1/4=${activeTempo.current.toString()}\n${voicesNotationArray.current[0]}`);
+  const voicesDeclarationString = useRef<string>(Voices.VOICE_ONE_DECLARATION);
+  const voicesNotationString = useRef<string>(Voices.VOICE_ONE_NOTATION);
+  const notationString = useRef<string>(`X:1\n${activeKey.current}\n${voicesDeclarationString.current}M:4/4\nQ:1/4=${activeTempo.current.toString()}\n${voicesNotationString.current}`);
   const notesInBarCount = useRef<number>(0);  // default to zero beats
   
   // INITIALIZE SYNTH AND STAFF //
@@ -155,6 +155,7 @@ export default function App() {
       pitchRangeSelection,
       selectedDurations
     };
+    console.log(notationString.current);
     // change name to "get correct notes based on parameters" or something
     await randomizeAndRenderNotes(getRandomizedNotes(randomizerParameters));
   };
@@ -249,49 +250,58 @@ export default function App() {
   // VOICES //
 
   const [voiceCount, setVoiceCount] = useState<number>(1);
-  // state for voice string
+  const [voiceNotationArray, setVoiceNotationArray] = useState<string[]>([Voices.VOICE_ONE_NOTATION]);
+  const [voiceDeclarationArray, setVoiceDeclarationArray] = useState<string[]>([Voices.VOICE_ONE_DECLARATION]);
   
   const addVoiceToSystem = (): void => {
     if (voiceCount < 4) {
-      let voiceNotationString = Voices.VOICE_ONE_DECLARATION;
       switch (voiceCount) {
         case 1:
-          voicesDeclarationArray.current.push(Voices.VOICE_TWO_DECLARATION);
-          voicesNotationArray.current.push(Voices.VOICE_TWO_NOTATION);
+          voiceNotationArray.push(Voices.VOICE_TWO_NOTATION);
+          voiceDeclarationArray.push(Voices.VOICE_TWO_DECLARATION);        
           break;
         case 2:
-          voicesDeclarationArray.current.push(Voices.VOICE_THREE_DECLARATION);
-          voicesNotationArray.current.push(Voices.VOICE_THREE_NOTATION);
+          voiceNotationArray.push(Voices.VOICE_THREE_NOTATION);
+          voiceDeclarationArray.push(Voices.VOICE_THREE_DECLARATION);         
           break;
         case 3:
-          voicesDeclarationArray.current.push(Voices.VOICE_FOUR_DECLARATION);
-          voicesNotationArray.current.push(Voices.VOICE_FOUR_NOTATION);
+          voiceNotationArray.push(Voices.VOICE_FOUR_NOTATION);
+          voiceDeclarationArray.push(Voices.VOICE_FOUR_DECLARATION);          
           break;
         default:
           console.log("Max voices reached");
       }
+
+      setVoiceNotationArray(voiceNotationArray);
+      setVoiceDeclarationArray(voiceDeclarationArray);
       setVoiceCount(voiceCount + 1);
+      
+      notationString.current = notationString.current.replace(`${voicesDeclarationString.current}`, voiceDeclarationArray.join(''));
+      notationString.current = notationString.current.replace(`${voicesNotationString.current}`, voiceNotationArray.join(''));
+      voicesNotationString.current = voiceNotationArray.join('');
+      voicesDeclarationString.current = voiceDeclarationArray.join('');
+
       abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
     }
   };
 
   const removeVoiceFromSystem = (): void => {
-    if (voiceCount > 2) {
+    if (voiceCount > 1) {
+      voiceNotationArray.pop();
+      voiceDeclarationArray.pop();
+      
+      setVoiceNotationArray(voiceNotationArray);
+      setVoiceDeclarationArray(voiceDeclarationArray);
       setVoiceCount(voiceCount - 1);
+      
+      notationString.current = notationString.current.replace(`${voicesDeclarationString.current}`, voiceDeclarationArray.join(''));
+      notationString.current = notationString.current.replace(`${voicesNotationString.current}`, voiceNotationArray.join(''));
+      voicesNotationString.current = voiceNotationArray.join('');
+      voicesDeclarationString.current = voiceDeclarationArray.join('');
+
       abcjs.renderAbc("staff", notationString.current, AudioVisual.notationOptions);
     }
   };
-
-  // X:1
-  // K:C
-  // V:V1 clef=treble
-  // V:V2 clef=treble
-  // V:Va clef=alto
-  // V:Vc clef=bass
-  // [V:V1] c
-  // [V:V2] E
-  // [V:Va] G,
-  // [V:Vc] C,
 
   return (
     <div>
@@ -311,12 +321,21 @@ export default function App() {
           <Button extraStyling="shadow" save rounded onClick={handleClearStaff}>Clear</Button>
         </div>
         <div className="flex justify-center p-4">
-          <Button secondary onClick={() => setOpenControlPanel(true)}>CTRLS</Button>
+          <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 1</Button>
+          {voiceNotationArray.length > 1 &&
+            <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 2</Button>
+          }
+          {voiceNotationArray.length > 2 &&
+            <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 3</Button>
+          }
+          {voiceNotationArray.length > 3 &&
+            <Button secondary onClick={() => setOpenControlPanel(true)}>Voice 4</Button>
+          }
           <Staff />
         </div>
         <div className="flex justify-center my-4">
-          <Button save outline onClick={addVoiceToSystem}>Add Voice</Button>
-          <Button save outline onClick={removeVoiceFromSystem}>Remove Voice</Button>
+          <Button extraStyling="mr-4" outline onClick={addVoiceToSystem}>Add Voice</Button>
+          <Button outline onClick={removeVoiceFromSystem}>Remove Voice</Button>
         </div>
         <Playback />
         <Modal

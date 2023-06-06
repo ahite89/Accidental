@@ -18,10 +18,7 @@ export default function Button({
         'border-gray-400 bg-gray-400 text-white': secondary,
         'border-blue-500 bg-blue-500 text-white': save,
         'rounded-full': rounded,
-        'bg-transparent': outline,
-        'text-cyan-500': outline && primary,
-        'text-gray-400': outline && secondary,
-        'text-blue-500': outline && save,
+        'bg-transparent border-blue-500 text-blue-500': outline
     }, extraStyling);
 
     return (
