@@ -1,2 +1,2 @@
 // Notations
-export const VOICE_ONE_NOTATION = "xxxx|xxxx|xxxx|xxxx|\n";
+export const FIRST_FOUR_BARS = "xxxx|xxxx|xxxx|xxxx|\n";

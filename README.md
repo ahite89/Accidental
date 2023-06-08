@@ -5,4 +5,8 @@ Allows the user to generate a random series of notes based on selected parameter
 
 Parameters include: Key, Scale, MIDI Instrument, Note Durations, Tempo, and Volume
 
+Up to four separate voices can be utilized
+
 Built with TypeScript, React (Redux pending), Tailwind CSS, and the abcjs libary for music notation and audio
+
+Working Demo: https://ahite89.github.io/Accidental/

@@ -20,7 +20,7 @@ import { DEFAULT_SCALE } from '../constants/scales';
 import { durationOptions, MAX_BEATS_PER_BAR } from "../constants/durations";
 import * as Tempo from "../constants/tempo";
 import { DEFAULT_VOLUME } from '../constants/volume';
-import { VOICE_ONE_NOTATION } from '../constants/voices';
+import { FIRST_FOUR_BARS } from '../constants/voices';
 import * as AudioVisual from '../constants/audiovisual';
 
 export default function App() {
@@ -41,17 +41,23 @@ export default function App() {
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
 
   interface notationData {
-    notationString: string,
     voiceNumber: number,
-    volume: number
+    notationString: string,
+    volume: number,
+    notesInBarCount: number
   }
 
   // Notation
   //const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${VOICE_ONE_NOTATION}`);
   const notationData = useRef<notationData[]>([
-    {notationString: "X:1\nK:C\n", voiceNumber: 1, volume: DEFAULT_VOLUME}
+    {
+      voiceNumber: 1,
+      notationString: `X:1\nK:C\n${FIRST_FOUR_BARS}`,
+      volume: DEFAULT_VOLUME,
+      notesInBarCount: 0
+    }
   ]);
-  const notesInBarCount = useRef<number>(0);  // default to zero beats
+  //const notesInBarCount = useRef<number>(0);  // default to zero beats
 
   // VOICES //
 
@@ -59,7 +65,14 @@ export default function App() {
 
   const addVoiceToSystem = (): void => {
     if (voiceCount < 4) {
-      notationData.current.push({notationString: `X:${voiceCount + 1}\nK:D\n`, voiceNumber: voiceCount + 1, volume: DEFAULT_VOLUME})
+      notationData.current.push(
+        {
+          voiceNumber: voiceCount + 1,
+          notationString: `X:${voiceCount + 1}\nK:D\n${FIRST_FOUR_BARS}`,
+          volume: DEFAULT_VOLUME,
+          notesInBarCount: 0
+        }
+      )
       setVoiceCount(voiceCount + 1);
     }
   };
@@ -77,23 +90,30 @@ export default function App() {
 
   useEffect(() => {
     if (abcjs.synth.supportsAudio()) {   
-      AudioVisual.synthControl.load("#audio",
-      AudioVisual.cursorControl,
-          {
-            displayLoop: true, 
-            displayRestart: true, 
-            displayPlay: true, 
-            displayProgress: true, 
-          }
+      AudioVisual.synthControlOne.load("#audio", null,
+        {
+          displayLoop: true, 
+          displayRestart: true, 
+          displayPlay: true, 
+          displayProgress: true, 
+        }
       );
+      // AudioVisual.synthControlTwo.load("#audio", null,
+      //   {
+      //     displayLoop: true, 
+      //     displayRestart: true, 
+      //     displayPlay: true, 
+      //     displayProgress: true, 
+      //   }
+      // );
 
       // use loop here for rendering staves based on number of voices
       // need to remove element from dom when applicable
       // re-run when any of the big voice objects has changed
       for (let i = 1; i < voiceCount + 1; i++) {
         staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
-        
-        AudioVisual.synth.init({ 
+        debugger
+        AudioVisual.synthOne.init({ 
           audioContext: AudioVisual.audioContext,
           visualObj: staffObj[0],
           millisecondsPerMeasure: 500,   // make dynamic or remove?
@@ -101,10 +121,25 @@ export default function App() {
             pan: [ -0.3, 0.3 ]
           }
         }).then(() => {
-          AudioVisual.synthControl.setTune(staffObj[0], false, { program: activeInstrument.current });
+            AudioVisual.synthControlOne.setTune(staffObj[0], false, { program: activeInstrument.current });
         }).catch((error) => {
             console.warn("Audio problem:", error);
         });
+        
+        if (i === 2) {
+          AudioVisual.synthTwo.init({ 
+            audioContext: AudioVisual.audioContext,
+            visualObj: staffObj[0],
+            millisecondsPerMeasure: 500,   // make dynamic or remove?
+            options: {
+              pan: [ -0.3, 0.3 ]
+            }
+          }).then(() => {
+            AudioVisual.synthControlOne.setTune(staffObj[0], false, { program: activeInstrument.current });
+          }).catch((error) => {
+              console.warn("Audio problem:", error);
+          });
+        }
       }
      }   // re-initialize synth when params are changed 
   }, [activeKey.current, activeInstrument.current, activeTempo.current,
@@ -116,24 +151,24 @@ export default function App() {
 
   const renderNoteToStaff = async (note: NoteProps, notationObj: notationData): Promise<void> => {
     // switch render function with pause function?
-    let newNote = ''; //blankStaffSpaceFilled = notationString.current.indexOf('x') === -1;
+    let newNote = '', blankStaffSpaceFilled = notationObj.notationString.indexOf('x') === -1;
     
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
-      notesInBarCount.current += note.duration;
+      notationObj.notesInBarCount += note.duration;
       newNote = note.abcName + note.duration.toString();
       
-      // if (blankStaffSpaceFilled) {
-      // if (notesInBarCount.current >= MAX_BEATS_PER_BAR) {
-      //   newNote += '|';
-      //   notesInBarCount.current = 0;
-      // }
+      if (blankStaffSpaceFilled) {
+        if (notationObj.notesInBarCount === MAX_BEATS_PER_BAR) {
+          newNote += '|';
+          notationObj.notesInBarCount = 0;
+        }
 
-      notationObj.notationString += newNote;
-      // }
-      // else {
-      //   // replace blank staff space until filled in with notes
-      //   notation = notation.replace('x', newNote);
-      // }
+        notationObj.notationString += newNote;
+      }
+      else {
+        // replace blank staff space until filled in with notes
+        notationObj.notationString = notationObj.notationString.replace('x', newNote);
+      }
       // quarter note in 4/4 would be .25
       abcjs.synth.playEvent(
         [
@@ -142,13 +177,12 @@ export default function App() {
             "volume": notationObj.volume,
             "start": 0,
             "duration": note.duration,
-            "instrument": notationObj.voiceNumber,
+            "instrument": notationObj.voiceNumber,  // TEMP
             "gap": 0
           },
         ], [], 1000 // a measure takes one second.    
       ).then(() => {
           staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
-          //staffObj = abcjs.renderAbc("staff-2", notationString.current[0], AudioVisual.notationOptions);
           console.log(note);
       });
     });
@@ -164,7 +198,8 @@ export default function App() {
       i++;
     }
 
-    AudioVisual.synthControl.setTune(staffObj[0], false, { program: activeInstrument.current });
+    AudioVisual.synthControlOne.setTune(staffObj[0], false, { program: activeInstrument.current });
+    AudioVisual.synthControlTwo.setTune(staffObj[0], false, { program: activeInstrument.current });
   }
 
   // NOTE RENDERING BUTTONS //
@@ -293,7 +328,7 @@ export default function App() {
         </p>
       </header>
       <div className="p-8 bg-slate-100">
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-8">
           <Button extraStyling="mr-4 shadow" primary rounded onClick={handleStartGenerating}>
             Generate
           </Button>
