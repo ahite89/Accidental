@@ -167,11 +167,12 @@ export default function App() {
   const randomizeAndRenderNotes = async (notes: NoteProps[], notationObj: notationData): Promise<void> => {
     let currentIndex = notes.length,  randomIndex: number;
 
-    let i = 0;
-    while (i < 10) {
+    while (!stopRendering.current) {
+      if (stopRendering.current) {
+        break;
+      }
       randomIndex = Math.floor(Math.random() * currentIndex);
       await renderNoteToStaff(notes[randomIndex], notationObj);
-      i++;
     }
 
     AudioVisual.synthControlOne.setTune(staffObj[0], false, { program: activeInstrument.current });
@@ -179,20 +180,28 @@ export default function App() {
 
   // NOTE RENDERING BUTTONS //
 
-  const [isGenerating, setIsGenerating] = useState(true);
+  const stopRendering = useRef<boolean>(false);
 
   const handleStopGenerating = () => {
-    setIsGenerating(false);
+    stopRendering.current = true;
   };
 
   const handleClearStaff = () => {
+    for (let i = 0; i < notationData.current.length; i++) {
+      if (i === 0) {
+        notationData.current[i].notationString = `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`;
+      }
+      else {
+        notationData.current[i].notationString = `X:${i + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`
+      }
+      staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
+    }
     //notationString.current[0] = `X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`;
-    //abcjs.renderAbc("staff-1", notationString.current[0], AudioVisual.notationOptions);
   };
 
   const handleStartGenerating = async (): Promise<void> => {
     // Need to disable everything but 'Stop' during generation
-    setIsGenerating(true);
+    stopRendering.current = false;
     const randomizerParameters: RandomizerParameters = {
       keySelection,
       scaleSelection,
