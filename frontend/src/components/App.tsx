@@ -11,7 +11,8 @@ import RangeSlider from './parameters/RangeSlider';
 
 import { NoteProps } from '../interfaces/note';
 import { SelectableProps } from '../interfaces/selectable';
-import { RandomizerParameters } from '../interfaces/controlPanel';
+import { RandomizerParameters, DEFAULT_RANDOMIZER_PARAMS } from '../interfaces/controlPanel';
+import { NotationData } from '../interfaces/notation';
 import { getRandomizedNotes } from '../services/noteRandomizer';
 
 import { DEFAULT_PITCH_RANGE } from '../constants/pitchRange';
@@ -28,11 +29,6 @@ export default function App() {
 
   // REFS //
 
-  // NEW PLAN: EACH VOICE WILL HAVE THEIR OWN PARAMS AS A BIG OBJECT
-  // KEY, INSTRUMENT, RANGE, VOLUME, DURATIONS
-  // TEMPO WILL BE GLOBAL AND REMOVED FROM THE CONTROL PANEL
-  // EACH VOICE WILL HAVE THEIR OWN NOTATION STRING
-
   // Params
   const activeKey = useRef<string>(`K:${DEFAULT_KEY}`);
   const activeInstrument = useRef<number>(instrumentMap[DEFAULT_INSTRUMENT]);
@@ -41,21 +37,14 @@ export default function App() {
   const activeVolume = useRef<number>(DEFAULT_VOLUME);
   const activeDurations = useRef<SelectableProps[]>(durationOptions);
 
-  interface notationData {
-    voiceNumber: number,
-    notationString: string,
-    volume: number,
-    notesInBarCount: number
-  }
-
   // Notation
-  //const notationString = useRef<string>(`X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${VOICE_ONE_NOTATION}`);
-  const notationData = useRef<notationData[]>([
+  const notationData = useRef<NotationData[]>([
     {
       voiceNumber: 1,
+      randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
       notationString: `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
       volume: DEFAULT_VOLUME,
-      notesInBarCount: 0
+      notesInBarCount: 0,
     }
   ]);
 
@@ -68,6 +57,7 @@ export default function App() {
       notationData.current.push(
         {
           voiceNumber: voiceCount + 1,
+          randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
           notationString: `X:${voiceCount + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`,
           volume: DEFAULT_VOLUME,
           notesInBarCount: 0
@@ -103,7 +93,6 @@ export default function App() {
       // re-run when any of the big voice objects has changed
       for (let i = 1; i < voiceCount + 1; i++) {
         staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
-        debugger
         AudioVisual.synthOne.init({ 
           audioContext: AudioVisual.audioContext,
           visualObj: staffObj[0],
@@ -125,7 +114,7 @@ export default function App() {
 
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-  const renderNoteToStaff = async (note: NoteProps, notationObj: notationData): Promise<void> => {
+  const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
     // switch render function with pause function?
     let newNote = '', blankStaffSpaceFilled = notationObj.notationString.indexOf('x') === -1;
     
@@ -164,7 +153,7 @@ export default function App() {
     });
   };
 
-  const randomizeAndRenderNotes = async (notes: NoteProps[], notationObj: notationData): Promise<void> => {
+  const randomizeAndRenderNotes = async (notes: NoteProps[], notationObj: NotationData): Promise<void> => {
     let currentIndex = notes.length,  randomIndex: number;
 
     while (!stopRendering.current) {
@@ -176,7 +165,7 @@ export default function App() {
     }
 
     AudioVisual.synthControlOne.setTune(staffObj[0], false, { program: activeInstrument.current });
-  }
+  };
 
   // NOTE RENDERING BUTTONS //
 
@@ -196,7 +185,6 @@ export default function App() {
       }
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
     }
-    //notationString.current[0] = `X:1\n${activeKey.current}\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\nxxxx|xxxx|xxxx|xxxx|`;
   };
 
   const handleStartGenerating = async (): Promise<void> => {
@@ -280,11 +268,11 @@ export default function App() {
     //notationString.current[0] = notationString.current[0].replace(activeTempo.current.toString(), tempoSelection.toString());
 
     // Update refs
-    activeKey.current = `K:${keySelection}`;
-    activeInstrument.current = instrumentMap[instrumentSelection];
-    activePitchRange.current = pitchRangeSelection;
+    // activeKey.current = `K:${keySelection}`;
+    // activeInstrument.current = instrumentMap[instrumentSelection];
+    // activePitchRange.current = pitchRangeSelection;
     //activeTempo.current = tempoSelection;
-    activeVolume.current = volumeSelection;
+    // activeVolume.current = volumeSelection;
 
     //abcjs.renderAbc("staff-1", notationString.current[0], AudioVisual.notationOptions);
     setOpenControlPanel(false);
