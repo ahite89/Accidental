@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import abcjs, { TuneObjectArray } from "abcjs";
+import className from 'classnames';
 import Modal from 'react-modal';
 
 import Staff from './Staff';
@@ -52,12 +53,11 @@ export default function App() {
   const notationData = useRef<notationData[]>([
     {
       voiceNumber: 1,
-      notationString: `X:1\nK:C\n${FIRST_FOUR_BARS}`,
+      notationString: `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
       volume: DEFAULT_VOLUME,
       notesInBarCount: 0
     }
   ]);
-  //const notesInBarCount = useRef<number>(0);  // default to zero beats
 
   // VOICES //
 
@@ -68,7 +68,7 @@ export default function App() {
       notationData.current.push(
         {
           voiceNumber: voiceCount + 1,
-          notationString: `X:${voiceCount + 1}\nK:D\n${FIRST_FOUR_BARS}`,
+          notationString: `X:${voiceCount + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`,
           volume: DEFAULT_VOLUME,
           notesInBarCount: 0
         }
@@ -98,16 +98,7 @@ export default function App() {
           displayProgress: true, 
         }
       );
-      // AudioVisual.synthControlTwo.load("#audio", null,
-      //   {
-      //     displayLoop: true, 
-      //     displayRestart: true, 
-      //     displayPlay: true, 
-      //     displayProgress: true, 
-      //   }
-      // );
 
-      // use loop here for rendering staves based on number of voices
       // need to remove element from dom when applicable
       // re-run when any of the big voice objects has changed
       for (let i = 1; i < voiceCount + 1; i++) {
@@ -125,21 +116,6 @@ export default function App() {
         }).catch((error) => {
             console.warn("Audio problem:", error);
         });
-        
-        if (i === 2) {
-          AudioVisual.synthTwo.init({ 
-            audioContext: AudioVisual.audioContext,
-            visualObj: staffObj[0],
-            millisecondsPerMeasure: 500,   // make dynamic or remove?
-            options: {
-              pan: [ -0.3, 0.3 ]
-            }
-          }).then(() => {
-            AudioVisual.synthControlOne.setTune(staffObj[0], false, { program: activeInstrument.current });
-          }).catch((error) => {
-              console.warn("Audio problem:", error);
-          });
-        }
       }
      }   // re-initialize synth when params are changed 
   }, [activeKey.current, activeInstrument.current, activeTempo.current,
@@ -199,7 +175,6 @@ export default function App() {
     }
 
     AudioVisual.synthControlOne.setTune(staffObj[0], false, { program: activeInstrument.current });
-    AudioVisual.synthControlTwo.setTune(staffObj[0], false, { program: activeInstrument.current });
   }
 
   // NOTE RENDERING BUTTONS //
@@ -263,6 +238,7 @@ export default function App() {
   const [tempoSelection, setTempoSelection] = useState<number>(Tempo.DEFAULT_TEMPO);
   const handleTempoSelection = (tempo: number): void => {
     setTempoSelection(tempo);
+    activeTempo.current = tempoSelection;
   };
 
   // Volume
@@ -298,7 +274,7 @@ export default function App() {
     activeKey.current = `K:${keySelection}`;
     activeInstrument.current = instrumentMap[instrumentSelection];
     activePitchRange.current = pitchRangeSelection;
-    activeTempo.current = tempoSelection;
+    //activeTempo.current = tempoSelection;
     activeVolume.current = volumeSelection;
 
     //abcjs.renderAbc("staff-1", notationString.current[0], AudioVisual.notationOptions);
@@ -319,6 +295,8 @@ export default function App() {
       transform: 'translate(-50%, -50%)',
     }
   };
+
+  const staffStyling = className("flex flex-row justify-center");
 
   return (
     <div>
@@ -349,25 +327,25 @@ export default function App() {
             {"\uD834\uDD5F"} =
           </RangeSlider>
         </div>
-        <div className="flex flex-col justify-center p-4">
-          <div className="flex flex-row">
+        <div className="flex flex-col p-4">
+          <div className={staffStyling}>
             <Button extraStyling="bg-blue-200" onClick={() => setOpenControlPanel(true)}>Voice 1</Button>
             <Staff voiceNumber={1} />
           </div>
           {voiceCount > 1 &&
-            <div className="flex flex-row">
+            <div className={staffStyling}>
               <Button extraStyling="bg-green-200" onClick={() => setOpenControlPanel(true)}>Voice 2</Button>
               <Staff voiceNumber={2} />
             </div>
           }
           {voiceCount > 2 &&
-            <div className="flex flex-row">
+            <div className={staffStyling}>
               <Button extraStyling="bg-orange-200" onClick={() => setOpenControlPanel(true)}>Voice 3</Button>
               <Staff voiceNumber={3} />
             </div>
           }
           {voiceCount > 3 &&
-            <div className="flex flex-row">
+            <div className={staffStyling}>
               <Button extraStyling="bg-purple-200" onClick={() => setOpenControlPanel(true)}>Voice 4</Button>
               <Staff voiceNumber={4} />
             </div>

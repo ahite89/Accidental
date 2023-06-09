@@ -7,7 +7,8 @@
 .slider-thumb {
     cursor: pointer;
     position: absolute;
-    z-index: 100;
+    /* fix z-index thumb issue */
+    z-index: 100;   
     background: #3b82f6;
     color: white;
     border-radius: 100%;
