@@ -9,7 +9,7 @@ import Playback from './Playback';
 import Button from './parameters/Button';
 import RangeSlider from './parameters/RangeSlider';
 
-import { NoteProps } from '../interfaces/note';
+import { NoteProps, PlaybackNoteData } from '../interfaces/note';
 import { SelectableProps } from '../interfaces/selectable';
 import { RandomizerParameters, DEFAULT_RANDOMIZER_PARAMS } from '../interfaces/controlPanel';
 import { NotationData } from '../interfaces/notation';
@@ -30,6 +30,8 @@ export default function App() {
   // REFS //
 
   // Voice Parameters
+  // ** These can be deleted now **
+  // ** Their data will be stored in the notation data objects **
   const activeKey = useRef<string>(`K:${DEFAULT_KEY}`);
   const activeInstrument = useRef<number>(instrumentMap[DEFAULT_INSTRUMENT]);
   const activePitchRange = useRef<number[]>(DEFAULT_PITCH_RANGE);
@@ -43,8 +45,9 @@ export default function App() {
       voiceNumber: 1,
       randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
       notationString: `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
+      playBackNotes: [],
       volume: DEFAULT_VOLUME,
-      notesInBarCount: 0,
+      notesInBarCount: 0
     }
   ]);
 
@@ -54,6 +57,7 @@ export default function App() {
 
   const handleStopGenerating = () => {
     stopRendering.current = true;
+    console.log(notationData.current);
     // Also split notation strings into note arrays?
   };
 
@@ -76,11 +80,12 @@ export default function App() {
       keySelection,
       scaleSelection,
       pitchRangeSelection,
+      instrumentSelection,
       selectedDurations
     };
-    console.log(notationData.current);
-    // change name to "get correct notes based on parameters" or something
+
     notationData.current.forEach(notationObj => {
+      // change name to "get correct notes based on parameters" or something
       // probably move getRandomizedNotes function into randomizeAndRender function
       // so you can access voice specific parameters
       randomizeAndRenderNotes(getRandomizedNotes(randomizerParameters), notationObj);
@@ -90,8 +95,11 @@ export default function App() {
   const handlePlayback = (): void => {
     // Find a way to only pass the notation object in; not the generated note props
     // Loop through notation string characters
-    notationData.current.forEach(notationObj => {
-      playNote({abcName: '', pitchNumber: 0, duration: 0, timeBetweenNotes: 0}, notationObj.volume);
+    notationData.current[0].playBackNotes.forEach(note => {
+        playNote(
+        {abcName: 'F', pitchNumber: note.pitchNumber, duration: note.duration, timeBetweenNotes: 1000},
+        notationData.current[0]
+      )
     });
   };
 
@@ -106,6 +114,7 @@ export default function App() {
           voiceNumber: voiceCount + 1,
           randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
           notationString: `X:${voiceCount + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`,
+          playBackNotes: [],
           volume: DEFAULT_VOLUME,
           notesInBarCount: 0
         }
@@ -182,25 +191,24 @@ export default function App() {
         notationObj.notationString = notationObj.notationString.replace('x', newNote);
       }
 
-      // Play audio then add note to staff
-      playNote(note, notationObj.volume)
-      .then(() => {
-        staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
-        console.log(note);
-      });
+      // Add notes to playback array for playback functionality
+      notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
+
+      // Play audio and add note to staff
+      playNote(note, notationObj)  
+      staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
     });
   };
 
-  const playNote = async (note: NoteProps, noteVolume: number): Promise<void> => {
-    // quarter note in 4/4 would be .25
+  const playNote = (note: NoteProps, notationObj: NotationData): void => {
     abcjs.synth.playEvent(
       [
         {
           "pitch": note.pitchNumber,
-          "volume": noteVolume,
+          "volume": notationObj.volume,
           "start": 0,
           "duration": note.duration,
-          "instrument": 5,  // TEMP
+          "instrument": instrumentMap[notationObj.randomizerParams.instrumentSelection],  // TEMP
           "gap": 0
         },
       ], [], 1000 // a measure takes one second.    

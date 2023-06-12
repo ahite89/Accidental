@@ -1,4 +1,5 @@
 import { durationOptions } from "../constants/durations";
+import { DEFAULT_INSTRUMENT } from "../constants/instruments";
 import { DEFAULT_KEY } from "../constants/keys";
 import { DEFAULT_PITCH_RANGE } from "../constants/pitchRange";
 import { DEFAULT_SCALE } from "../constants/scales";
@@ -20,11 +21,12 @@ export interface ControlPanelProps {
 }
 
 export interface RandomizerParameters extends Pick<ControlPanelProps,
- "keySelection" | "scaleSelection" | "pitchRangeSelection" | "selectedDurations">{};
+ "keySelection" | "scaleSelection" | "pitchRangeSelection" | "selectedDurations" | "instrumentSelection">{};
 
  export const DEFAULT_RANDOMIZER_PARAMS: RandomizerParameters = {
     keySelection: DEFAULT_KEY,
     scaleSelection: DEFAULT_SCALE,
     pitchRangeSelection: DEFAULT_PITCH_RANGE,
+    instrumentSelection: DEFAULT_INSTRUMENT,
     selectedDurations: durationOptions
  } 

@@ -4,3 +4,5 @@ export interface NoteProps {
     duration: number,
     timeBetweenNotes: number
 }
+
+export interface PlaybackNoteData extends Pick<NoteProps, "pitchNumber" | "duration">{};
