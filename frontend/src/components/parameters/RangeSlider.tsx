@@ -2,10 +2,10 @@ import ReactSlider from "react-slider";
 import './range-slider.css';
 import { SliderProps } from "../../interfaces/slider";
 
-export default function RangeSlider({ min, max, value, interval, onChangeValue, labelStyling, children}: SliderProps) {
+export default function RangeSlider({ min, max, value, interval, onChangeValue, children}: SliderProps) {
     return (
         <>
-            <label className={labelStyling}>{children}</label>
+            <label>{children}</label>
             <ReactSlider
                 className="horizontal-slider"
                 min={min}

@@ -7,22 +7,17 @@ import Staff from './Staff';
 import ControlPanel from './ControlPanel';
 import Playback from './Playback';
 import Button from './parameters/Button';
-import RangeSlider from './parameters/RangeSlider';
 
 import { NoteProps, PlaybackNoteData } from '../interfaces/note';
-import { SelectableProps } from '../interfaces/selectable';
 import { RandomizerParameters, DEFAULT_RANDOMIZER_PARAMS } from '../interfaces/controlPanel';
 import { NotationData } from '../interfaces/notation';
 import { getRandomizedNotes } from '../services/noteRandomizer';
 
-import { DEFAULT_PITCH_RANGE } from '../constants/pitchRange';
-import { DEFAULT_KEY } from '../constants/keys';
-import { DEFAULT_INSTRUMENT, instrumentMap } from '../constants/instruments';
-import { DEFAULT_SCALE } from '../constants/scales';
-import { durationOptions, MAX_BEATS_PER_BAR } from "../constants/durations";
-import * as Tempo from "../constants/tempo";
+import { instrumentMap } from '../constants/instruments';
+import { MAX_BEATS_PER_BAR } from "../constants/durations";
 import { DEFAULT_VOLUME } from '../constants/volume';
 import { FIRST_FOUR_BARS } from '../constants/voices';
+import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
 
 export default function App() {
@@ -30,7 +25,7 @@ export default function App() {
   // REFS //
 
   // Tempo
-  const activeTempo = useRef<number>(Tempo.DEFAULT_TEMPO);
+  const activeTempo = useRef<number>(DEFAULT_TEMPO);
 
   // Notation
   const notationData = useRef<NotationData[]>([
@@ -69,19 +64,11 @@ export default function App() {
   const handleStartGenerating = async (): Promise<void> => {
     // Need to disable everything but 'Stop' during generation
     stopRendering.current = false;
-    const randomizerParameters: RandomizerParameters = {
-      keySelection,
-      scaleSelection,
-      pitchRangeSelection,
-      instrumentSelection,
-      selectedDurations
-    };
-
     notationData.current.forEach(notationObj => {
       // change name to "get correct notes based on parameters" or something
       // probably move getRandomizedNotes function into randomizeAndRender function
       // so you can access voice specific parameters
-      randomizeAndRenderNotes(getRandomizedNotes(randomizerParameters), notationObj);
+      randomizeAndRenderNotes(getRandomizedNotes(DEFAULT_RANDOMIZER_PARAMS), notationObj);
     });
   };
 
@@ -177,7 +164,7 @@ export default function App() {
           "volume": notationObj.volume,
           "start": 0,
           "duration": note.duration,
-          "instrument": instrumentMap[notationObj.randomizerParams.instrumentSelection],  // TEMP
+          "instrument": instrumentMap[notationObj.randomizerParams.instrumentSelection],
           "gap": 0
         },
       ], [], 1000 // a measure takes one second.    
@@ -204,67 +191,11 @@ export default function App() {
     }
   };
 
-  // CONTROL PANEL PARAMETERS //
-
-  // Key
-  const [keySelection, setKeySelection] = useState<string>(DEFAULT_KEY);
-  const handleKeySelection = (key: string): void => {
-    setKeySelection(key);
-  };
-
-  // Scale
-  const [scaleSelection, setScaleSelection] = useState<string>(DEFAULT_SCALE);
-  const handleScaleSelection = (scale: string): void => {
-      setScaleSelection(scale);
-  };
-
-  // Instrument
-  const [instrumentSelection, setInstrumentSelection] = useState<string>(DEFAULT_INSTRUMENT);
-  const handleInstrumentSelection = (instrument: string): void => {
-    setInstrumentSelection(instrument);
-  };
-
-  // Range
-  const [pitchRangeSelection, setPitchRangeSelection] = useState<number[]>(DEFAULT_PITCH_RANGE);
-  const handlePitchRangeSelection = (pitchRange: number[]): void => {
-      setPitchRangeSelection([pitchRange[0], pitchRange[1]]);
-  };
-
-  // Tempo
-  const [tempoSelection, setTempoSelection] = useState<number>(Tempo.DEFAULT_TEMPO);
-  const handleTempoSelection = (tempo: number): void => {
-    setTempoSelection(tempo);
-    activeTempo.current = tempoSelection;
-  };
-
-  // Volume
-  const [volumeSelection, setVolumeSelection] = useState<number>(DEFAULT_VOLUME);
-  const handleVolumeSelection = (volume: number): void => {
-    setVolumeSelection(volume);
-  };
-
-  // Duration
-  const [selectedDurations, setSelectedDurations] = useState<SelectableProps[]>(durationOptions);
-
-  const handleDurationSelection = (durationObject: SelectableProps) => {
-    const updatedDurations = selectedDurations.map((duration) => {
-      if (duration.value === durationObject.value) {
-        return {value: duration.value, selected: !duration.selected};
-      }
-      return duration;
-    });
-
-    setSelectedDurations(updatedDurations);
-  };
-
   // Save control panel changes (check to see if there's a difference first?)
   const handleUpdateStaff = (): void => {
 
     // Update notation string
-    //notationString.current[0] = notationString.current[0].replace(activeKey.current, `K:${keySelection}`);
-    //notationString.current[0] = notationString.current[0].replace(activeTempo.current.toString(), tempoSelection.toString());
 
-    //abcjs.renderAbc("staff-1", notationString.current[0], AudioVisual.notationOptions);
     setOpenControlPanel(false);
   };
 
@@ -307,18 +238,6 @@ export default function App() {
             Play
           </Button>
         </div>
-        <div className="flex justify-center">
-          <RangeSlider
-                min={Tempo.MIN_TEMPO}
-                max={Tempo.MAX_TEMPO}
-                value={tempoSelection}
-                onChangeValue={handleTempoSelection}
-                interval={Tempo.TEMPO_INTERVAL}
-                labelStyling="text-3xl mr-2"
-          >
-            {"\uD834\uDD5F"} =
-          </RangeSlider>
-        </div>
         <div className="flex flex-col p-4">
           <div className={staffStyling}>
             <Button extraStyling="bg-blue-200" onClick={() => setOpenControlPanel(true)}>Voice 1</Button>
@@ -353,20 +272,7 @@ export default function App() {
           ariaHideApp={false}
           style={modalStyling}
         >
-          <ControlPanel
-            keySelection={keySelection} 
-            scaleSelection={scaleSelection}
-            instrumentSelection={instrumentSelection}
-            pitchRangeSelection={pitchRangeSelection}
-            volumeSelection={volumeSelection}
-            selectedDurations={selectedDurations}
-            handleKeySelection={handleKeySelection}
-            handleScaleSelection={handleScaleSelection}
-            handleInstrumentSelection={handleInstrumentSelection}
-            handlePitchRangeSelection={handlePitchRangeSelection}
-            handleVolumeSelection={handleVolumeSelection}
-            handleDurationSelection={handleDurationSelection}
-          />
+          <ControlPanel randomizerParameters={DEFAULT_RANDOMIZER_PARAMS} />
           <div className="flex justify-center mb-4">
             <Button save extraStyling="mr-4" onClick={handleUpdateStaff}>Save Changes</Button>
             <Button secondary onClick={() => setOpenControlPanel(false)}>Cancel</Button>
