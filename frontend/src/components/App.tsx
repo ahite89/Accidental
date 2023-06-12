@@ -29,15 +29,8 @@ export default function App() {
 
   // REFS //
 
-  // Voice Parameters
-  // ** These can be deleted now **
-  // ** Their data will be stored in the notation data objects **
-  const activeKey = useRef<string>(`K:${DEFAULT_KEY}`);
-  const activeInstrument = useRef<number>(instrumentMap[DEFAULT_INSTRUMENT]);
-  const activePitchRange = useRef<number[]>(DEFAULT_PITCH_RANGE);
+  // Tempo
   const activeTempo = useRef<number>(Tempo.DEFAULT_TEMPO);
-  const activeVolume = useRef<number>(DEFAULT_VOLUME);
-  const activeDurations = useRef<SelectableProps[]>(durationOptions);
 
   // Notation
   const notationData = useRef<NotationData[]>([
@@ -134,37 +127,13 @@ export default function App() {
 
   let staffObj: TuneObjectArray;
 
-  useEffect(() => {
-    if (abcjs.synth.supportsAudio()) {   
-      AudioVisual.synthControlOne.load("#audio", null,
-        {
-          displayLoop: true, 
-          displayRestart: true, 
-          displayPlay: true, 
-          displayProgress: true, 
-        }
-      );
-
-      // need to remove element from dom when applicable
-      // re-run when any of the big voice objects has changed
-      for (let i = 1; i < voiceCount + 1; i++) {
-        staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
-        AudioVisual.synthOne.init({ 
-          audioContext: AudioVisual.audioContext,
-          visualObj: staffObj[0],
-          millisecondsPerMeasure: 500,   // make dynamic or remove?
-          options: {
-            pan: [ -0.3, 0.3 ]
-          }
-        }).then(() => {
-            AudioVisual.synthControlOne.setTune(staffObj[0], false, { program: activeInstrument.current });
-        }).catch((error) => {
-            console.warn("Audio problem:", error);
-        });
-      }
-     }   // re-initialize synth when params are changed 
-  }, [activeKey.current, activeInstrument.current, activeTempo.current,
-      activeVolume.current, activePitchRange.current, voiceCount, stopRendering.current]);
+  useEffect(() => {   
+    // need to remove element from dom when applicable
+    // re-run when any of the big voice objects has changed
+    for (let i = 1; i < voiceCount + 1; i++) {
+      staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
+    }   // re-initialize synth when params are changed 
+  }, [activeTempo.current, voiceCount, stopRendering.current]);
 
   // NOTE RENDERING //
 
@@ -233,8 +202,6 @@ export default function App() {
       randomIndex = Math.floor(Math.random() * currentIndex);
       await playAndRenderNoteToStaff(notes[randomIndex], notationObj);
     }
-
-    AudioVisual.synthControlOne.setTune(staffObj[0], false, { program: activeInstrument.current });
   };
 
   // CONTROL PANEL PARAMETERS //
@@ -288,8 +255,6 @@ export default function App() {
     });
 
     setSelectedDurations(updatedDurations);
-    activeDurations.current = selectedDurations.filter((duration) => duration.selected);
-    console.log(activeDurations.current);
   };
 
   // Save control panel changes (check to see if there's a difference first?)
@@ -298,13 +263,6 @@ export default function App() {
     // Update notation string
     //notationString.current[0] = notationString.current[0].replace(activeKey.current, `K:${keySelection}`);
     //notationString.current[0] = notationString.current[0].replace(activeTempo.current.toString(), tempoSelection.toString());
-
-    // Update refs
-    // activeKey.current = `K:${keySelection}`;
-    // activeInstrument.current = instrumentMap[instrumentSelection];
-    // activePitchRange.current = pitchRangeSelection;
-    //activeTempo.current = tempoSelection;
-    // activeVolume.current = volumeSelection;
 
     //abcjs.renderAbc("staff-1", notationString.current[0], AudioVisual.notationOptions);
     setOpenControlPanel(false);
