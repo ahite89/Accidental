@@ -54,6 +54,7 @@ export default function App() {
 
   const handleStopGenerating = () => {
     stopRendering.current = true;
+    // Also split notation strings into note arrays?
   };
 
   const handleClearStaff = () => {
@@ -88,8 +89,9 @@ export default function App() {
 
   const handlePlayback = (): void => {
     // Find a way to only pass the notation object in; not the generated note props
+    // Loop through notation string characters
     notationData.current.forEach(notationObj => {
-      playNote(null, notationObj);
+      playNote({abcName: '', pitchNumber: 0, duration: 0, timeBetweenNotes: 0}, notationObj.volume);
     });
   };
 
@@ -181,23 +183,24 @@ export default function App() {
       }
 
       // Play audio then add note to staff
-      playNote(note, notationObj).then(() => {
+      playNote(note, notationObj.volume)
+      .then(() => {
         staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
         console.log(note);
       });
     });
   };
 
-  const playNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
+  const playNote = async (note: NoteProps, noteVolume: number): Promise<void> => {
     // quarter note in 4/4 would be .25
     abcjs.synth.playEvent(
       [
         {
           "pitch": note.pitchNumber,
-          "volume": notationObj.volume,
+          "volume": noteVolume,
           "start": 0,
           "duration": note.duration,
-          "instrument": notationObj.voiceNumber,  // TEMP
+          "instrument": 5,  // TEMP
           "gap": 0
         },
       ], [], 1000 // a measure takes one second.    
