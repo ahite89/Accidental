@@ -29,7 +29,7 @@ export default function App() {
 
   // REFS //
 
-  // Params
+  // Voice Parameters
   const activeKey = useRef<string>(`K:${DEFAULT_KEY}`);
   const activeInstrument = useRef<number>(instrumentMap[DEFAULT_INSTRUMENT]);
   const activePitchRange = useRef<number[]>(DEFAULT_PITCH_RANGE);
@@ -83,6 +83,13 @@ export default function App() {
       // probably move getRandomizedNotes function into randomizeAndRender function
       // so you can access voice specific parameters
       randomizeAndRenderNotes(getRandomizedNotes(randomizerParameters), notationObj);
+    });
+  };
+
+  const handlePlayback = (): void => {
+    // Find a way to only pass the notation object in; not the generated note props
+    notationData.current.forEach(notationObj => {
+      playNote(null, notationObj);
     });
   };
 
@@ -196,6 +203,14 @@ export default function App() {
       ], [], 1000 // a measure takes one second.    
     )
   }
+
+
+  // IDEA:
+  // CONTROL PANEL HAS ALL THE STATES FOR THE PARAMETERS. IT HAS AN ONSUBMIT FUNCTION FOR THE SAVE
+  // PARAMETERS BUTTON. AT THAT POINT A PARAMETERS OBJECT IS CREATED FROM ALL THE STATE UPDATES AND
+  // PASSED BACK TO APP.TSX WHERE ITS PROPERTIES ARE ASSIGNED TO THE NOTATION STRING AND ELSEWHERE FOR
+  // THAT SPECIFIC VOICE (INSIDE OF NOTATION DATA ARRAY)
+
 
   const randomizeAndRenderNotes = async (notes: NoteProps[], notationObj: NotationData): Promise<void> => {
     let currentIndex = notes.length,  randomIndex: number;
@@ -319,7 +334,7 @@ export default function App() {
           <Button extraStyling="mr-4 shadow" save rounded onClick={handleClearStaff}>
             Clear
           </Button>
-          <Button extraStyling="shadow" outline onClick={() => console.log('playback button')}>
+          <Button extraStyling="shadow" outline onClick={handlePlayback}>
             Play
           </Button>
         </div>
