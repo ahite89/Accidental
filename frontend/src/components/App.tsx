@@ -5,7 +5,6 @@ import Modal from 'react-modal';
 
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
-import Playback from './Playback';
 import Button from './parameters/Button';
 
 import { NoteProps, PlaybackNoteData } from '../interfaces/note';
@@ -103,9 +102,10 @@ export default function App() {
     }
   };
 
-  const removeVoiceFromSystem = (): void => {
+  const removeVoiceFromSystem = (voiceNumber: number): void => {
     if (voiceCount > 1) {
-      notationData.current.pop();
+      const voice = notationData.current.indexOf(notationData.current[voiceNumber - 1]);
+      notationData.current.splice(voice, 1);
       setVoiceCount(voiceCount - 1);
     }
   };
@@ -119,7 +119,7 @@ export default function App() {
     // re-run when any of the big voice objects has changed
     for (let i = 1; i < voiceCount + 1; i++) {
       staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
-    }   // re-initialize synth when params are changed 
+    }
   }, [activeTempo.current, voiceCount, stopRendering.current]);
 
   // NOTE RENDERING //
@@ -234,39 +234,52 @@ export default function App() {
           <Button extraStyling="mr-4 shadow" save rounded onClick={handleClearStaff}>
             Clear
           </Button>
-          <Button extraStyling="shadow" outline onClick={handlePlayback}>
+          <Button extraStyling="mr-4 shadow" primary rounded onClick={handlePlayback}>
             Play
+          </Button>
+          <Button extraStyling="shadow" outline rounded onClick={addVoiceToSystem}>
+            Add Voice
           </Button>
         </div>
         <div className="flex flex-col p-4">
           <div className={staffStyling}>
-            <Button extraStyling="bg-blue-200" onClick={() => setOpenControlPanel(true)}>Voice 1</Button>
+            <div className="flex flex-col">
+              <Button extraStyling="bg-blue-200" onClick={() => setOpenControlPanel(true)}>Voice 1</Button>
+              {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
+            </div>
             <Staff voiceNumber={1} />
           </div>
           {voiceCount > 1 &&
             <div className={staffStyling}>
-              <Button extraStyling="bg-green-200" onClick={() => setOpenControlPanel(true)}>Voice 2</Button>
+              <div className="flex flex-col">
+                <Button extraStyling="bg-green-200" onClick={() => setOpenControlPanel(true)}>Voice 2</Button>
+                {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
+                <Button outline onClick={() => removeVoiceFromSystem(2)}>X</Button>
+              </div>
               <Staff voiceNumber={2} />
             </div>
           }
           {voiceCount > 2 &&
             <div className={staffStyling}>
-              <Button extraStyling="bg-orange-200" onClick={() => setOpenControlPanel(true)}>Voice 3</Button>
+              <div className="flex flex-col">
+                <Button extraStyling="bg-orange-200" onClick={() => setOpenControlPanel(true)}>Voice 3</Button>
+                {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
+                <Button outline onClick={() => removeVoiceFromSystem(3)}>X</Button>
+              </div>
               <Staff voiceNumber={3} />
             </div>
           }
           {voiceCount > 3 &&
             <div className={staffStyling}>
-              <Button extraStyling="bg-purple-200" onClick={() => setOpenControlPanel(true)}>Voice 4</Button>
+              <div className="flex flex-col">
+                <Button extraStyling="bg-purple-200" onClick={() => setOpenControlPanel(true)}>Voice 4</Button>
+                {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
+                <Button outline onClick={() => removeVoiceFromSystem(4)}>X</Button>
+              </div>
               <Staff voiceNumber={4} />
             </div>
           }
         </div>
-        <div className="flex justify-center my-4">
-          <Button extraStyling="mr-4" outline onClick={addVoiceToSystem}>Add Voice</Button>
-          <Button outline onClick={removeVoiceFromSystem}>Remove Voice</Button>
-        </div>
-        <Playback />
         <Modal
           isOpen={openControlPanel}
           ariaHideApp={false}
