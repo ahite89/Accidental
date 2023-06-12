@@ -48,6 +48,44 @@ export default function App() {
     }
   ]);
 
+  // NOTE RENDERING BUTTONS //
+
+  const stopRendering = useRef<boolean>(false);
+
+  const handleStopGenerating = () => {
+    stopRendering.current = true;
+  };
+
+  const handleClearStaff = () => {
+    for (let i = 0; i < notationData.current.length; i++) {
+      if (i === 0) {
+        notationData.current[i].notationString = `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`;
+      }
+      else {
+        notationData.current[i].notationString = `X:${i + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`
+      }
+      staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
+    }
+  };
+
+  const handleStartGenerating = async (): Promise<void> => {
+    // Need to disable everything but 'Stop' during generation
+    stopRendering.current = false;
+    const randomizerParameters: RandomizerParameters = {
+      keySelection,
+      scaleSelection,
+      pitchRangeSelection,
+      selectedDurations
+    };
+    console.log(notationData.current);
+    // change name to "get correct notes based on parameters" or something
+    notationData.current.forEach(notationObj => {
+      // probably move getRandomizedNotes function into randomizeAndRender function
+      // so you can access voice specific parameters
+      randomizeAndRenderNotes(getRandomizedNotes(randomizerParameters), notationObj);
+    });
+  };
+
   // VOICES //
 
   const [voiceCount, setVoiceCount] = useState<number>(1);  // state used for iterative staff rendering
@@ -108,13 +146,13 @@ export default function App() {
       }
      }   // re-initialize synth when params are changed 
   }, [activeKey.current, activeInstrument.current, activeTempo.current,
-      activeVolume.current, activePitchRange.current, voiceCount]);
+      activeVolume.current, activePitchRange.current, voiceCount, stopRendering.current]);
 
   // NOTE RENDERING //
 
   const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-  const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
+  const playAndRenderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
     // switch render function with pause function?
     let newNote = '', blankStaffSpaceFilled = notationObj.notationString.indexOf('x') === -1;
     
@@ -134,24 +172,30 @@ export default function App() {
         // replace blank staff space until filled in with notes
         notationObj.notationString = notationObj.notationString.replace('x', newNote);
       }
-      // quarter note in 4/4 would be .25
-      abcjs.synth.playEvent(
-        [
-          {
-            "pitch": note.pitchNumber,
-            "volume": notationObj.volume,
-            "start": 0,
-            "duration": note.duration,
-            "instrument": notationObj.voiceNumber,  // TEMP
-            "gap": 0
-          },
-        ], [], 1000 // a measure takes one second.    
-      ).then(() => {
-          staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
-          console.log(note);
+
+      // Play audio then add note to staff
+      playNote(note, notationObj).then(() => {
+        staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
+        console.log(note);
       });
     });
   };
+
+  const playNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
+    // quarter note in 4/4 would be .25
+    abcjs.synth.playEvent(
+      [
+        {
+          "pitch": note.pitchNumber,
+          "volume": notationObj.volume,
+          "start": 0,
+          "duration": note.duration,
+          "instrument": notationObj.voiceNumber,  // TEMP
+          "gap": 0
+        },
+      ], [], 1000 // a measure takes one second.    
+    )
+  }
 
   const randomizeAndRenderNotes = async (notes: NoteProps[], notationObj: NotationData): Promise<void> => {
     let currentIndex = notes.length,  randomIndex: number;
@@ -161,48 +205,10 @@ export default function App() {
         break;
       }
       randomIndex = Math.floor(Math.random() * currentIndex);
-      await renderNoteToStaff(notes[randomIndex], notationObj);
+      await playAndRenderNoteToStaff(notes[randomIndex], notationObj);
     }
 
     AudioVisual.synthControlOne.setTune(staffObj[0], false, { program: activeInstrument.current });
-  };
-
-  // NOTE RENDERING BUTTONS //
-
-  const stopRendering = useRef<boolean>(false);
-
-  const handleStopGenerating = () => {
-    stopRendering.current = true;
-  };
-
-  const handleClearStaff = () => {
-    for (let i = 0; i < notationData.current.length; i++) {
-      if (i === 0) {
-        notationData.current[i].notationString = `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`;
-      }
-      else {
-        notationData.current[i].notationString = `X:${i + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`
-      }
-      staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
-    }
-  };
-
-  const handleStartGenerating = async (): Promise<void> => {
-    // Need to disable everything but 'Stop' during generation
-    stopRendering.current = false;
-    const randomizerParameters: RandomizerParameters = {
-      keySelection,
-      scaleSelection,
-      pitchRangeSelection,
-      selectedDurations
-    };
-    console.log(notationData.current);
-    // change name to "get correct notes based on parameters" or something
-    notationData.current.forEach(notationObj => {
-      // probably move getRandomizedNotes function into randomizeAndRender function
-      // so you can access voice specific parameters
-      randomizeAndRenderNotes(getRandomizedNotes(randomizerParameters), notationObj);
-    });
   };
 
   // CONTROL PANEL PARAMETERS //
@@ -310,7 +316,12 @@ export default function App() {
           <Button extraStyling="mr-4 shadow" secondary rounded onClick={handleStopGenerating}>
             Stop
           </Button>
-          <Button extraStyling="shadow" save rounded onClick={handleClearStaff}>Clear</Button>
+          <Button extraStyling="mr-4 shadow" save rounded onClick={handleClearStaff}>
+            Clear
+          </Button>
+          <Button extraStyling="shadow" outline onClick={() => console.log('playback button')}>
+            Play
+          </Button>
         </div>
         <div className="flex justify-center">
           <RangeSlider
