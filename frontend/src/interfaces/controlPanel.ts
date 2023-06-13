@@ -8,7 +8,9 @@ import { DEFAULT_VOLUME } from "../constants/volume";
 import { SelectableProps } from "./selectable";
 
 export interface ControlPanelProps {
-    randomizerParameters: RandomizerParameters
+    randomizerParameters: RandomizerParameters,
+    voiceNumber: number,
+    onSubmit: (controlPanelParameters: RandomizerParameters, voiceNumber: number) => void
 }
 
 export interface RandomizerParameters {

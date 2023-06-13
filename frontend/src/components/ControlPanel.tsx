@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import className from "classnames";
 
+import Button from './parameters/Button';
 import DropDown from "./parameters/Dropdown";
 import MultiRangeSlider from "./parameters/MultiRangeSlider";
 import RangeSlider from "./parameters/RangeSlider";
@@ -16,8 +17,20 @@ import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../const
 import { MIN_VOLUME, MAX_VOLUME, VOLUME_INTERVAL } from "../constants/volume";
 import * as Tempo from "../constants/tempo";
 
-export default function ControlPanel({ randomizerParameters }: ControlPanelProps) {
+export default function ControlPanel({ voiceNumber, onSubmit }: ControlPanelProps) {
 
+    const handleSubmitParameters = (): void => {
+        onSubmit({
+            keySelection,
+            scaleSelection,
+            instrumentSelection,
+            pitchRangeSelection,
+            tempoSelection,
+            volumeSelection,
+            selectedDurations
+        }, voiceNumber)
+    };
+    
     // Key
     const [keySelection, setKeySelection] = useState<string>(DEFAULT_RANDOMIZER_PARAMS.keySelection);
     const handleKeySelection = (key: string): void => {
@@ -116,6 +129,10 @@ export default function ControlPanel({ randomizerParameters }: ControlPanelProps
             >
                 Volume
             </RangeSlider>
+            <div className="flex justify-center mb-4">
+                <Button save extraStyling="mr-4" onClick={handleSubmitParameters}>Save Changes</Button>
+                <Button secondary onClick={() => console.log("cancel")}>Cancel</Button>
+          </div>
         </div>
     );
 }

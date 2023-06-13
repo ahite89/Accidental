@@ -112,7 +112,7 @@ export default function App() {
 
   // INITIALIZE SYNTH AND STAFF //
 
-  let staffObj: TuneObjectArray;
+  let staffObj: TuneObjectArray, targetVoice: NotationData | undefined;
 
   useEffect(() => {   
     // need to remove element from dom when applicable
@@ -191,11 +191,17 @@ export default function App() {
     }
   };
 
-  // Save control panel changes (check to see if there's a difference first?)
-  const handleUpdateStaff = (): void => {
+  useEffect(() => {
+    // useRef to update key/scale label?
+  }, [targetVoice]);
 
-    // Update notation string
-
+  // Save control panel changes for targeted voice
+  const handleUpdateStaff = (controlPanelParams: RandomizerParameters, voiceNumber: number): void => {
+    targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === voiceNumber);
+    if (targetVoice) {
+      targetVoice.notationString = `X:${voiceNumber}\nK:${controlPanelParams.keySelection}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
+      abcjs.renderAbc(`staff-${voiceNumber}`, targetVoice.notationString, AudioVisual.notationOptions);
+    }
     setOpenControlPanel(false);
   };
 
@@ -248,6 +254,10 @@ export default function App() {
               {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
             </div>
             <Staff voiceNumber={1} />
+            <Modal isOpen={openControlPanel} style={modalStyling}>
+              {/* Pass in saved params for each voice */}
+              <ControlPanel onSubmit={handleUpdateStaff} voiceNumber={1} randomizerParameters={DEFAULT_RANDOMIZER_PARAMS} />
+            </Modal>
           </div>
           {voiceCount > 1 &&
             <div className={staffStyling}>
@@ -256,6 +266,7 @@ export default function App() {
                 {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
                 <Button outline onClick={() => removeVoiceFromSystem(2)}>X</Button>
               </div>
+              <ControlPanel onSubmit={handleUpdateStaff} voiceNumber={2} randomizerParameters={DEFAULT_RANDOMIZER_PARAMS} />
               <Staff voiceNumber={2} />
             </div>
           }
@@ -266,6 +277,7 @@ export default function App() {
                 {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
                 <Button outline onClick={() => removeVoiceFromSystem(3)}>X</Button>
               </div>
+              <ControlPanel onSubmit={handleUpdateStaff} voiceNumber={3} randomizerParameters={DEFAULT_RANDOMIZER_PARAMS} />
               <Staff voiceNumber={3} />
             </div>
           }
@@ -276,21 +288,11 @@ export default function App() {
                 {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
                 <Button outline onClick={() => removeVoiceFromSystem(4)}>X</Button>
               </div>
+              <ControlPanel onSubmit={handleUpdateStaff} voiceNumber={4} randomizerParameters={DEFAULT_RANDOMIZER_PARAMS} />
               <Staff voiceNumber={4} />
             </div>
           }
-        </div>
-        <Modal
-          isOpen={openControlPanel}
-          ariaHideApp={false}
-          style={modalStyling}
-        >
-          <ControlPanel randomizerParameters={DEFAULT_RANDOMIZER_PARAMS} />
-          <div className="flex justify-center mb-4">
-            <Button save extraStyling="mr-4" onClick={handleUpdateStaff}>Save Changes</Button>
-            <Button secondary onClick={() => setOpenControlPanel(false)}>Cancel</Button>
-          </div>
-        </Modal>
+        </div>          
       </div>
     </div>
   );
