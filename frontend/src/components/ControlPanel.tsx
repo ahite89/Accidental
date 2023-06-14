@@ -7,8 +7,10 @@ import MultiRangeSlider from "./parameters/MultiRangeSlider";
 import RangeSlider from "./parameters/RangeSlider";
 import SelectableList from './parameters/SelectableList';
 
-import { ControlPanelProps, DEFAULT_RANDOMIZER_PARAMS } from "../interfaces/controlPanel";
+import { ControlPanelProps } from "../interfaces/controlPanel";
 import { SelectableProps } from '../interfaces/selectable';
+
+import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { keyOptions } from "../constants/keys";
 import { scaleOptions } from "../constants/scales";
 import { instrumentOptions } from "../constants/instruments";
@@ -17,7 +19,7 @@ import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../const
 import { MIN_VOLUME, MAX_VOLUME, VOLUME_INTERVAL } from "../constants/volume";
 import * as Tempo from "../constants/tempo";
 
-export default function ControlPanel({ voiceNumber, onSubmit }: ControlPanelProps) {
+export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControlPanel }: ControlPanelProps) {
 
     const handleSubmitParameters = (): void => {
         onSubmit({
@@ -131,7 +133,7 @@ export default function ControlPanel({ voiceNumber, onSubmit }: ControlPanelProp
             </RangeSlider>
             <div className="flex justify-center mb-4">
                 <Button save extraStyling="mr-4" onClick={handleSubmitParameters}>Save Changes</Button>
-                <Button secondary onClick={() => console.log("cancel")}>Cancel</Button>
+                <Button secondary onClick={handleCloseControlPanel}>Cancel</Button>
           </div>
         </div>
     );

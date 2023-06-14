@@ -8,10 +8,11 @@ import ControlPanel from './ControlPanel';
 import Button from './parameters/Button';
 
 import { NoteProps, PlaybackNoteData } from '../interfaces/note';
-import { RandomizerParameters, DEFAULT_RANDOMIZER_PARAMS } from '../interfaces/controlPanel';
+import { RandomizerParameters } from '../interfaces/controlPanel';
 import { NotationData } from '../interfaces/notation';
 import { getRandomizedNotes } from '../services/noteRandomizer';
 
+import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { instrumentMap } from '../constants/instruments';
 import { MAX_BEATS_PER_BAR } from "../constants/durations";
 import { DEFAULT_VOLUME } from '../constants/volume';
@@ -84,7 +85,7 @@ export default function App() {
 
   // VOICES //
 
-  const [voiceCount, setVoiceCount] = useState<number>(1);  // state used for iterative staff rendering
+  const [voiceCount, setVoiceCount] = useState<number>(notationData.current.length);  // state used for iterative staff rendering
 
   const addVoiceToSystem = (): void => {
     if (voiceCount < 4) {
@@ -104,8 +105,8 @@ export default function App() {
 
   const removeVoiceFromSystem = (voiceNumber: number): void => {
     if (voiceCount > 1) {
-      const voice = notationData.current.indexOf(notationData.current[voiceNumber - 1]);
-      notationData.current.splice(voice, 1);
+      const selectedVoice = notationData.current.indexOf(notationData.current[voiceNumber - 1]);
+      notationData.current.splice(selectedVoice, 1);
       setVoiceCount(voiceCount - 1);
     }
   };
@@ -117,6 +118,7 @@ export default function App() {
   useEffect(() => {   
     // need to remove element from dom when applicable
     // re-run when any of the big voice objects has changed
+    const voiceCount = notationData.current.length;
     for (let i = 1; i < voiceCount + 1; i++) {
       staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
     }
@@ -196,11 +198,13 @@ export default function App() {
   }, [targetVoice]);
 
   // Save control panel changes for targeted voice
-  const handleUpdateStaff = (controlPanelParams: RandomizerParameters, voiceNumber: number): void => {
-    targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === voiceNumber);
+  const handleUpdateStaff = (controlPanelParams: RandomizerParameters, selectedVoiceNumber: number): void => {
+    debugger
+    targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
     if (targetVoice) {
-      targetVoice.notationString = `X:${voiceNumber}\nK:${controlPanelParams.keySelection}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
-      abcjs.renderAbc(`staff-${voiceNumber}`, targetVoice.notationString, AudioVisual.notationOptions);
+      targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${controlPanelParams.keySelection}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
+      targetVoice.randomizerParams = controlPanelParams;
+      abcjs.renderAbc(`staff-${targetVoice.voiceNumber}`, targetVoice.notationString, AudioVisual.notationOptions);
     }
     setOpenControlPanel(false);
   };
@@ -208,6 +212,9 @@ export default function App() {
   // CONTROLS MODAL //
 
   const [openControlPanel, setOpenControlPanel] = useState<boolean>(false);
+  const handleCloseControlPanel = () => {
+    setOpenControlPanel(false);
+  };
 
   const modalStyling = {
     content: {
@@ -234,16 +241,16 @@ export default function App() {
           <Button extraStyling="mr-4 shadow" primary rounded onClick={handleStartGenerating}>
             Generate
           </Button>
-          <Button extraStyling="mr-4 shadow" secondary rounded onClick={handleStopGenerating}>
+          <Button extraStyling="mr-4 shadow" primary rounded onClick={handleStopGenerating}>
             Stop
           </Button>
-          <Button extraStyling="mr-4 shadow" save rounded onClick={handleClearStaff}>
+          <Button extraStyling="mr-4 shadow" primary rounded onClick={handleClearStaff}>
             Clear
           </Button>
           <Button extraStyling="mr-4 shadow" primary rounded onClick={handlePlayback}>
             Play
           </Button>
-          <Button extraStyling="shadow" outline rounded onClick={addVoiceToSystem}>
+          <Button extraStyling="shadow" primary rounded onClick={addVoiceToSystem}>
             Add Voice
           </Button>
         </div>
@@ -254,9 +261,13 @@ export default function App() {
               {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
             </div>
             <Staff voiceNumber={1} />
-            <Modal isOpen={openControlPanel} style={modalStyling}>
-              {/* Pass in saved params for each voice */}
-              <ControlPanel onSubmit={handleUpdateStaff} voiceNumber={1} randomizerParameters={DEFAULT_RANDOMIZER_PARAMS} />
+            <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
+              <ControlPanel 
+                onSubmit={handleUpdateStaff} 
+                voiceNumber={1} 
+                randomizerParameters={DEFAULT_RANDOMIZER_PARAMS}
+                handleCloseControlPanel={handleCloseControlPanel}  
+              />
             </Modal>
           </div>
           {voiceCount > 1 &&
@@ -266,8 +277,15 @@ export default function App() {
                 {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
                 <Button outline onClick={() => removeVoiceFromSystem(2)}>X</Button>
               </div>
-              <ControlPanel onSubmit={handleUpdateStaff} voiceNumber={2} randomizerParameters={DEFAULT_RANDOMIZER_PARAMS} />
               <Staff voiceNumber={2} />
+              <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
+                <ControlPanel 
+                  onSubmit={handleUpdateStaff} 
+                  voiceNumber={2} 
+                  randomizerParameters={DEFAULT_RANDOMIZER_PARAMS}
+                  handleCloseControlPanel={handleCloseControlPanel}
+                />
+              </Modal>
             </div>
           }
           {voiceCount > 2 &&
@@ -277,8 +295,15 @@ export default function App() {
                 {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
                 <Button outline onClick={() => removeVoiceFromSystem(3)}>X</Button>
               </div>
-              <ControlPanel onSubmit={handleUpdateStaff} voiceNumber={3} randomizerParameters={DEFAULT_RANDOMIZER_PARAMS} />
               <Staff voiceNumber={3} />
+              <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
+                <ControlPanel 
+                  onSubmit={handleUpdateStaff} 
+                  voiceNumber={3} 
+                  randomizerParameters={DEFAULT_RANDOMIZER_PARAMS}
+                  handleCloseControlPanel={handleCloseControlPanel}
+                />
+              </Modal>
             </div>
           }
           {voiceCount > 3 &&
@@ -288,8 +313,15 @@ export default function App() {
                 {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
                 <Button outline onClick={() => removeVoiceFromSystem(4)}>X</Button>
               </div>
-              <ControlPanel onSubmit={handleUpdateStaff} voiceNumber={4} randomizerParameters={DEFAULT_RANDOMIZER_PARAMS} />
               <Staff voiceNumber={4} />
+              <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
+                <ControlPanel 
+                  onSubmit={handleUpdateStaff} 
+                  voiceNumber={4} 
+                  randomizerParameters={DEFAULT_RANDOMIZER_PARAMS}
+                  handleCloseControlPanel={handleCloseControlPanel} 
+                />
+              </Modal>
             </div>
           }
         </div>          
