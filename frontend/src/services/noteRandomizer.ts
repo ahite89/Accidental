@@ -8,31 +8,33 @@ export const getRandomizedNotes = (randomizerParameters: RandomizerParameters): 
     // Scale: Major (string)
     // Durations: Quarter Note (number) = 2
     // Range: 48-84 aka C3-C6 (number[])
+    // Volume: 40 (number)
+    // Tempo: 100 (number)
 
     // Result from parameters
     const notesForRandomization: NoteProps[] = [
-        {abcName: 'C,', pitchNumber: 48, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'D,', pitchNumber: 50, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'E,', pitchNumber: 52, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'F,', pitchNumber: 53, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'G,', pitchNumber: 55, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'A,', pitchNumber: 57, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'B,', pitchNumber: 59, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'C', pitchNumber: 60, duration: 2, timeBetweenNotes: 1000},
+        // {abcName: 'C,', pitchNumber: 48, duration: 2, timeBetweenNotes: 1000},
+        // {abcName: 'D,', pitchNumber: 50, duration: 2, timeBetweenNotes: 1000},
+        // {abcName: 'E,', pitchNumber: 52, duration: 2, timeBetweenNotes: 1000},
+        // {abcName: 'F,', pitchNumber: 53, duration: 2, timeBetweenNotes: 1000},
+        // {abcName: 'G,', pitchNumber: 55, duration: 2, timeBetweenNotes: 1000},
+        // {abcName: 'A,', pitchNumber: 57, duration: 2, timeBetweenNotes: 1000},
+        {abcName: 'B,', pitchNumber: 59, duration: 4, timeBetweenNotes: 2000},
+        {abcName: 'C', pitchNumber: 60, duration: 4, timeBetweenNotes: 2000},
         {abcName: 'D', pitchNumber: 62, duration: 2, timeBetweenNotes: 1000},
         {abcName: 'E', pitchNumber: 64, duration: 2, timeBetweenNotes: 1000},
         {abcName: 'F', pitchNumber: 65, duration: 2, timeBetweenNotes: 1000},
         {abcName: 'G', pitchNumber: 67, duration: 2, timeBetweenNotes: 1000},
         {abcName: 'A', pitchNumber: 69, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'B', pitchNumber: 71, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'c', pitchNumber: 72, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'd', pitchNumber: 74, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'e', pitchNumber: 76, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'f', pitchNumber: 77, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'g', pitchNumber: 79, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'a', pitchNumber: 81, duration: 2, timeBetweenNotes: 1000},
-        {abcName: 'b', pitchNumber: 83, duration: 2, timeBetweenNotes: 1000},
-        {abcName: "c'", pitchNumber: 84, duration: 2, timeBetweenNotes: 1000}
+        {abcName: 'B', pitchNumber: 71, duration: 1, timeBetweenNotes: 500},
+        {abcName: 'c', pitchNumber: 72, duration: 1, timeBetweenNotes: 500},
+        {abcName: 'd', pitchNumber: 74, duration: 1, timeBetweenNotes: 500},
+        {abcName: 'e', pitchNumber: 76, duration: 1, timeBetweenNotes: 500},
+        {abcName: 'f', pitchNumber: 77, duration: 1, timeBetweenNotes: 500},
+        // {abcName: 'g', pitchNumber: 79, duration: 2, timeBetweenNotes: 1000},
+        // {abcName: 'a', pitchNumber: 81, duration: 2, timeBetweenNotes: 1000},
+        // {abcName: 'b', pitchNumber: 83, duration: 2, timeBetweenNotes: 1000},
+        // {abcName: "c'", pitchNumber: 84, duration: 2, timeBetweenNotes: 1000}
     ];
 
     return notesForRandomization;

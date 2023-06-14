@@ -1,7 +1,5 @@
 import { DropDownOption } from "../interfaces/dropdown";
 
-export const DEFAULT_INSTRUMENT = 'Grand Piano';
-
 enum Instruments {
     GrandPiano = 'Grand Piano',
     ElectricPiano = 'Electric Piano',
@@ -35,6 +33,8 @@ export const instrumentOptions = (): DropDownOption[] => {
     }
     return instruments;
 };
+
+export const DEFAULT_INSTRUMENT = Instruments.Organ;
 
 export const instrumentMap: Record<string, number> = {
     'Grand Piano': 0,

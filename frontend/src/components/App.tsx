@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import abcjs, { TuneObjectArray } from "abcjs";
-import className from 'classnames';
 import Modal from 'react-modal';
+import { MdEdit, MdPlaylistRemove } from 'react-icons/md';
 
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
@@ -85,7 +85,7 @@ export default function App() {
 
   // VOICES //
 
-  const [voiceCount, setVoiceCount] = useState<number>(notationData.current.length);  // state used for iterative staff rendering
+  const [voiceCount, setVoiceCount] = useState<number>(notationData.current.length);
 
   const addVoiceToSystem = (): void => {
     if (voiceCount < 4) {
@@ -223,19 +223,27 @@ export default function App() {
 
   const staves = notationData.current.map((notationObj) => {
     return (
-      <div className="flex flex-row justify-start">
+      <div key={notationObj.voiceNumber} className="flex flex-row justify-start pb-3">
         <div className="flex flex-col">
-          <Button extraStyling="bg-blue-200" onClick={() => setOpenControlPanel(true)}>Voice {notationObj.voiceNumber}</Button>
-          {notationObj.randomizerParams.keySelection} {notationObj.randomizerParams.scaleSelection}
+          <p className="bg-blue-200 px-3 py-1.5">Voice {notationObj.voiceNumber}</p>
+          <p className="px-2">{notationObj.randomizerParams.keySelection} {notationObj.randomizerParams.scaleSelection}</p>
+          <p className="px-2">{notationObj.randomizerParams.instrumentSelection}</p>
         </div>
         <Staff voiceNumber={notationObj.voiceNumber} />
-        {notationObj.voiceNumber !== 1 &&
-            <Button outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>X</Button>
+        <div className="self-center">
+          <Button outline onClick={() => setOpenControlPanel(true)}>
+            <MdEdit className="text-2xl"/>
+          </Button>
+          {notationObj.voiceNumber !== 1 &&
+            <Button outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+              <MdPlaylistRemove className="text-3xl" />
+            </Button>
           }
+        </div>
         <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
           <ControlPanel 
             onSubmit={handleUpdateStaff} 
-            voiceNumber={notationObj.voiceNumber} 
+            voiceNumber={notationObj.voiceNumber}
             randomizerParameters={notationObj.randomizerParams}
             handleCloseControlPanel={handleCloseControlPanel}
           />
@@ -243,6 +251,8 @@ export default function App() {
       </div>
     );
   });
+
+  // JSX //
 
   return (
     <div>
