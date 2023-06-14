@@ -41,10 +41,10 @@ export default function App() {
 
   // NOTE RENDERING BUTTONS //
 
-  const stopRendering = useRef<boolean>(false);
+  const isGenerating = useRef<boolean>(false);
 
   const handleStopGenerating = () => {
-    stopRendering.current = true;
+    isGenerating.current = false;
     console.log(notationData.current);
     // Also split notation strings into note arrays?
   };
@@ -62,8 +62,7 @@ export default function App() {
   };
 
   const handleStartGenerating = async (): Promise<void> => {
-    // Need to disable everything but 'Stop' during generation
-    stopRendering.current = false;
+    isGenerating.current = true;
     notationData.current.forEach(notationObj => {
       // change name to "get correct notes based on parameters" or something
       // probably move getRandomizedNotes function into randomizeAndRender function
@@ -122,7 +121,7 @@ export default function App() {
     for (let i = 1; i < voiceCount + 1; i++) {
       staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
     }
-  }, [activeTempo.current, voiceCount, stopRendering.current]);
+  }, [activeTempo.current, voiceCount, isGenerating.current]);
 
   // NOTE RENDERING //
 
@@ -176,8 +175,8 @@ export default function App() {
   const randomizeAndRenderNotes = async (notes: NoteProps[], notationObj: NotationData): Promise<void> => {
     let currentIndex = notes.length,  randomIndex: number;
 
-    while (!stopRendering.current) {
-      if (stopRendering.current) {
+    while (isGenerating.current) {
+      if (!isGenerating.current) {
         break;
       }
       randomIndex = Math.floor(Math.random() * currentIndex);
@@ -231,11 +230,11 @@ export default function App() {
         </div>
         <Staff voiceNumber={notationObj.voiceNumber} />
         <div className="self-center">
-          <Button outline onClick={() => setOpenControlPanel(true)}>
+          <Button disabled={isGenerating.current} outline onClick={() => setOpenControlPanel(true)}>
             <MdEdit className="text-2xl"/>
           </Button>
           {notationObj.voiceNumber !== 1 &&
-            <Button outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+            <Button disabled={isGenerating.current} outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
               <MdPlaylistRemove className="text-3xl" />
             </Button>
           }
@@ -263,19 +262,19 @@ export default function App() {
       </header>
       <div className="p-8 bg-slate-100">
         <div className="flex justify-center mb-8">
-          <Button extraStyling="mr-4 shadow" primary rounded onClick={handleStartGenerating}>
+          <Button disabled={isGenerating.current} extraStyling="mr-4 shadow" primary rounded onClick={handleStartGenerating}>
             Generate
           </Button>
-          <Button extraStyling="mr-4 shadow" primary rounded onClick={handleStopGenerating}>
+          <Button disabled={!isGenerating.current} extraStyling="mr-4 shadow" primary rounded onClick={handleStopGenerating}>
             Stop
           </Button>
-          <Button extraStyling="mr-4 shadow" primary rounded onClick={handleClearStaff}>
+          <Button disabled={isGenerating.current} extraStyling="mr-4 shadow" primary rounded onClick={handleClearStaff}>
             Clear
           </Button>
-          <Button extraStyling="mr-4 shadow" primary rounded onClick={handlePlayback}>
+          <Button disabled={isGenerating.current} extraStyling="mr-4 shadow" primary rounded onClick={handlePlayback}>
             Play
           </Button>
-          <Button extraStyling="shadow" primary rounded onClick={addVoiceToSystem}>
+          <Button disabled={isGenerating.current} extraStyling="shadow" primary rounded onClick={addVoiceToSystem}>
             Add Voice
           </Button>
         </div>

@@ -3,9 +3,8 @@ import className from 'classnames';
 
 export default function Button({ 
     children,
+    disabled,
     primary,
-    secondary,
-    save, 
     outline,
     rounded,
     extraStyling,
@@ -15,15 +14,14 @@ export default function Button({
 
     const classes = className('px-3 py-1.5', {
         'border border-cyan-500 bg-cyan-500 text-white': primary,
-        'border border-gray-400 bg-gray-400 text-white': secondary,
-        'border border-blue-500 bg-blue-500 text-white': save,
+        'border border-gray-400 bg-gray-400 text-white': disabled,
         'rounded-full': rounded,
         'bg-transparent border-blue-500 text-blue-500': outline
     }, extraStyling);
 
     return (
         <div>
-            <button {...rest} className={classes} onClick={onClick}>
+            <button disabled={disabled} {...rest} className={classes} onClick={onClick}>
                 {children}
             </button>
         </div>
