@@ -173,14 +173,6 @@ export default function App() {
     )
   }
 
-
-  // IDEA:
-  // CONTROL PANEL HAS ALL THE STATES FOR THE PARAMETERS. IT HAS AN ONSUBMIT FUNCTION FOR THE SAVE
-  // PARAMETERS BUTTON. AT THAT POINT A PARAMETERS OBJECT IS CREATED FROM ALL THE STATE UPDATES AND
-  // PASSED BACK TO APP.TSX WHERE ITS PROPERTIES ARE ASSIGNED TO THE NOTATION STRING AND ELSEWHERE FOR
-  // THAT SPECIFIC VOICE (INSIDE OF NOTATION DATA ARRAY)
-
-
   const randomizeAndRenderNotes = async (notes: NoteProps[], notationObj: NotationData): Promise<void> => {
     let currentIndex = notes.length,  randomIndex: number;
 
@@ -227,7 +219,30 @@ export default function App() {
     }
   };
 
-  const staffStyling = className("flex flex-row justify-center");
+  // STAVES //
+
+  const staves = notationData.current.map((notationObj) => {
+    return (
+      <div className="flex flex-row justify-start">
+        <div className="flex flex-col">
+          <Button extraStyling="bg-blue-200" onClick={() => setOpenControlPanel(true)}>Voice {notationObj.voiceNumber}</Button>
+          {notationObj.randomizerParams.keySelection} {notationObj.randomizerParams.scaleSelection}
+        </div>
+        <Staff voiceNumber={notationObj.voiceNumber} />
+        {notationObj.voiceNumber !== 1 &&
+            <Button outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>X</Button>
+          }
+        <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
+          <ControlPanel 
+            onSubmit={handleUpdateStaff} 
+            voiceNumber={notationObj.voiceNumber} 
+            randomizerParameters={notationObj.randomizerParams}
+            handleCloseControlPanel={handleCloseControlPanel}
+          />
+        </Modal>
+      </div>
+    );
+  });
 
   return (
     <div>
@@ -255,75 +270,7 @@ export default function App() {
           </Button>
         </div>
         <div className="flex flex-col p-4">
-          <div className={staffStyling}>
-            <div className="flex flex-col">
-              <Button extraStyling="bg-blue-200" onClick={() => setOpenControlPanel(true)}>Voice 1</Button>
-              {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
-            </div>
-            <Staff voiceNumber={1} />
-            <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
-              <ControlPanel 
-                onSubmit={handleUpdateStaff} 
-                voiceNumber={1} 
-                randomizerParameters={DEFAULT_RANDOMIZER_PARAMS}
-                handleCloseControlPanel={handleCloseControlPanel}  
-              />
-            </Modal>
-          </div>
-          {voiceCount > 1 &&
-            <div className={staffStyling}>
-              <div className="flex flex-col">
-                <Button extraStyling="bg-green-200" onClick={() => setOpenControlPanel(true)}>Voice 2</Button>
-                {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
-                <Button outline onClick={() => removeVoiceFromSystem(2)}>X</Button>
-              </div>
-              <Staff voiceNumber={2} />
-              <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
-                <ControlPanel 
-                  onSubmit={handleUpdateStaff} 
-                  voiceNumber={2} 
-                  randomizerParameters={DEFAULT_RANDOMIZER_PARAMS}
-                  handleCloseControlPanel={handleCloseControlPanel}
-                />
-              </Modal>
-            </div>
-          }
-          {voiceCount > 2 &&
-            <div className={staffStyling}>
-              <div className="flex flex-col">
-                <Button extraStyling="bg-orange-200" onClick={() => setOpenControlPanel(true)}>Voice 3</Button>
-                {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
-                <Button outline onClick={() => removeVoiceFromSystem(3)}>X</Button>
-              </div>
-              <Staff voiceNumber={3} />
-              <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
-                <ControlPanel 
-                  onSubmit={handleUpdateStaff} 
-                  voiceNumber={3} 
-                  randomizerParameters={DEFAULT_RANDOMIZER_PARAMS}
-                  handleCloseControlPanel={handleCloseControlPanel}
-                />
-              </Modal>
-            </div>
-          }
-          {voiceCount > 3 &&
-            <div className={staffStyling}>
-              <div className="flex flex-col">
-                <Button extraStyling="bg-purple-200" onClick={() => setOpenControlPanel(true)}>Voice 4</Button>
-                {DEFAULT_RANDOMIZER_PARAMS.keySelection} {DEFAULT_RANDOMIZER_PARAMS.scaleSelection}
-                <Button outline onClick={() => removeVoiceFromSystem(4)}>X</Button>
-              </div>
-              <Staff voiceNumber={4} />
-              <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
-                <ControlPanel 
-                  onSubmit={handleUpdateStaff} 
-                  voiceNumber={4} 
-                  randomizerParameters={DEFAULT_RANDOMIZER_PARAMS}
-                  handleCloseControlPanel={handleCloseControlPanel} 
-                />
-              </Modal>
-            </div>
-          }
+          {staves}
         </div>          
       </div>
     </div>

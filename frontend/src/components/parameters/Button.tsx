@@ -13,10 +13,10 @@ export default function Button({
     ...rest
 }: ButtonProps) {
 
-    const classes = className('px-3 py-1.5 border', {
-        'border-cyan-500 bg-cyan-500 text-white': primary,
-        'border-gray-400 bg-gray-400 text-white': secondary,
-        'border-blue-500 bg-blue-500 text-white': save,
+    const classes = className('px-3 py-1.5', {
+        'border border-cyan-500 bg-cyan-500 text-white': primary,
+        'border border-gray-400 bg-gray-400 text-white': secondary,
+        'border border-blue-500 bg-blue-500 text-white': save,
         'rounded-full': rounded,
         'bg-transparent border-blue-500 text-blue-500': outline
     }, extraStyling);
