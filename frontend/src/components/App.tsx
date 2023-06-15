@@ -228,17 +228,13 @@ export default function App() {
         <div className="flex flex-row">
           <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">Voice {notationObj.voiceNumber}</p>
           <p className="px-3 py-2 text-slate-600">{staffDescription}</p>
-          <p className="">
-            <Button disabled={isGenerating.current} outline onClick={() => setOpenControlPanel(true)}>
-              <MdEdit className="text-2xl"/>
-            </Button>
-          </p>
+          <Button disabled={isGenerating.current} outline onClick={() => setOpenControlPanel(true)}>
+            <MdEdit className="text-2xl"/>
+          </Button>
           {notationObj.voiceNumber !== 1 &&
-            <p>
-              <Button disabled={isGenerating.current} outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
-                <MdPlaylistRemove className="text-3xl" />
-              </Button>
-            </p>
+            <Button disabled={isGenerating.current} outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+              <MdPlaylistRemove className="text-3xl" />
+            </Button>
           }
         </div>
         <div className="flex flex-row">
@@ -260,29 +256,29 @@ export default function App() {
 
   return (
     <div>
-      <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-start px-10 py-4">
+      <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-between px-10 py-4">
         <p className="text-white text-xl border-white border-2 border-solid p-2 rounded">
           &#9838;ccidental
         </p>
-      </header>
-      <div className="p-8 bg-slate-100">
-        <div className="flex justify-center mb-8">
-          <Button disabled={isGenerating.current} extraStyling="mr-4 shadow" primary rounded onClick={handleStartGenerating}>
+        <div className="flex flex-row self-center">
+          <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleStartGenerating}>
             Generate
           </Button>
-          <Button disabled={!isGenerating.current} extraStyling="mr-4 shadow" primary rounded onClick={handleStopGenerating}>
+          <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleStopGenerating}>
             Stop
           </Button>
-          <Button disabled={isGenerating.current} extraStyling="mr-4 shadow" primary rounded onClick={handleClearStaff}>
+          <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleClearStaff}>
             Clear
           </Button>
-          <Button disabled={isGenerating.current} extraStyling="mr-4 shadow" primary rounded onClick={handlePlayback}>
+          <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>
             Play
           </Button>
-          <Button disabled={isGenerating.current} extraStyling="shadow" primary rounded onClick={addVoiceToSystem}>
+          <Button disabled={isGenerating.current} extraStyling="shadow border border-2 border-white" primary rounded onClick={addVoiceToSystem}>
             Add Voice
           </Button>
         </div>
+      </header>
+      <div className="p-8 bg-slate-100">
         <div className="flex flex-col p-4">
           {staves}
         </div>          

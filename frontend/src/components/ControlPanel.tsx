@@ -132,8 +132,8 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                 Volume
             </RangeSlider>
             <div className="flex justify-center mb-4">
-                <Button save extraStyling="mr-4" onClick={handleSubmitParameters}>Save Changes</Button>
-                <Button secondary onClick={handleCloseControlPanel}>Cancel</Button>
+                <Button primary extraStyling="mr-4" onClick={handleSubmitParameters}>Save Changes</Button>
+                <Button onClick={handleCloseControlPanel}>Cancel</Button>
           </div>
         </div>
     );
