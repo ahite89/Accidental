@@ -14,7 +14,7 @@ export default function Button({
 
     const classes = className('px-3 py-1.5', {
         'border border-cyan-500 bg-cyan-500 text-white': primary,
-        'border border-gray-400 bg-gray-400 text-white': disabled,
+        'border border-slate-400 bg-slate-400 text-white': disabled,
         'rounded-full': rounded,
         'bg-transparent border-blue-500 text-blue-500': outline
     }, extraStyling);

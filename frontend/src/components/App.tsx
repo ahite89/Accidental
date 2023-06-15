@@ -34,7 +34,6 @@ export default function App() {
       randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
       notationString: `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
       playBackNotes: [],
-      volume: DEFAULT_VOLUME,
       notesInBarCount: 0
     }
   ]);
@@ -94,7 +93,6 @@ export default function App() {
           randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
           notationString: `X:${voiceCount + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`,
           playBackNotes: [],
-          volume: DEFAULT_VOLUME,
           notesInBarCount: 0
         }
       )
@@ -162,7 +160,7 @@ export default function App() {
       [
         {
           "pitch": note.pitchNumber,
-          "volume": notationObj.volume,
+          "volume": notationObj.randomizerParams.volumeSelection,
           "start": 0,
           "duration": note.duration,
           "instrument": instrumentMap[notationObj.randomizerParams.instrumentSelection],
@@ -221,23 +219,30 @@ export default function App() {
   // STAVES //
 
   const staves = notationData.current.map((notationObj) => {
+
+    const staffDescription = `${notationObj.randomizerParams.instrumentSelection} in
+    ${notationObj.randomizerParams.keySelection} ${notationObj.randomizerParams.scaleSelection}`
+
     return (
-      <div key={notationObj.voiceNumber} className="flex flex-row justify-start pb-3">
-        <div className="flex flex-col">
-          <p className="bg-blue-200 px-3 py-1.5">Voice {notationObj.voiceNumber}</p>
-          <p className="px-2">{notationObj.randomizerParams.keySelection} {notationObj.randomizerParams.scaleSelection}</p>
-          <p className="px-2">{notationObj.randomizerParams.instrumentSelection}</p>
-        </div>
-        <Staff voiceNumber={notationObj.voiceNumber} />
-        <div className="self-center">
-          <Button disabled={isGenerating.current} outline onClick={() => setOpenControlPanel(true)}>
-            <MdEdit className="text-2xl"/>
-          </Button>
-          {notationObj.voiceNumber !== 1 &&
-            <Button disabled={isGenerating.current} outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
-              <MdPlaylistRemove className="text-3xl" />
+      <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">
+        <div className="flex flex-row">
+          <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">Voice {notationObj.voiceNumber}</p>
+          <p className="px-3 py-2 text-slate-600">{staffDescription}</p>
+          <p className="">
+            <Button disabled={isGenerating.current} outline onClick={() => setOpenControlPanel(true)}>
+              <MdEdit className="text-2xl"/>
             </Button>
+          </p>
+          {notationObj.voiceNumber !== 1 &&
+            <p>
+              <Button disabled={isGenerating.current} outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+                <MdPlaylistRemove className="text-3xl" />
+              </Button>
+            </p>
           }
+        </div>
+        <div className="flex flex-row">
+          <Staff voiceNumber={notationObj.voiceNumber} />
         </div>
         <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
           <ControlPanel 

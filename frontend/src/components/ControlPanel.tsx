@@ -19,7 +19,7 @@ import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../const
 import { MIN_VOLUME, MAX_VOLUME, VOLUME_INTERVAL } from "../constants/volume";
 import * as Tempo from "../constants/tempo";
 
-export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControlPanel }: ControlPanelProps) {
+export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControlPanel, randomizerParameters }: ControlPanelProps) {
 
     const handleSubmitParameters = (): void => {
         onSubmit({
@@ -34,43 +34,43 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
     };
     
     // Key
-    const [keySelection, setKeySelection] = useState<string>(DEFAULT_RANDOMIZER_PARAMS.keySelection);
+    const [keySelection, setKeySelection] = useState<string>(randomizerParameters.keySelection);
     const handleKeySelection = (key: string): void => {
         setKeySelection(key);
     };
 
     // Scale
-    const [scaleSelection, setScaleSelection] = useState<string>(DEFAULT_RANDOMIZER_PARAMS.scaleSelection);
+    const [scaleSelection, setScaleSelection] = useState<string>(randomizerParameters.scaleSelection);
     const handleScaleSelection = (scale: string): void => {
         setScaleSelection(scale);
     };
 
     // Instrument
-    const [instrumentSelection, setInstrumentSelection] = useState<string>(DEFAULT_RANDOMIZER_PARAMS.instrumentSelection);
+    const [instrumentSelection, setInstrumentSelection] = useState<string>(randomizerParameters.instrumentSelection);
     const handleInstrumentSelection = (instrument: string): void => {
         setInstrumentSelection(instrument);
     };
 
     // Range
-    const [pitchRangeSelection, setPitchRangeSelection] = useState<number[]>(DEFAULT_RANDOMIZER_PARAMS.pitchRangeSelection);
+    const [pitchRangeSelection, setPitchRangeSelection] = useState<number[]>(randomizerParameters.pitchRangeSelection);
     const handlePitchRangeSelection = (pitchRange: number[]): void => {
         setPitchRangeSelection([pitchRange[0], pitchRange[1]]);
     };
 
     // Tempo
-    const [tempoSelection, setTempoSelection] = useState<number>(DEFAULT_RANDOMIZER_PARAMS.tempoSelection);
+    const [tempoSelection, setTempoSelection] = useState<number>(randomizerParameters.tempoSelection);
     const handleTempoSelection = (tempo: number): void => {
         setTempoSelection(tempo);
     };
 
     // Volume
-    const [volumeSelection, setVolumeSelection] = useState<number>(DEFAULT_RANDOMIZER_PARAMS.volumeSelection);
+    const [volumeSelection, setVolumeSelection] = useState<number>(randomizerParameters.volumeSelection);
     const handleVolumeSelection = (volume: number): void => {
         setVolumeSelection(volume);
     };
 
     // Duration
-    const [selectedDurations, setSelectedDurations] = useState<SelectableProps[]>(DEFAULT_RANDOMIZER_PARAMS.selectedDurations);
+    const [selectedDurations, setSelectedDurations] = useState<SelectableProps[]>(randomizerParameters.selectedDurations);
 
     const handleDurationSelection = (durationObject: SelectableProps) => {
         const updatedDurations = selectedDurations.map((duration) => {
