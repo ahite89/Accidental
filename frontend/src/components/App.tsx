@@ -70,16 +70,16 @@ export default function App() {
     });
   };
 
-  const handlePlayback = (): void => {
-    // Find a way to only pass the notation object in; not the generated note props
-    // Loop through notation string characters
-    notationData.current[0].playBackNotes.forEach(note => {
-        playNote(
-        {abcName: 'F', pitchNumber: note.pitchNumber, duration: note.duration, timeBetweenNotes: 1000},
-        notationData.current[0]
-      )
-    });
-  };
+  // const handlePlayback = (): void => {
+  //   // Find a way to only pass the notation object in; not the generated note props
+  //   // Loop through notation string characters
+  //   notationData.current[0].playBackNotes.forEach(note => {
+  //       playNote(
+  //       {abcName: 'F', pitchNumber: note.pitchNumber, duration: note.duration, timeBetweenNotes: 1000},
+  //       notationData.current[0]
+  //     )
+  //   });
+  // };
 
   // VOICES //
 
@@ -270,9 +270,9 @@ export default function App() {
           <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleClearStaff}>
             Clear
           </Button>
-          <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>
+          {/* <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>
             Play
-          </Button>
+          </Button> */}
           <Button disabled={isGenerating.current} extraStyling="shadow border border-2 border-white" primary rounded onClick={addVoiceToSystem}>
             Add Voice
           </Button>
