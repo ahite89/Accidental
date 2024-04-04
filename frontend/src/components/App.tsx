@@ -7,7 +7,7 @@ import Staff from './Staff';
 import ControlPanel from './ControlPanel';
 import Button from './parameters/Button';
 
-import { NoteProps, PlaybackNoteData } from '../interfaces/note';
+import { NoteProps } from '../interfaces/note';
 import { RandomizerParameters } from '../interfaces/controlPanel';
 import { NotationData } from '../interfaces/notation';
 import { getRandomizedNotes } from '../services/noteRandomizer';
