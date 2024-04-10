@@ -10,7 +10,7 @@ import Button from './parameters/Button';
 import { NoteProps } from '../interfaces/note';
 import { RandomizerParameters } from '../interfaces/controlPanel';
 import { NotationData } from '../interfaces/notation';
-import { getRandomizedNotes } from '../services/noteRandomizer';
+import { getRandomizedNote } from '../services/noteRandomizer';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { instrumentMap } from '../constants/instruments';
@@ -66,7 +66,7 @@ export default function App() {
       // change name to "get correct notes based on parameters" or something
       // probably move getRandomizedNotes function into randomizeAndRender function
       // so you can access voice specific parameters
-      randomizeAndRenderNotes(getRandomizedNotes(DEFAULT_RANDOMIZER_PARAMS), notationObj);
+      randomizeAndRenderNotes(notationObj);
     });
   };
 
@@ -134,10 +134,10 @@ export default function App() {
       newNote = note.abcName + note.duration.toString();
       
       if (blankStaffSpaceFilled) {
-        if (notationObj.notesInBarCount === MAX_BEATS_PER_BAR) {
-          newNote += '|';
-          notationObj.notesInBarCount = 0;
-        }
+        // if (notationObj.notesInBarCount === MAX_BEATS_PER_BAR) {
+          // newNote += '|';
+          // notationObj.notesInBarCount = 0;
+        // }
 
         notationObj.notationString += newNote;
       }
@@ -170,15 +170,15 @@ export default function App() {
     )
   }
 
-  const randomizeAndRenderNotes = async (notes: NoteProps[], notationObj: NotationData): Promise<void> => {
-    let currentIndex = notes.length,  randomIndex: number;
+  const randomizeAndRenderNotes = async (notationObj: NotationData): Promise<void> => {
+    let randomNote: NoteProps;
 
     while (isGenerating.current) {
       if (!isGenerating.current) {
         break;
       }
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      await playAndRenderNoteToStaff(notes[randomIndex], notationObj);
+      randomNote = getRandomizedNote(notationObj.randomizerParams);
+      await playAndRenderNoteToStaff(randomNote, notationObj);
     }
   };
 
@@ -188,9 +188,12 @@ export default function App() {
 
   // Save control panel changes for targeted voice
   const handleUpdateStaff = (controlPanelParams: RandomizerParameters, selectedVoiceNumber: number): void => {
-    debugger
     targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
     if (targetVoice) {
+      debugger
+
+      // need to set state for 
+
       targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${controlPanelParams.keySelection}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
       targetVoice.randomizerParams = controlPanelParams;
       abcjs.renderAbc(`staff-${targetVoice.voiceNumber}`, targetVoice.notationString, AudioVisual.notationOptions);
