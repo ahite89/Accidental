@@ -1,5 +1,6 @@
 import { NoteProps } from '../interfaces/note';
 import { RandomizerParameters } from '../interfaces/controlPanel';
+import { fetchValidNotes } from './noteFetcher';
 
 export const getRandomizedNote = (randomizerParameters: RandomizerParameters): NoteProps => {
 
@@ -15,6 +16,10 @@ export const getRandomizedNote = (randomizerParameters: RandomizerParameters): N
 
     // let randomIndex: number
     // randomIndex = Math.floor(Math.random() * currentIndex);
+
+    debugger;
+    const keyAndScale = `${randomizerParameters.keySelection}${randomizerParameters.scaleSelection}`;
+    const validNotes = fetchValidNotes(keyAndScale);
     const randomNote: NoteProps = {abcName: 'C', pitchNumber: 60, duration: 4, timeBetweenNotes: 2000};
 
     // Result from parameters
