@@ -14,6 +14,7 @@ import { getRandomizedNote } from '../services/noteRandomizer';
 import { fetchValidNotes } from '../services/noteFetcher';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
+import { DEFAULT_VALID_NOTES } from '../constants/notes';
 import { instrumentMap } from '../constants/instruments';
 import { MAX_BEATS_PER_BAR } from "../constants/durations";
 import { DEFAULT_VOLUME } from '../constants/volume';
@@ -36,7 +37,7 @@ export default function App() {
       notationString: `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
       playBackNotes: [],
       notesInBarCount: 0,
-      validNotesForRandomizing: []
+      validNotesForRandomizing: DEFAULT_VALID_NOTES
     }
   ]);
 
@@ -96,7 +97,7 @@ export default function App() {
           notationString: `X:${voiceCount + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`,
           playBackNotes: [],
           notesInBarCount: 0,
-          validNotesForRandomizing: []
+          validNotesForRandomizing: DEFAULT_VALID_NOTES
         }
       )
       setVoiceCount(voiceCount + 1);

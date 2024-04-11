@@ -1,5 +1,7 @@
 import { NoteProps } from '../interfaces/note';
 
+export const DEFAULT_VALID_NOTES = [['C', 60], ['D', 62], ['E', 64], ['F', 65], ['G', 67], ['A', 69], ['B', 71], ['c', 72]];
+
 export const defaultNotes: NoteProps[] = [
     // Duration: 1 = 8th, 2 = quarter, 3 = dotted quarter, 4 = half, etc.
     {abcName: 'C', pitchNumber: 60, duration: 1, timeBetweenNotes: 500},
@@ -27,7 +29,7 @@ export const noteDurationSymbolMap: Record<number, string> = {
 
 // https://stackoverflow.com/questions/70695492/javascript-map-object-with-multiple-keys-to-one-value
 export const scaleToAbcNamePitchNumberMap: Record<string, (string | number)[][]> = {
-    'CMajor': [['C', 60], ['D', 62], ['E', 64], ['F', 65], ['G', 67], ['A', 69], ['B', 71], ['c', 72]],
+    'CMajor': DEFAULT_VALID_NOTES,
     'C#Major': [],
     'DbMajor': [],
     'DMajor': [['D', 62], ['E', 64], ['^F', 66], ['G', 67], ['A', 69], ['B', 71], ['^c', 73], ['d', 74]],
