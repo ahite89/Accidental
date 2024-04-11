@@ -1,7 +1,6 @@
-import { keyAndScalePitchesMap } from "../constants/notes";
+import { scaleToAbcNamePitchNumberMap } from "../constants/notes";
 
-export const fetchValidNotes = (keyAndScale: string): number[] => {
-    
-    const validNotes = keyAndScalePitchesMap[keyAndScale];
+export const fetchValidNotes = (keyAndScale: string): (string | number)[][] => { 
+    const validNotes = scaleToAbcNamePitchNumberMap[keyAndScale];
     return validNotes;
 }

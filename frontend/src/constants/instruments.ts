@@ -34,7 +34,7 @@ export const instrumentOptions = (): DropDownOption[] => {
     return instruments;
 };
 
-export const DEFAULT_INSTRUMENT = Instruments.Organ;
+export const DEFAULT_INSTRUMENT = Instruments.ElectricPiano;
 
 export const instrumentMap: Record<string, number> = {
     'Grand Piano': 0,

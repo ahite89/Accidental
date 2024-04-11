@@ -19,47 +19,26 @@ export const noteDurationSymbolMap: Record<number, string> = {
     1: "\uD834\uDD5D"
 };
 
-// https://stackoverflow.com/questions/70695492/javascript-map-object-with-multiple-keys-to-one-value
-// Gonna need to switch this to <string, string> and use ABC names
-// Then map ABC name to pitch number
-export const keyAndScalePitchesMap: Record<string, number[]> = {
-    'CMajor': [60, 62, 64, 65, 67, 69, 71, 72],
-    'C#Major': [],
-    'DbMajor': [],
-    'DMajor': [62, 64, 66, 67, 69, 71, 73, 74],
-    'EbMajor': [],
-    'EMajor': [],
-    'FMajor': [],
-    'F#Major': [],
-    'GbMajor': [],
-    'GMajor': [],
-    'AbMajor': [],
-    'AMajor': [],
-    'BbMajor': [],
-    'BMajor': []
-};
-
-export const pitchNumberAbcNameMap: Record<number, string> = {
-    59: 'B,',
-    60: 'C',
-    61: '^C',
-    62: 'D',
-    63: '_E',
-    64: 'E',
-    65: 'F',
-    66: '^F',
-    67: 'G',
-    68: '_A',
-    69: 'A',
-    70: '_B',
-    71: 'B',
-    72: 'c',
-    73: '^c',
-    74: 'd'
-};
-
 // Note names for notation (lowest to highest)
 // C,, D,, E,, F,, G,, A,, B,, C, D, E, F, G, A, B, C D E F G A B c d e f g a b c' d' e' f' g' a' b', c''
 // Sharp: ^c (double = ^^)
 // Flat: _B (double = __)
 // Natural: =c
+
+// https://stackoverflow.com/questions/70695492/javascript-map-object-with-multiple-keys-to-one-value
+export const scaleToAbcNamePitchNumberMap: Record<string, (string | number)[][]> = {
+    'CMajor': [['C', 60], ['D', 62], ['E', 64], ['F', 65], ['G', 67], ['A', 69], ['B', 71], ['c', 72]],
+    'C#Major': [],
+    'DbMajor': [],
+    'DMajor': [['D', 62], ['E', 64], ['^F', 66], ['G', 67], ['A', 69], ['B', 71], ['^c', 73], ['d', 74]],
+    'EbMajor': [],
+    'EMajor': [],
+    'FMajor': [],
+    'F#Major': [],
+    'GbMajor': [],
+    'GMajor': [['G', 67], ['A', 69], ['B', 71], ['c', 72], ['d', 74], ['e', 76], ['^f', 78], ['g', 79]],
+    'AbMajor': [],
+    'AMajor': [],
+    'BbMajor': [],
+    'BMajor': []
+};
