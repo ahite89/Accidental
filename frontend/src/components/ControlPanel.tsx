@@ -99,7 +99,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                     options={selectedDurations}
                     onSelect={handleDurationSelection}
                 >
-                    Durations
+                    Note Durations
                 </SelectableList>
             </div>
             {/* Custom scale buttons */}
@@ -111,7 +111,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                 onChangeValues={handlePitchRangeSelection}
                 map={pitchNumberMap}
             >
-                Range
+                Pitch Range
             </MultiRangeSlider>
             <RangeSlider
                 min={Tempo.MIN_TEMPO}

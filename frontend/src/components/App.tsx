@@ -229,7 +229,7 @@ export default function App() {
     return (
       <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">
         <div className="flex flex-row">
-          <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">Voice {notationObj.voiceNumber}</p>
+          <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">{notationObj.voiceNumber}</p>
           <p className="px-3 py-2 text-slate-600">{staffDescription}</p>
           <Button disabled={isGenerating.current} outline onClick={() => setOpenControlPanel(true)}>
             <MdEdit className="text-2xl"/>
