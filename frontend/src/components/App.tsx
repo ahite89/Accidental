@@ -11,6 +11,7 @@ import { NoteProps } from '../interfaces/note';
 import { RandomizerParameters } from '../interfaces/controlPanel';
 import { NotationData } from '../interfaces/notation';
 import { getRandomizedNote } from '../services/noteRandomizer';
+import { fetchValidNotes } from '../services/noteFetcher';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { instrumentMap } from '../constants/instruments';
@@ -34,7 +35,8 @@ export default function App() {
       randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
       notationString: `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
       playBackNotes: [],
-      notesInBarCount: 0
+      notesInBarCount: 0,
+      validNotesForRandomizing: []
     }
   ]);
 
@@ -93,7 +95,8 @@ export default function App() {
           randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
           notationString: `X:${voiceCount + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`,
           playBackNotes: [],
-          notesInBarCount: 0
+          notesInBarCount: 0,
+          validNotesForRandomizing: []
         }
       )
       setVoiceCount(voiceCount + 1);
@@ -147,7 +150,7 @@ export default function App() {
       }
 
       // Add notes to playback array for playback functionality
-      notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
+      // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
 
       // Play audio and add note to staff
       playNote(note, notationObj)  
@@ -177,7 +180,7 @@ export default function App() {
       if (!isGenerating.current) {
         break;
       }
-      randomNote = getRandomizedNote(notationObj.randomizerParams);
+      randomNote = getRandomizedNote(notationObj);
       await playAndRenderNoteToStaff(randomNote, notationObj);
     }
   };
@@ -192,8 +195,10 @@ export default function App() {
     if (targetVoice) {
       debugger
 
-      // need to set state for 
-
+      // Set valid notes property based on selected key and scale
+      const keyAndScale = `${controlPanelParams.keySelection}${controlPanelParams.scaleSelection}`;
+      targetVoice.validNotesForRandomizing = fetchValidNotes(keyAndScale);
+      
       targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${controlPanelParams.keySelection}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
       targetVoice.randomizerParams = controlPanelParams;
       abcjs.renderAbc(`staff-${targetVoice.voiceNumber}`, targetVoice.notationString, AudioVisual.notationOptions);

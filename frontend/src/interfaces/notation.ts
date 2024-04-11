@@ -6,5 +6,6 @@ export interface NotationData {
     randomizerParams: RandomizerParameters
     notationString: string,
     playBackNotes: PlaybackNoteData[],
-    notesInBarCount: number
+    notesInBarCount: number,
+    validNotesForRandomizing: (string | number)[][]
 }
