@@ -11,7 +11,7 @@ export const defaultNotes: NoteProps[] = [
     {abcName: 'B', pitchNumber: 71, duration: 4, timeBetweenNotes: 2000},
 ];
 
-export const noteSymbolMap: Record<number, string> = {
+export const noteDurationSymbolMap: Record<number, string> = {
     16: "\uD834\uDD61",
     8: "\uD834\uDD60",
     4: "\uD834\uDD5F",
@@ -19,9 +19,24 @@ export const noteSymbolMap: Record<number, string> = {
     1: "\uD834\uDD5D"
 };
 
+// https://stackoverflow.com/questions/70695492/javascript-map-object-with-multiple-keys-to-one-value
+// Gonna need to switch this to <string, string> and use ABC names
+// Then map ABC name to pitch number
 export const keyAndScalePitchesMap: Record<string, number[]> = {
     'CMajor': [60, 62, 64, 65, 67, 69, 71, 72],
-    'DMajor': [62, 64, 66, 67, 69, 71, 73, 74]
+    'C#Major': [],
+    'DbMajor': [],
+    'DMajor': [62, 64, 66, 67, 69, 71, 73, 74],
+    'EbMajor': [],
+    'EMajor': [],
+    'FMajor': [],
+    'F#Major': [],
+    'GbMajor': [],
+    'GMajor': [],
+    'AbMajor': [],
+    'AMajor': [],
+    'BbMajor': [],
+    'BMajor': []
 };
 
 export const pitchNumberAbcNameMap: Record<number, string> = {
@@ -48,12 +63,3 @@ export const pitchNumberAbcNameMap: Record<number, string> = {
 // Sharp: ^c (double = ^^)
 // Flat: _B (double = __)
 // Natural: =c
-
-
-// {abcName: 'C', pitchNumber: 60, duration: 4, timeBetweenNotes: 2000},
-        // {abcName: 'D', pitchNumber: 62, duration: 2, timeBetweenNotes: 1000},
-        // {abcName: 'E', pitchNumber: 64, duration: 2, timeBetweenNotes: 1000},
-        // {abcName: 'F', pitchNumber: 65, duration: 2, timeBetweenNotes: 1000},
-        // {abcName: 'G', pitchNumber: 67, duration: 2, timeBetweenNotes: 1000},
-        // {abcName: 'A', pitchNumber: 69, duration: 2, timeBetweenNotes: 1000},
-        // {abcName: 'B', pitchNumber: 71, duration: 1, timeBetweenNotes: 500},

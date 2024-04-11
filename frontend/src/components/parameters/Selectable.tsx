@@ -1,6 +1,6 @@
 import className from 'classnames';
 import { SelectableOption } from '../../interfaces/selectable';
-import { noteSymbolMap } from '../../constants/notes';
+import { noteDurationSymbolMap } from '../../constants/notes';
 
 export default function Selectable({ value, selected, onSelect }: SelectableOption) {
     
@@ -17,7 +17,7 @@ export default function Selectable({ value, selected, onSelect }: SelectableOpti
     
     return (
         <div onClick={handleOptionClick} className={classes}>
-            {noteSymbolMap[value]}
+            {noteDurationSymbolMap[value]}
         </div>
     );
 }
