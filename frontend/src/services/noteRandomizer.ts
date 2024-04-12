@@ -8,5 +8,5 @@ export const getRandomizedNote = (notationObj: NotationData): NoteProps => {
     const validNotesMultiArray = notationObj.validNotesForRandomizing;
     const randomIndex = Math.floor(Math.random() * validNotesMultiArray.length);
     const randomNameAndPitch = validNotesMultiArray[randomIndex];
-    return { abcName: randomNameAndPitch[0] as string, pitchNumber: randomNameAndPitch[1] as number, duration: 4, timeBetweenNotes: 2000 };
+    return { abcName: randomNameAndPitch[0] as string, pitchNumber: +randomNameAndPitch[1], duration: 4, timeBetweenNotes: 2000 };
 };

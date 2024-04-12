@@ -194,11 +194,8 @@ export default function App() {
   const handleUpdateStaff = (controlPanelParams: RandomizerParameters, selectedVoiceNumber: number): void => {
     targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
     if (targetVoice) {
-      debugger
-
-      // Set valid notes property based on selected key and scale
-      const keyAndScale = `${controlPanelParams.keySelection}${controlPanelParams.scaleSelection}`;
-      targetVoice.validNotesForRandomizing = fetchValidNotes(keyAndScale);
+      // Set valid notes for randomizing based on control panel params
+      targetVoice.validNotesForRandomizing = fetchValidNotes(controlPanelParams);
       
       targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${controlPanelParams.keySelection}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
       targetVoice.randomizerParams = controlPanelParams;

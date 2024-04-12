@@ -19,5 +19,5 @@ export const DEFAULT_RANDOMIZER_PARAMS: RandomizerParameters = {
     instrumentSelection: DEFAULT_INSTRUMENT,
     tempoSelection: DEFAULT_TEMPO,
     volumeSelection: DEFAULT_VOLUME,
-    selectedDurations: durationOptions
+    durationSelection: durationOptions
  } 
