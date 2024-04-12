@@ -14,5 +14,5 @@ export interface RandomizerParameters {
     instrumentSelection: string,
     tempoSelection: number,
     volumeSelection: number,
-    selectedDurations: SelectableProps[]
+    durationSelection: SelectableProps[]
 }

@@ -29,7 +29,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
             pitchRangeSelection,
             tempoSelection,
             volumeSelection,
-            selectedDurations
+            durationSelection
         }, voiceNumber)
     };
     
@@ -70,17 +70,17 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
     };
 
     // Duration
-    const [selectedDurations, setSelectedDurations] = useState<SelectableProps[]>(randomizerParameters.selectedDurations);
+    const [durationSelection, setDurationSelection] = useState<SelectableProps[]>(randomizerParameters.durationSelection);
 
     const handleDurationSelection = (durationObject: SelectableProps) => {
-        const updatedDurations = selectedDurations.map((duration) => {
-        if (duration.value === durationObject.value) {
-            return {value: duration.value, selected: !duration.selected};
-        }
-        return duration;
+        const updatedDurations = durationSelection.map((duration) => {
+            if (duration.value === durationObject.value) {
+                return {value: duration.value, selected: !duration.selected};
+            }
+            return duration;
         });
 
-        setSelectedDurations(updatedDurations);
+        setDurationSelection(updatedDurations);
     };
 
     const classes = className(
@@ -96,7 +96,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
             </div>
             <div className="flex flex-col items-center mb-8">
                 <SelectableList 
-                    options={selectedDurations}
+                    options={durationSelection}
                     onSelect={handleDurationSelection}
                 >
                     Note Durations
