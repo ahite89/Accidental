@@ -1,8 +1,10 @@
+import { DurationProps } from "./selectable";
+
 export interface NoteProps {
     abcName: string,
     pitchNumber: number,
-    duration: number,
+    durationProps: DurationProps,
     timeBetweenNotes: number
 }
 
-export interface PlaybackNoteData extends Pick<NoteProps, "pitchNumber" | "duration">{};
+export interface PlaybackNoteData extends Pick<NoteProps, "pitchNumber" | "durationProps">{};

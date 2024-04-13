@@ -3,10 +3,25 @@ import { NotationData } from '../interfaces/notation';
 
 export const getRandomizedNote = (notationObj: NotationData): NoteProps => {
 
-    // Get Random Note
-    debugger;
+    // Get random duration
+    debugger
+    const selectedDurations = notationObj.randomizerParams.durationSelection.filter((duration) => {
+        return duration.selected;
+    });
+    const randomDurationIndex = Math.floor(Math.random() * selectedDurations.length);
+    const randomDuration = selectedDurations[randomDurationIndex];
+
+    debugger
+
+    // Get random pitch
     const validNotesMultiArray = notationObj.validNotesForRandomizing;
-    const randomIndex = Math.floor(Math.random() * validNotesMultiArray.length);
-    const randomNameAndPitch = validNotesMultiArray[randomIndex];
-    return { abcName: randomNameAndPitch[0] as string, pitchNumber: +randomNameAndPitch[1], duration: 4, timeBetweenNotes: 2000 };
+    const randomPitchIndex = Math.floor(Math.random() * validNotesMultiArray.length);
+    const randomNameAndPitch = validNotesMultiArray[randomPitchIndex];
+    
+    return { 
+        abcName: randomNameAndPitch[0] as string,
+        pitchNumber: +randomNameAndPitch[1],
+        durationProps: randomDuration,
+        timeBetweenNotes: 500 
+    };
 };

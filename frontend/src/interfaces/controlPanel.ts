@@ -1,4 +1,4 @@
-import { SelectableProps } from "./selectable";
+import { DurationProps } from "./selectable";
 
 export interface ControlPanelProps {
     randomizerParameters: RandomizerParameters,
@@ -14,5 +14,5 @@ export interface RandomizerParameters {
     instrumentSelection: string,
     tempoSelection: number,
     volumeSelection: number,
-    durationSelection: SelectableProps[]
+    durationSelection: DurationProps[]
 }

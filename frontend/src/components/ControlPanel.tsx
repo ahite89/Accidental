@@ -8,7 +8,7 @@ import RangeSlider from "./parameters/RangeSlider";
 import SelectableList from './parameters/SelectableList';
 
 import { ControlPanelProps } from "../interfaces/controlPanel";
-import { SelectableProps } from '../interfaces/selectable';
+import { DurationProps } from '../interfaces/selectable';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { keyOptions } from "../constants/keys";
@@ -70,13 +70,20 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
     };
 
     // Duration
-    const [durationSelection, setDurationSelection] = useState<SelectableProps[]>(randomizerParameters.durationSelection);
+    const [durationSelection, setDurationSelection] = useState<DurationProps[]>(randomizerParameters.durationSelection);
 
-    const handleDurationSelection = (durationObject: SelectableProps) => {
+    const handleDurationSelection = (durationObject: DurationProps) => {
         const updatedDurations = durationSelection.map((duration) => {
-            if (duration.value === durationObject.value) {
-                return {value: duration.value, selected: !duration.selected};
+            // Toggle selected value if duration is clicked
+            if (duration.noteLength === durationObject.noteLength) {
+                return {
+                    noteLength: duration.noteLength,
+                    selected: !duration.selected,
+                    abcSyntax: duration.abcSyntax,
+                    audioDuration: duration.audioDuration
+                };
             }
+            
             return duration;
         });
 

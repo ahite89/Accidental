@@ -1,18 +1,19 @@
 import { ReactNode } from 'react';
 
 export interface SelectableOptions {
-    options: SelectableProps[],
-    onSelect: (value: SelectableProps) => void,
+    options: DurationProps[],
+    onSelect: (value: DurationProps) => void,
     children?: ReactNode
 }
 
 export interface SelectableOption {
-    value: number,
-    selected: boolean,
-    onSelect: (value: SelectableProps) => void
+    duration: DurationProps,
+    onSelect: (value: DurationProps) => void
 }
 
-export interface SelectableProps {
-    value: number,
-    selected: boolean
+export interface DurationProps {
+    noteLength: string,
+    selected: boolean,
+    abcSyntax: string,
+    audioDuration: number
 }

@@ -1,14 +1,13 @@
 import Selectable from './Selectable';
-import { SelectableOption, SelectableOptions } from "../../interfaces/selectable";
+import { SelectableOptions } from "../../interfaces/selectable";
 
 export default function SelectableList({ options, onSelect, children }: SelectableOptions) {
 
-    const renderedSelectables = options.map((option) => {
+    const renderedSelectables = options.map((duration) => {
        return (
         <Selectable
-            key={option.value}
-            value={option.value}
-            selected={option.selected}
+            key={duration.noteLength}
+            duration={duration}
             onSelect={onSelect}
         />
        );

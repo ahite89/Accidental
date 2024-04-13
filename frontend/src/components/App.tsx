@@ -34,7 +34,7 @@ export default function App() {
     {
       voiceNumber: 1,
       randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
-      notationString: `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
+      notationString: `X:1\nK:C\nM:4/4\nL:1/8\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
       playBackNotes: [],
       notesInBarCount: 0,
       validNotesForRandomizing: DEFAULT_VALID_NOTES
@@ -54,10 +54,10 @@ export default function App() {
   const handleClearStaff = () => {
     for (let i = 0; i < notationData.current.length; i++) {
       if (i === 0) {
-        notationData.current[i].notationString = `X:1\nK:C\nM:4/4\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`;
+        notationData.current[i].notationString = `X:1\nK:C\nM:4/4\nL:1/8\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`;
       }
       else {
-        notationData.current[i].notationString = `X:${i + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`
+        notationData.current[i].notationString = `X:${i + 1}\nK:C\nM:4/4\nL:1/8\n${FIRST_FOUR_BARS}`
       }
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
     }
@@ -94,7 +94,7 @@ export default function App() {
         {
           voiceNumber: voiceCount + 1,
           randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
-          notationString: `X:${voiceCount + 1}\nK:C\nM:4/4\n${FIRST_FOUR_BARS}`,
+          notationString: `X:${voiceCount + 1}\nK:C\nM:4/4\nL:1/8\n${FIRST_FOUR_BARS}`,
           playBackNotes: [],
           notesInBarCount: 0,
           validNotesForRandomizing: DEFAULT_VALID_NOTES
@@ -134,8 +134,9 @@ export default function App() {
     let newNote = '', blankStaffSpaceFilled = notationObj.notationString.indexOf('x') === -1;
     
     await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
-      notationObj.notesInBarCount += note.duration;
-      newNote = note.abcName + note.duration.toString();
+      debugger
+      //vnotationObj.notesInBarCount += note.duration;
+      newNote = note.abcName + note.durationProps.abcSyntax;
       
       if (blankStaffSpaceFilled) {
         // if (notationObj.notesInBarCount === MAX_BEATS_PER_BAR) {
@@ -166,7 +167,7 @@ export default function App() {
           "pitch": note.pitchNumber,
           "volume": notationObj.randomizerParams.volumeSelection,
           "start": 0,
-          "duration": note.duration,
+          "duration": note.durationProps.audioDuration,
           "instrument": instrumentMap[notationObj.randomizerParams.instrumentSelection],
           "gap": 0
         },
@@ -223,7 +224,9 @@ export default function App() {
   };
 
   // STAVES //
-
+  // need to pass in the correct notation object - the one based on the voice number
+  // that might be the problem
+  // targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
   const staves = notationData.current.map((notationObj) => {
 
     const staffDescription = `${notationObj.randomizerParams.instrumentSelection} in
