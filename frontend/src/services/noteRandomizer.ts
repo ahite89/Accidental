@@ -17,7 +17,7 @@ export const getRandomizedNote = (notationObj: NotationData): NoteProps => {
     const randomNameAndPitch = validNotesMultiArray[randomPitchIndex];
 
     // Get time between notes based on selected tempo
-    // 1 Minute or 60,000 milliseconds for quarter note
+    // Use 1 Minute (60,000 milliseconds) to calculate for quarter note
     const selectedTempo = notationObj.randomizerParams.tempoSelection;
     const eighthNoteDurationInMilliseconds = 30000 / selectedTempo
     
