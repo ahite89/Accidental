@@ -127,37 +127,32 @@ export default function App() {
 
   // NOTE RENDERING //
 
-  const pauseBeforeNextNote = (ms: number) => new Promise(res => setTimeout(res, ms));
-
   const playAndRenderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
     // switch render function with pause function?
     let newNote = '', blankStaffSpaceFilled = notationObj.notationString.indexOf('x') === -1;
     
-    await pauseBeforeNextNote(note.timeBetweenNotes).then(() => {
-      debugger
-      //vnotationObj.notesInBarCount += note.duration;
-      newNote = note.abcName + note.durationProps.abcSyntax;
-      
-      if (blankStaffSpaceFilled) {
-        // if (notationObj.notesInBarCount === MAX_BEATS_PER_BAR) {
-          // newNote += '|';
-          // notationObj.notesInBarCount = 0;
-        // }
+    //vnotationObj.notesInBarCount += note.duration;
+    newNote = note.abcName + note.durationProps.abcSyntax;
+    
+    if (blankStaffSpaceFilled) {
+      // if (notationObj.notesInBarCount === MAX_BEATS_PER_BAR) {
+        // newNote += '|';
+        // notationObj.notesInBarCount = 0;
+      // }
 
-        notationObj.notationString += newNote;
-      }
-      else {
-        // replace blank staff space until filled in with notes
-        notationObj.notationString = notationObj.notationString.replace('x', newNote);
-      }
+      notationObj.notationString += newNote;
+    }
+    else {
+      // replace blank staff space until filled in with notes
+      notationObj.notationString = notationObj.notationString.replace('x', newNote);
+    }
 
-      // Add notes to playback array for playback functionality
-      // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
+    // Add notes to playback array for playback functionality
+    // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
 
-      // Play audio and add note to staff
-      playNote(note, notationObj)  
-      staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
-    });
+    // Play audio and add note to staff
+    playNote(note, notationObj)  
+    staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
   };
 
   const playNote = (note: NoteProps, notationObj: NotationData): void => {
@@ -184,6 +179,8 @@ export default function App() {
       }
       randomNote = getRandomizedNote(notationObj);
       await playAndRenderNoteToStaff(randomNote, notationObj);
+      // Need to pause to ensure note plays out for entire length
+      await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
     }
   };
 
