@@ -21,6 +21,7 @@ import { DEFAULT_VOLUME } from '../constants/volume';
 import { FIRST_FOUR_BARS } from '../constants/voices';
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
+import { pitchNumberMap } from '../constants/pitchRange';
 
 export default function App() {
 
@@ -151,11 +152,11 @@ export default function App() {
     // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
 
     // Play audio and add note to staff
-    playNote(note, notationObj)  
     staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
+    await playNote(note, notationObj);
   };
 
-  const playNote = (note: NoteProps, notationObj: NotationData): void => {
+  const playNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
     abcjs.synth.playEvent(
       [
         {
@@ -226,8 +227,11 @@ export default function App() {
   // targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
   const staves = notationData.current.map((notationObj) => {
 
+    const noteDurations = notationObj.randomizerParams.durationSelection.filter(d => d.selected).map(d => d.noteLength);
     const staffDescription = `${notationObj.randomizerParams.instrumentSelection} in
-    ${notationObj.randomizerParams.keySelection} ${notationObj.randomizerParams.scaleSelection}`
+      ${notationObj.randomizerParams.keySelection} ${notationObj.randomizerParams.scaleSelection},
+      Range of ${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[0]]}-${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[1]]}, 
+      Durations of ${noteDurations.join(', ')}`
 
     return (
       <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">
