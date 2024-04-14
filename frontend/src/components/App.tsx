@@ -150,6 +150,7 @@ export default function App() {
 
     // Add notes to playback array for playback functionality
     // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
+    // probably need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches
 
     // Play audio and add note to staff
     staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
