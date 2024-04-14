@@ -38,6 +38,7 @@ export default function App() {
       notationString: `X:1\nK:C\nM:4/4\nL:1/8\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
       playBackNotes: [],
       notesInBarCount: 0,
+      instrumentMidiNumber: 2,
       validNotesForRandomizing: DEFAULT_VALID_NOTES
     }
   ]);
@@ -98,6 +99,7 @@ export default function App() {
           notationString: `X:${voiceCount + 1}\nK:C\nM:4/4\nL:1/8\n${FIRST_FOUR_BARS}`,
           playBackNotes: [],
           notesInBarCount: 0,
+          instrumentMidiNumber: 2,
           validNotesForRandomizing: DEFAULT_VALID_NOTES
         }
       )
@@ -165,7 +167,7 @@ export default function App() {
           "volume": notationObj.randomizerParams.volumeSelection,
           "start": 0,
           "duration": note.durationProps.audioDuration,
-          "instrument": instrumentMap[notationObj.randomizerParams.instrumentSelection],
+          "instrument": notationObj.instrumentMidiNumber,
           "gap": 0
         },
       ], [], 1000 // a measure takes one second.    
@@ -197,6 +199,7 @@ export default function App() {
       // Set valid notes for randomizing based on control panel params
       targetVoice.validNotesForRandomizing = fetchValidNotes(controlPanelParams);
       
+      targetVoice.instrumentMidiNumber = instrumentMap[controlPanelParams.instrumentSelection];
       targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${controlPanelParams.keySelection}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
       targetVoice.randomizerParams = controlPanelParams;
       abcjs.renderAbc(`staff-${targetVoice.voiceNumber}`, targetVoice.notationString, AudioVisual.notationOptions);

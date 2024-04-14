@@ -7,5 +7,6 @@ export interface NotationData {
     notationString: string,
     playBackNotes: PlaybackNoteData[],
     notesInBarCount: number,
+    instrumentMidiNumber: number,
     validNotesForRandomizing: (string | number)[][]
 }
