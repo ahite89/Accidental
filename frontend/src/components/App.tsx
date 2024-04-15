@@ -238,9 +238,7 @@ export default function App() {
   };
 
   // STAVES //
-  // need to pass in the correct notation object - the one based on the voice number
-  // that might be the problem
-  // targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
+
   const staves = notationData.current.map((notationObj) => {
 
     const noteDurations = notationObj.randomizerParams.durationSelection.filter(d => d.selected).map(d => d.noteLength);
@@ -266,9 +264,19 @@ export default function App() {
         <div className="flex flex-row">
           <Staff voiceNumber={notationObj.voiceNumber} />
         </div>
+        <div>
+          <Button onClick={() => handleDownloadMIDI(notationObj)} id="midi-link" outline>Download MIDI</Button>
+        </div>
       </div>
     );
   });
+
+  const handleDownloadMIDI = (notationObj: NotationData): void => {
+    debugger
+    const staffObjForDownload = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
+    const midi = abcjs.synth.getMidiFile(staffObjForDownload[0], { chordsOff: true, midiOutputType: "link" });
+    document.getElementById("midi-link")!.innerHTML = midi;
+  };
 
   // JSX //
 
