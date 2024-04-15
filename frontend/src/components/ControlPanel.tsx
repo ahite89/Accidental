@@ -21,6 +21,7 @@ import * as Tempo from "../constants/tempo";
 
 export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControlPanel, randomizerParameters }: ControlPanelProps) {
 
+    debugger
     const handleSubmitParameters = (): void => {
         onSubmit({
             keySelection,

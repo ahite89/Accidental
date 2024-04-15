@@ -188,13 +188,16 @@ export default function App() {
     }
   };
 
-  useEffect(() => {
-    // useRef to update key/scale label?
-  }, [targetVoice]);
+  // useEffect(() => {
+  //   // useRef to update key/scale label?
+  // }, [targetVoice]);
 
   // Save control panel changes for targeted voice
   const handleUpdateStaff = (controlPanelParams: RandomizerParameters, selectedVoiceNumber: number): void => {
     targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
+    debugger;
+    console.log(notationData.current);
+
     if (targetVoice) {
       // Set valid notes for randomizing based on control panel params
       targetVoice.validNotesForRandomizing = fetchValidNotes(controlPanelParams);
@@ -209,7 +212,16 @@ export default function App() {
 
   // CONTROLS MODAL //
 
+  const [randomizerParameters, setRandomizerParameters] = useState<RandomizerParameters>(DEFAULT_RANDOMIZER_PARAMS);
+  const [voiceNumber, setVoiceNumber] = useState<number>(1);
   const [openControlPanel, setOpenControlPanel] = useState<boolean>(false);
+
+  const handleOpenControlPanel = (voiceNumber: number, randomizerParams: RandomizerParameters): void => {
+    setRandomizerParameters(randomizerParams);
+    setVoiceNumber(voiceNumber);
+    setOpenControlPanel(true);
+  };
+
   const handleCloseControlPanel = () => {
     setOpenControlPanel(false);
   };
@@ -242,7 +254,7 @@ export default function App() {
         <div className="flex flex-row">
           <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">{notationObj.voiceNumber}</p>
           <p className="px-3 py-2 text-slate-600">{staffDescription}</p>
-          <Button disabled={isGenerating.current} outline onClick={() => setOpenControlPanel(true)}>
+          <Button disabled={isGenerating.current} outline onClick={() => handleOpenControlPanel(notationObj.voiceNumber, notationObj.randomizerParams)}>
             <MdEdit className="text-2xl"/>
           </Button>
           {notationObj.voiceNumber !== 1 &&
@@ -254,14 +266,6 @@ export default function App() {
         <div className="flex flex-row">
           <Staff voiceNumber={notationObj.voiceNumber} />
         </div>
-        <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
-          <ControlPanel 
-            onSubmit={handleUpdateStaff} 
-            voiceNumber={notationObj.voiceNumber}
-            randomizerParameters={notationObj.randomizerParams}
-            handleCloseControlPanel={handleCloseControlPanel}
-          />
-        </Modal>
       </div>
     );
   });
@@ -297,6 +301,14 @@ export default function App() {
           {staves}
         </div>          
       </div>
+      <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
+          {openControlPanel && <ControlPanel 
+            onSubmit={handleUpdateStaff} 
+            voiceNumber={voiceNumber}
+            randomizerParameters={randomizerParameters}
+            handleCloseControlPanel={handleCloseControlPanel}
+          />}
+        </Modal>
     </div>
   );
 }
