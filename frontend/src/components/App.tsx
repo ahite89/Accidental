@@ -47,10 +47,21 @@ export default function App() {
 
   const isGenerating = useRef<boolean>(false);
 
+  // MIDI Download
+  const handleDownloadMIDI = (notationObj: NotationData): void => {
+    const staffObjForDownload = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
+    const midi = abcjs.synth.getMidiFile(staffObjForDownload[0], { chordsOff: true, midiOutputType: "link" });
+    document.getElementById("midi-link")!.innerHTML = midi;
+  };
+
   const handleStopGenerating = () => {
     isGenerating.current = false;
-    console.log(notationData.current);
-    // Also split notation strings into note arrays?
+    // Only reveal the download link for a staff if generator has run and stopped
+    for (let i = 0; i < notationData.current.length; i++) {
+      if (!notationData.current[i].notationString.includes(FIRST_FOUR_BARS)) {
+        handleDownloadMIDI(notationData.current[0]);
+      }
+    }
   };
 
   const handleClearStaff = () => {
@@ -63,14 +74,13 @@ export default function App() {
       }
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
     }
+    // Hide download link if staves have been cleared
+    document.getElementById("midi-link")!.innerHTML = "";
   };
 
   const handleStartGenerating = async (): Promise<void> => {
     isGenerating.current = true;
     notationData.current.forEach(notationObj => {
-      // change name to "get correct notes based on parameters" or something
-      // probably move getRandomizedNotes function into randomizeAndRender function
-      // so you can access voice specific parameters
       randomizeAndRenderNotes(notationObj);
     });
   };
@@ -131,10 +141,9 @@ export default function App() {
   // NOTE RENDERING //
 
   const playAndRenderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
-    // switch render function with pause function?
     let newNote = '', blankStaffSpaceFilled = notationObj.notationString.indexOf('x') === -1;
     
-    //vnotationObj.notesInBarCount += note.duration;
+    // notationObj.notesInBarCount += note.duration;
     newNote = note.abcName + note.durationProps.abcSyntax;
     
     if (blankStaffSpaceFilled) {
@@ -187,10 +196,6 @@ export default function App() {
       await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
     }
   };
-
-  // useEffect(() => {
-  //   // useRef to update key/scale label?
-  // }, [targetVoice]);
 
   // Save control panel changes for targeted voice
   const handleUpdateStaff = (controlPanelParams: RandomizerParameters, selectedVoiceNumber: number): void => {
@@ -263,20 +268,13 @@ export default function App() {
         </div>
         <div className="flex flex-row">
           <Staff voiceNumber={notationObj.voiceNumber} />
-        </div>
-        <div>
-          <Button onClick={() => handleDownloadMIDI(notationObj)} id="midi-link" outline>Download MIDI</Button>
-        </div>
+        </div>       
+          <div>
+            <div onClick={() => handleDownloadMIDI(notationObj)} id="midi-link"></div>
+          </div>      
       </div>
     );
   });
-
-  const handleDownloadMIDI = (notationObj: NotationData): void => {
-    debugger
-    const staffObjForDownload = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
-    const midi = abcjs.synth.getMidiFile(staffObjForDownload[0], { chordsOff: true, midiOutputType: "link" });
-    document.getElementById("midi-link")!.innerHTML = midi;
-  };
 
   // JSX //
 
@@ -316,7 +314,7 @@ export default function App() {
             randomizerParameters={randomizerParameters}
             handleCloseControlPanel={handleCloseControlPanel}
           />}
-        </Modal>
+      </Modal>
     </div>
   );
 }
