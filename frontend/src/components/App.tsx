@@ -50,10 +50,18 @@ export default function App() {
   // MIDI Download
   const handleDownloadMIDI = (notationObj: NotationData): void => {
     const staffObjForDownload = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
-    const midi = abcjs.synth.getMidiFile(staffObjForDownload[0], { chordsOff: true, midiOutputType: "link" });
+    const midi = abcjs.synth.getMidiFile(staffObjForDownload[0],
+      { 
+        chordsOff: true,
+        midiOutputType: "link",
+        fileName: `Accidental Voice ${notationObj.voiceNumber}`,
+        downloadLabel: `Download Voice ${notationObj.voiceNumber} MIDI`
+      }
+    );
     document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!.innerHTML = midi;
   };
 
+  // Stop
   const handleStopGenerating = () => {
     isGenerating.current = false;
     // Only reveal the download link for a staff if generator has run and stopped
@@ -64,6 +72,15 @@ export default function App() {
     }
   };
 
+  // Start
+  const handleStartGenerating = async (): Promise<void> => {
+    isGenerating.current = true;
+    notationData.current.forEach(notationObj => {
+      randomizeAndRenderNotes(notationObj);
+    });
+  };
+
+  // Clear
   const handleClearStaff = () => {
     for (let i = 0; i < notationData.current.length; i++) {
       if (i === 0) {
@@ -76,13 +93,6 @@ export default function App() {
       // Hide download link if staves have been cleared
       document.getElementById("midi-link-" + notationData.current[i].voiceNumber)!.innerHTML = "";
     }
-  };
-
-  const handleStartGenerating = async (): Promise<void> => {
-    isGenerating.current = true;
-    notationData.current.forEach(notationObj => {
-      randomizeAndRenderNotes(notationObj);
-    });
   };
 
   // const handlePlayback = (): void => {
@@ -100,6 +110,7 @@ export default function App() {
 
   const [voiceCount, setVoiceCount] = useState<number>(notationData.current.length);
 
+  // Add
   const addVoiceToSystem = (): void => {
     if (voiceCount < 4) {
       notationData.current.push(
@@ -117,6 +128,7 @@ export default function App() {
     }
   };
 
+  // Remove
   const removeVoiceFromSystem = (voiceNumber: number): void => {
     if (voiceCount > 1) {
       const selectedVoice = notationData.current.indexOf(notationData.current[voiceNumber - 1]);
