@@ -55,7 +55,7 @@ export default function App() {
         chordsOff: true,
         midiOutputType: "link",
         fileName: `Accidental Voice ${notationObj.voiceNumber}`,
-        downloadLabel: `Download Voice ${notationObj.voiceNumber} MIDI`
+        downloadLabel: `Download MIDI`
       }
     );
     document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!.innerHTML = midi;
@@ -76,6 +76,7 @@ export default function App() {
   const handleStartGenerating = async (): Promise<void> => {
     isGenerating.current = true;
     notationData.current.forEach(notationObj => {
+      document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!.innerHTML = "";
       randomizeAndRenderNotes(notationObj);
     });
   };
@@ -277,13 +278,14 @@ export default function App() {
               <MdPlaylistRemove className="text-3xl" />
             </Button>
           }
+          <div onClick={() => handleDownloadMIDI(notationObj)} 
+               id={`midi-link-` + notationObj.voiceNumber.toString()} 
+               className="px-3 py-1.5 text-slate-600 self-center">
+          </div>
         </div>
         <div className="flex flex-row">
           <Staff voiceNumber={notationObj.voiceNumber} />
-        </div>       
-          <div>
-            <div onClick={() => handleDownloadMIDI(notationObj)} id={`midi-link-` + notationObj.voiceNumber.toString()}></div>
-          </div>      
+        </div>          
       </div>
     );
   });
