@@ -51,7 +51,7 @@ export default function App() {
   const handleDownloadMIDI = (notationObj: NotationData): void => {
     const staffObjForDownload = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
     const midi = abcjs.synth.getMidiFile(staffObjForDownload[0], { chordsOff: true, midiOutputType: "link" });
-    document.getElementById("midi-link")!.innerHTML = midi;
+    document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!.innerHTML = midi;
   };
 
   const handleStopGenerating = () => {
@@ -59,7 +59,7 @@ export default function App() {
     // Only reveal the download link for a staff if generator has run and stopped
     for (let i = 0; i < notationData.current.length; i++) {
       if (!notationData.current[i].notationString.includes(FIRST_FOUR_BARS)) {
-        handleDownloadMIDI(notationData.current[0]);
+        handleDownloadMIDI(notationData.current[i]);
       }
     }
   };
@@ -73,9 +73,9 @@ export default function App() {
         notationData.current[i].notationString = `X:${i + 1}\nK:C\nM:4/4\nL:1/8\n${FIRST_FOUR_BARS}`
       }
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
+      // Hide download link if staves have been cleared
+      document.getElementById("midi-link-" + notationData.current[i].voiceNumber)!.innerHTML = "";
     }
-    // Hide download link if staves have been cleared
-    document.getElementById("midi-link")!.innerHTML = "";
   };
 
   const handleStartGenerating = async (): Promise<void> => {
@@ -270,7 +270,7 @@ export default function App() {
           <Staff voiceNumber={notationObj.voiceNumber} />
         </div>       
           <div>
-            <div onClick={() => handleDownloadMIDI(notationObj)} id="midi-link"></div>
+            <div onClick={() => handleDownloadMIDI(notationObj)} id={`midi-link-` + notationObj.voiceNumber.toString()}></div>
           </div>      
       </div>
     );
