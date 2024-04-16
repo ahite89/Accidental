@@ -11,6 +11,15 @@ import { RandomizerParameters } from "../interfaces/controlPanel";
 // Voice Notation
 export const FIRST_FOUR_BARS = "xxxx|xxxx|xxxx|xxxx|\n";
 
+// Clefs
+export enum Clefs {
+    Treble = 'treble',
+    Alto = 'alto',
+    Bass = 'bass'
+}
+
+export const DEFAULT_CLEF = "treble";
+
 // Control Panel Parameters
 export const DEFAULT_RANDOMIZER_PARAMS: RandomizerParameters = {
     keySelection: DEFAULT_KEY,

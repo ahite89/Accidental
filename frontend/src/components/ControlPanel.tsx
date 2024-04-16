@@ -10,7 +10,6 @@ import SelectableList from './parameters/SelectableList';
 import { ControlPanelProps } from "../interfaces/controlPanel";
 import { DurationProps } from '../interfaces/selectable';
 
-import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { keyOptions } from "../constants/keys";
 import { scaleOptions } from "../constants/scales";
 import { instrumentOptions } from "../constants/instruments";
@@ -21,7 +20,6 @@ import * as Tempo from "../constants/tempo";
 
 export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControlPanel, randomizerParameters }: ControlPanelProps) {
 
-    debugger
     const handleSubmitParameters = (): void => {
         onSubmit({
             keySelection,

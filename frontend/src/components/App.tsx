@@ -10,15 +10,16 @@ import Button from './parameters/Button';
 import { NoteProps } from '../interfaces/note';
 import { RandomizerParameters } from '../interfaces/controlPanel';
 import { NotationData } from '../interfaces/notation';
+
 import { getRandomizedNote } from '../services/noteRandomizer';
 import { fetchValidNotes } from '../services/noteFetcher';
+import { fetchClefBasedOnPitchRange } from '../services/clefFetcher';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { DEFAULT_VALID_NOTES } from '../constants/notes';
 import { instrumentMap } from '../constants/instruments';
 import { MAX_BEATS_PER_BAR } from "../constants/durations";
-import { DEFAULT_VOLUME } from '../constants/volume';
-import { FIRST_FOUR_BARS } from '../constants/voices';
+import { FIRST_FOUR_BARS, Clefs, DEFAULT_CLEF } from '../constants/voices';
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
 import { pitchNumberMap } from '../constants/pitchRange';
@@ -35,11 +36,12 @@ export default function App() {
     {
       voiceNumber: 1,
       randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
-      notationString: `X:1\nK:C\nM:4/4\nL:1/8\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
+      notationString: `X:1\nK:C ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`,
       playBackNotes: [],
       notesInBarCount: 0,
       instrumentMidiNumber: 2,
-      validNotesForRandomizing: DEFAULT_VALID_NOTES
+      validNotesForRandomizing: DEFAULT_VALID_NOTES,
+      clef: Clefs.Treble
     }
   ]);
 
@@ -85,10 +87,10 @@ export default function App() {
   const handleClearStaff = () => {
     for (let i = 0; i < notationData.current.length; i++) {
       if (i === 0) {
-        notationData.current[i].notationString = `X:1\nK:C\nM:4/4\nL:1/8\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`;
+        notationData.current[i].notationString = `X:1\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`;
       }
       else {
-        notationData.current[i].notationString = `X:${i + 1}\nK:C\nM:4/4\nL:1/8\n${FIRST_FOUR_BARS}`
+        notationData.current[i].notationString = `X:${i + 1}\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\n${FIRST_FOUR_BARS}`
       }
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
       // Hide download link if staves have been cleared
@@ -118,11 +120,12 @@ export default function App() {
         {
           voiceNumber: voiceCount + 1,
           randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
-          notationString: `X:${voiceCount + 1}\nK:C\nM:4/4\nL:1/8\n${FIRST_FOUR_BARS}`,
+          notationString: `X:${voiceCount + 1}\nK:C ${DEFAULT_CLEF}\nM:4/4\nL:1/8\n${FIRST_FOUR_BARS}`,
           playBackNotes: [],
           notesInBarCount: 0,
           instrumentMidiNumber: 2,
-          validNotesForRandomizing: DEFAULT_VALID_NOTES
+          validNotesForRandomizing: DEFAULT_VALID_NOTES,
+          clef: Clefs.Treble
         }
       )
       setVoiceCount(voiceCount + 1);
@@ -213,16 +216,16 @@ export default function App() {
   // Save control panel changes for targeted voice
   const handleUpdateStaff = (controlPanelParams: RandomizerParameters, selectedVoiceNumber: number): void => {
     targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
-    debugger;
-    console.log(notationData.current);
 
     if (targetVoice) {
       // Set valid notes for randomizing based on control panel params
       targetVoice.validNotesForRandomizing = fetchValidNotes(controlPanelParams);
       
+      targetVoice.clef = fetchClefBasedOnPitchRange(controlPanelParams.pitchRangeSelection);
       targetVoice.instrumentMidiNumber = instrumentMap[controlPanelParams.instrumentSelection];
-      targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${controlPanelParams.keySelection}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
+      targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${controlPanelParams.keySelection} ${targetVoice.clef}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
       targetVoice.randomizerParams = controlPanelParams;
+      
       abcjs.renderAbc(`staff-${targetVoice.voiceNumber}`, targetVoice.notationString, AudioVisual.notationOptions);
     }
     setOpenControlPanel(false);
