@@ -1,6 +1,130 @@
+import { RandomizerParameters } from '../interfaces/controlPanel';
 import { NoteProps } from '../interfaces/note';
 
 export const DEFAULT_VALID_NOTES = [['C', 60], ['D', 62], ['E', 64], ['F', 65], ['G', 67], ['A', 69], ['B', 71], ['c', 72]];
+
+export const allNotesAndPitchNumbers = [
+    ['A', 33],
+    ['#A', 34],
+    ['B', 34],
+    ['bB', 35],
+    ['C', 36],
+    ['#C', 37],
+    ['bD', 37],
+    ['D', 38],
+    ['#D', 39],
+    ['bE', 39],
+    ['E', 40],
+    ['F', 41],
+    ['#F', 42],
+    ['bG', 42],
+    ['G', 43],
+    ['#G', 44],
+    ['Ab', 44],
+    ['A', 45],
+    ['#A', 46],
+    ['bB', 46],
+    ['B', 47],
+    ['C', 48],
+    ['#C', 49],
+    ['bD', 49],
+    ['D', 50],
+    ['#D', 51],
+    ['bE', 51],
+    ['E', 52],
+    ['F', 53],
+    ['#F', 54],
+    ['bG', 54],
+    ['G', 55],
+    ['#G', 56],
+    ['bA', 56],
+    ['A', 57],
+    ['#A', 58],
+    ['bB', 58],
+    ['B', 59],
+    ['C', 60],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+]
 
 
 // Note names for notation (lowest to highest)
@@ -8,6 +132,28 @@ export const DEFAULT_VALID_NOTES = [['C', 60], ['D', 62], ['E', 64], ['F', 65], 
 // Sharp: ^c (double = ^^)
 // Flat: _B (double = __)
 // Natural: =c
+
+// Take in an array of [key, scale] instead?
+// Can just use randomizerParams as argument
+// Move to noteFetcher service
+// Might have to do two multi-arrays; one with sharps and one with flats
+// Could add two flags for key - isSharp and isFlat
+export const getNotesFromScale = (randomizerParams: RandomizerParameters): (string | number)[][] => {
+    // Create an algorithm here that returns the notes from a scale    
+    // Find the starting pitch, the lowest possible pitch from the selected scale
+    const startingPitchArray = allNotesAndPitchNumbers.find((note) => {
+        return note[0].toString() === randomizerParams.keySelection;
+    });
+    
+    if (startingPitchArray) console.log(startingPitchArray[1]);
+    // ...if sharp key, use sharp scale; if flat key, use flat scale
+    // Depending on the scale, the algo will search for the pitches that align with the intervals between notes
+    // Ex: Major scale - W,W,H,W,W,W,H => startingPitch + 2 + 2 + 1 + 2 + 2 + 2 + 1
+    // Search based on lowercase version of abc name?
+    // Add abc name to array?
+    // Make this a record
+    return DEFAULT_VALID_NOTES;
+};
 
 export const scaleToAbcNamePitchNumberMap: Record<string, (string | number)[][]> = {
     'CMajor': DEFAULT_VALID_NOTES,

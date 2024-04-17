@@ -16,7 +16,7 @@ import { fetchValidNotes } from '../services/noteFetcher';
 import { fetchClefBasedOnPitchRange } from '../services/clefFetcher';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
-import { DEFAULT_VALID_NOTES } from '../constants/notes';
+import { DEFAULT_VALID_NOTES, getNotesFromScale } from '../constants/notes';
 import { instrumentMap } from '../constants/instruments';
 import { MAX_BEATS_PER_BAR } from "../constants/durations";
 import { FIRST_FOUR_BARS, Clefs, DEFAULT_CLEF } from '../constants/voices';
@@ -86,6 +86,8 @@ export default function App() {
   // Clear
   const handleClearStaff = () => {
     for (let i = 0; i < notationData.current.length; i++) {
+      // can consolidate if tempo is removed from the voice 1 staff
+      // could also add tempo to all staves
       if (i === 0) {
         notationData.current[i].notationString = `X:1\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`;
       }
@@ -220,6 +222,8 @@ export default function App() {
     if (targetVoice) {
       // Set valid notes for randomizing based on control panel params
       targetVoice.validNotesForRandomizing = fetchValidNotes(controlPanelParams);
+
+      let notesFromScale = getNotesFromScale(controlPanelParams);
       
       targetVoice.clef = fetchClefBasedOnPitchRange(controlPanelParams.pitchRangeSelection);
       targetVoice.instrumentMidiNumber = instrumentMap[controlPanelParams.instrumentSelection];

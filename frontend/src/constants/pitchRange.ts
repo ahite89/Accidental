@@ -1,24 +1,12 @@
-export const MIN_PITCH_NUMBER = 36;
-export const MAX_PITCH_NUMBER = 96;
+export const MIN_PITCH_NUMBER = 33;
+export const MAX_PITCH_NUMBER = 100;
 export const DEFAULT_PITCH_RANGE = [48, 84];
 export const MIN_PITCH_DISTANCE = 5;
 
 export const pitchNumberMap: Record<number, string> = {
-    // 21: 'A0',
-    // 22: 'A#0',
-    // 23: 'B0',
-    // 24: 'C1',
-    // 25: 'C#1',
-    // 26: 'D1',
-    // 27: 'D#1',
-    // 28: 'E1',
-    // 29: 'F1',
-    // 30: 'F#1',
-    // 31: 'G1',
-    // 32: 'G#1',
-    // 33: 'A1',
-    // 34: 'A#1',
-    // 35: 'B1',
+    33: 'A1',
+    34: 'A#1',
+    35: 'B1',
     36: 'C2',
     37: 'C#2',
     38: 'D2',
@@ -79,17 +67,9 @@ export const pitchNumberMap: Record<number, string> = {
     93: 'A6',
     94: 'A#6',
     95: 'B6',
-    96: 'C7'
-    // 97: 'C#7',
-    // 98: 'D7',
-    // 99: 'D#7',
-    // 100: 'E7',
-    // 101: 'F7',
-    // 102: 'F#7',
-    // 103: 'G7',
-    // 104: 'G#7',
-    // 105: 'A7',
-    // 106: 'A#7',
-    // 107: 'B7',
-    // 108: 'C8'
+    96: 'C7',
+    97: 'C#7',
+    98: 'D7',
+    99: 'D#7',
+    100: 'E7',
 };
