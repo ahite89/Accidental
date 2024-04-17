@@ -4,9 +4,9 @@ export const DEFAULT_SCALE = 'Major';
 
 enum Scales {
     Major = 'Major',
-    Minor = 'Minor',
-    HarmonicMinor = 'Harmonic Minor',
     NaturalMinor = 'Natural Minor',
+    HarmonicMinor = 'Harmonic Minor',
+    MelodicMinor = 'Melodic Minor',
     Dorian = 'Dorian',
     Phrygian = 'Phrygian',
     Lydian = 'Lydian',
@@ -14,8 +14,12 @@ enum Scales {
     Locrian = 'Locrian',
     Chromatic = 'Chromatic',
     WholeTone = 'Whole Tone',
-    Pentatonic = 'Pentatonic',
-    Custom = 'Custom'
+    MajorPentatonic = 'Major Pentatonic',
+    MinorPentatonic = 'Minor Pentatonic',
+    MajorBlues = 'Major Blues',
+    MinorBlues = 'Minor Blues',
+    Augmented = 'Augmented',
+    Diminished = 'Diminished'
 }
 
 export const scaleOptions = (): DropDownOption[] => {
