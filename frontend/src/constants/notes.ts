@@ -144,11 +144,13 @@ export const getNotesFromScale = (randomizerParams: RandomizerParameters): (stri
     const startingPitchArray = allNotesAndPitchNumbers.find((note) => {
         return note[0].toString() === randomizerParams.keySelection;
     });
-    
-    if (startingPitchArray) console.log(startingPitchArray[1]);
+    const startingPitchInterval = allNotesAndPitchNumbers.indexOf(startingPitchArray!, 0)
+
     // ...if sharp key, use sharp scale; if flat key, use flat scale
     // Depending on the scale, the algo will search for the pitches that align with the intervals between notes
     // Ex: Major scale - W,W,H,W,W,W,H => startingPitch + 2 + 2 + 1 + 2 + 2 + 2 + 1
+    // Add intervals.ts file to constants folder
+    // ...probably contains a record, mapping scale to interval array
     // Search based on lowercase version of abc name?
     // Add abc name to array?
     // Make this a record
