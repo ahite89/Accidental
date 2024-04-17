@@ -22,8 +22,8 @@ export const getRandomizedNote = (notationObj: NotationData): NoteProps => {
     const eighthNoteDurationInMilliseconds = 30000 / selectedTempo
     
     return { 
-        abcName: randomNameAndPitch[0] as string,
-        pitchNumber: +randomNameAndPitch[1],
+        abcName: randomNameAndPitch.abcName,
+        pitchNumber: randomNameAndPitch.pitchNumber,
         durationProps: randomDuration,
         timeBetweenNotes: eighthNoteDurationInMilliseconds * randomDuration.audioDuration
     };

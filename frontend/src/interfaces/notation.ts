@@ -1,6 +1,7 @@
 import { RandomizerParameters } from "./controlPanel"
 import { PlaybackNoteData } from "./note"
 import { Clefs } from "../constants/voices"
+import { NoteForScaleProps } from "./scale"
 
 export interface NotationData {
     voiceNumber: number,
@@ -9,6 +10,6 @@ export interface NotationData {
     playBackNotes: PlaybackNoteData[],
     notesInBarCount: number,
     instrumentMidiNumber: number,
-    validNotesForRandomizing: (string | number)[][],
+    validNotesForRandomizing: NoteForScaleProps[],
     clef: Clefs
 }

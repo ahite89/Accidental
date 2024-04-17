@@ -16,7 +16,6 @@ import { fetchValidNotes } from '../services/noteFetcher';
 import { fetchClefBasedOnPitchRange } from '../services/clefFetcher';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
-import { DEFAULT_VALID_NOTES, getNotesFromScale } from '../constants/notes';
 import { instrumentMap } from '../constants/instruments';
 import { MAX_BEATS_PER_BAR } from "../constants/durations";
 import { FIRST_FOUR_BARS, Clefs, DEFAULT_CLEF } from '../constants/voices';
@@ -40,7 +39,7 @@ export default function App() {
       playBackNotes: [],
       notesInBarCount: 0,
       instrumentMidiNumber: 2,
-      validNotesForRandomizing: DEFAULT_VALID_NOTES,
+      validNotesForRandomizing: fetchValidNotes(DEFAULT_RANDOMIZER_PARAMS),
       clef: Clefs.Treble
     }
   ]);
@@ -126,7 +125,7 @@ export default function App() {
           playBackNotes: [],
           notesInBarCount: 0,
           instrumentMidiNumber: 2,
-          validNotesForRandomizing: DEFAULT_VALID_NOTES,
+          validNotesForRandomizing: fetchValidNotes(DEFAULT_RANDOMIZER_PARAMS),
           clef: Clefs.Treble
         }
       )
@@ -222,8 +221,6 @@ export default function App() {
     if (targetVoice) {
       // Set valid notes for randomizing based on control panel params
       targetVoice.validNotesForRandomizing = fetchValidNotes(controlPanelParams);
-
-      let notesFromScale = getNotesFromScale(controlPanelParams);
       
       targetVoice.clef = fetchClefBasedOnPitchRange(controlPanelParams.pitchRangeSelection);
       targetVoice.instrumentMidiNumber = instrumentMap[controlPanelParams.instrumentSelection];
