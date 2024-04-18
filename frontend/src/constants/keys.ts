@@ -4,6 +4,7 @@ export const DEFAULT_KEY = 'C';
 
 // NEED TO MAP KEYS BASED ON SCALE QUALITY
 // Ex: A Minor => Key of C, No sharps or flats
+// map scale to array?
 
 
 enum Keys {

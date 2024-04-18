@@ -1,5 +1,7 @@
 import { NoteProps } from "./note"
+import { AccidentalType } from "../constants/notes"
 
 export interface NoteForScaleProps extends Pick<NoteProps, "abcName" | "pitchNumber"> {
-    noteName: string
+    noteName: string,
+    accidentalType: AccidentalType
 };
