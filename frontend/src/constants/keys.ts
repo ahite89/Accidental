@@ -1,4 +1,6 @@
 import { DropDownOption } from "../interfaces/dropdown";
+import { AccidentalTypes } from "./notes";
+import { KeyQuality } from "../interfaces/key";
 
 export const DEFAULT_KEY = 'C';
 
@@ -6,8 +8,7 @@ export const DEFAULT_KEY = 'C';
 // Ex: A Minor => Key of C, No sharps or flats
 // map scale to array?
 
-
-enum Keys {
+export enum Keys {
     C = 'C',
     CSharp = 'C#',
     DFlat = 'Db',
@@ -23,6 +24,11 @@ enum Keys {
     BFlat = 'Bb',
     B = 'B'
 }
+
+export const scaleKeyQualityMap: Record<string, KeyQuality> = {
+    'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural}
+    // Expand this...
+};
 
 export const keyOptions = (): DropDownOption[] => {
     const keys = [];

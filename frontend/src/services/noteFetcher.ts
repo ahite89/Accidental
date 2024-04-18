@@ -23,6 +23,9 @@ export const fetchValidNotes = (randomizerParams: RandomizerParameters): NoteFor
 };
 
 const getNotesByScaleIntervals = (randomizerParams: RandomizerParameters): NoteForScaleProps[] => {
+
+    // Start by filtering out the undesired accidentals (based on key and scale)
+    
     // Find the starting pitch, the lowest possible pitch from the selected scale
     const startingPitchObject = allNotesAndPitchNumbers.find((note) => {
         return note.noteName === randomizerParams.keySelection;
