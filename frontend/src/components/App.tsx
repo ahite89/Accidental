@@ -87,6 +87,8 @@ export default function App() {
     for (let i = 0; i < notationData.current.length; i++) {
       // can consolidate if tempo is removed from the voice 1 staff
       // could also add tempo to all staves
+
+      // SHOULD NOT REVERT TEMPO
       if (i === 0) {
         notationData.current[i].notationString = `X:1\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${activeTempo.current.toString()}\n${FIRST_FOUR_BARS}`;
       }
@@ -275,11 +277,11 @@ export default function App() {
           <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">{notationObj.voiceNumber}</p>
           <p className="px-3 py-2 text-slate-600">{staffDescription}</p>
           <Button disabled={isGenerating.current} outline onClick={() => handleOpenControlPanel(notationObj.voiceNumber, notationObj.randomizerParams)}>
-            <MdEdit className="text-2xl"/>
+            <MdEdit className="text-2xl"/>Edit Parameters
           </Button>
           {notationObj.voiceNumber !== 1 &&
             <Button disabled={isGenerating.current} outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
-              <MdPlaylistRemove className="text-3xl" />
+              <MdPlaylistRemove className="text-3xl" />Remove Voice
             </Button>
           }
           <div onClick={() => handleDownloadMIDI(notationObj)} 
@@ -302,28 +304,30 @@ export default function App() {
         <p className="text-white text-xl border-white border-2 border-solid p-2 rounded">
           &#9838;ccidental
         </p>
-        <div className="flex flex-row self-center">
+      </header>
+      <div className="p-8 bg-slate-100">
+      <div className="flex flex-row self-center">
           <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleStartGenerating}>
-            Generate
+            Generate Notes
           </Button>
           <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleStopGenerating}>
             Stop
           </Button>
           <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleClearStaff}>
-            Clear
+            Clear Staves
           </Button>
           {/* <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>
             Play
           </Button> */}
+        </div>
+        <div className="flex flex-col p-4">
+          {staves}
+        </div> 
+        <div>
           <Button disabled={isGenerating.current} extraStyling="shadow border border-2 border-white" primary rounded onClick={addVoiceToSystem}>
             Add Voice
           </Button>
-        </div>
-      </header>
-      <div className="p-8 bg-slate-100">
-        <div className="flex flex-col p-4">
-          {staves}
-        </div>          
+        </div>         
       </div>
       <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
           {openControlPanel && <ControlPanel 

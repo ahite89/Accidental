@@ -1,6 +1,6 @@
 import { RandomizerParameters } from "../interfaces/controlPanel";
 import { NoteForScaleProps } from "../interfaces/scale";
-import { allNotesAndPitchNumbersFlatKeys, allNotesAndPitchNumbersSharpKeys } from "../constants/notes";
+import { allNotesAndPitchNumbers } from "../constants/notes";
 import { scaleIntervalsArrayMap } from "../constants/intervals";
 
 export const fetchValidNotes = (randomizerParams: RandomizerParameters): NoteForScaleProps[] => { 
@@ -28,12 +28,12 @@ const getNotesFromScale = (randomizerParams: RandomizerParameters): NoteForScale
     // TRY RECOMBINING THE SHARPS AND FLATS TO SEE IF IT ACTUALLY WORKS (TEST WITH MULTIPLE MAJOR AND MINOR SCALES)
 
     // Find the starting pitch, the lowest possible pitch from the selected scale
-    const startingPitchObject = allNotesAndPitchNumbersFlatKeys().find((note) => {
+    const startingPitchObject = allNotesAndPitchNumbers.find((note) => {
         return note.noteName === randomizerParams.keySelection;
     });
     
     // ** NOT WORKING ** Get index of first occurence of the starting pitch within the full pitch range
-    const startingPitchIndex = allNotesAndPitchNumbersFlatKeys().indexOf(startingPitchObject!, 0);
+    let startingPitchIndex = allNotesAndPitchNumbers.indexOf(startingPitchObject!, 0);
     // Get array of scale intervals from corresponding scale name
     const scaleIntervalsArray = scaleIntervalsArrayMap[randomizerParams.scaleSelection];
 
@@ -44,7 +44,11 @@ const getNotesFromScale = (randomizerParams: RandomizerParameters): NoteForScale
     // then continue moving through scaleIntervalsArray until you've reached the end of the allNotesAndPitchNumbersArray
     // for each iteration, push the note object into the validScaleNotes array
     // while (i = startingPitchIndex; i < allNotesAndPitchNumbersArray.length; i++;)
-    // ...
+    while (startingPitchIndex < allNotesAndPitchNumbers.length) {
+        debugger
+        validScaleNotes.push(allNotesAndPitchNumbers[startingPitchIndex]);
+        startingPitchIndex++;
+    }
 
 
     return validScaleNotes;

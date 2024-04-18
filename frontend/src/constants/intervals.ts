@@ -1,8 +1,8 @@
 // Ex: Major scale - W,W,H,W,W,W,H => startingPitch + 2 + 2 + 1 + 2 + 2 + 2 + 1
 
 export const scaleIntervalsArrayMap : Record<string, number[]> = {
-    'Major': [2, 2, 1, 2, 2, 2, 1],
-    'Natural Minor': [],
+    'Major': [3, 3, 1, 3, 3, 3, 1],
+    'Natural Minor': [3, 1, 3, 3, 1, 3, 3],
     'Harmonic Minor': [],
     'Melodic Minor': [],
     'Dorian': [],
@@ -11,7 +11,7 @@ export const scaleIntervalsArrayMap : Record<string, number[]> = {
     'Mixolydian': [],
     'Locrian': [],
     'Chromatic': [1],
-    'Whole Tone': [2],
+    'Whole Tone': [3, 2, 3, 3, 3, 3],
     'Major Pentatonic': [],
     'Minor Pentatonic': [],
     'Major Blues': [],
