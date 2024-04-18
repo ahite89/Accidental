@@ -98,6 +98,7 @@ export default function App() {
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
       // Hide download link if staves have been cleared
       document.getElementById("midi-link-" + notationData.current[i].voiceNumber)!.innerHTML = "";
+      notationData.current[i].notesInBarCount = 0;
     }
   };
 
@@ -162,14 +163,14 @@ export default function App() {
   const playAndRenderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
     let newNote = '', blankStaffSpaceFilled = notationObj.notationString.indexOf('x') === -1;
     
-    // notationObj.notesInBarCount += note.duration;
     newNote = note.abcName + note.durationProps.abcSyntax;
-    
+    debugger
     if (blankStaffSpaceFilled) {
-      // if (notationObj.notesInBarCount === MAX_BEATS_PER_BAR) {
-        // newNote += '|';
-        // notationObj.notesInBarCount = 0;
-      // }
+      notationObj.notesInBarCount += note.durationProps.audioDuration;
+      if (notationObj.notesInBarCount >= MAX_BEATS_PER_BAR) {
+        newNote += '|';
+        notationObj.notesInBarCount = 0;
+      }
 
       notationObj.notationString += newNote;
     }
@@ -184,7 +185,7 @@ export default function App() {
 
     // Play audio and add note to staff
     staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
-    await playNote(note, notationObj);
+    await playNote(note, notationObj);    
   };
 
   const playNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {

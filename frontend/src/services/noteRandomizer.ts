@@ -4,7 +4,6 @@ import { NotationData } from '../interfaces/notation';
 export const getRandomizedNote = (notationObj: NotationData): NoteProps => {
 
     // Get random duration
-    debugger
     const selectedDurations = notationObj.randomizerParams.durationSelection.filter((duration) => {
         return duration.selected;
     });
