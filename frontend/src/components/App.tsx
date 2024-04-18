@@ -218,8 +218,8 @@ export default function App() {
   const handleUpdateStaff = (controlPanelParams: RandomizerParameters, selectedVoiceNumber: number): void => {
     targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
 
-    if (targetVoice) {
-      // Set valid notes for randomizing based on control panel params
+    if (targetVoice && targetVoice.randomizerParams !== controlPanelParams) {
+      // Set valid notes for randomizing based on control panel params (assuming they've changed)
       targetVoice.validNotesForRandomizing = fetchValidNotes(controlPanelParams);
       
       targetVoice.clef = fetchClefBasedOnPitchRange(controlPanelParams.pitchRangeSelection);

@@ -1,5 +1,7 @@
 import { NoteForScaleProps } from '../interfaces/scale';
 
+// Might want to add scientific name to NoteForScaleProps object
+
 export const allNotesAndPitchNumbersSharpKeys = (): NoteForScaleProps[] => [
     {noteName: "A", abcName: "A,,,", pitchNumber: 33},
     {noteName: "A#", abcName: "^A,,,", pitchNumber: 34},
