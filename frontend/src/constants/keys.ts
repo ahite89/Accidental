@@ -2,6 +2,9 @@ import { DropDownOption } from "../interfaces/dropdown";
 
 export const DEFAULT_KEY = 'C';
 
+// NEED TO MAP KEYS BASED ON SCALE QUALITY
+// Ex: A Minor => Key of C
+
 enum Keys {
     C = 'C',
     CSharp = 'C#',

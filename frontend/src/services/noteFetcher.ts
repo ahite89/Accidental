@@ -5,7 +5,7 @@ import { scaleIntervalsArrayMap } from "../constants/intervals";
 
 export const fetchValidNotes = (randomizerParams: RandomizerParameters): NoteForScaleProps[] => { 
     // First get all valid notes from the selected key and scale
-    const allValidNotesFromKeyAndScale = getNotesFromScale(randomizerParams);
+    const allValidNotesFromKeyAndScale = getNotesByScaleIntervals(randomizerParams);
 
     // Narrow down to only valid notes within selected pitch range
     const pitchRangeMin = randomizerParams.pitchRangeSelection[0];
@@ -22,34 +22,32 @@ export const fetchValidNotes = (randomizerParams: RandomizerParameters): NoteFor
     return validNotesForRandomizing;
 };
 
-const getNotesFromScale = (randomizerParams: RandomizerParameters): NoteForScaleProps[] => {
-
-    // in notes.ts....
-    // TRY RECOMBINING THE SHARPS AND FLATS TO SEE IF IT ACTUALLY WORKS (TEST WITH MULTIPLE MAJOR AND MINOR SCALES)
-
+const getNotesByScaleIntervals = (randomizerParams: RandomizerParameters): NoteForScaleProps[] => {
     // Find the starting pitch, the lowest possible pitch from the selected scale
     const startingPitchObject = allNotesAndPitchNumbers.find((note) => {
         return note.noteName === randomizerParams.keySelection;
     });
     
-    // ** NOT WORKING ** Get index of first occurence of the starting pitch within the full pitch range
+    // Get index of first occurence of the starting pitch within the full pitch range
     let startingPitchIndex = allNotesAndPitchNumbers.indexOf(startingPitchObject!, 0);
     // Get array of scale intervals from corresponding scale name
     const scaleIntervalsArray = scaleIntervalsArrayMap[randomizerParams.scaleSelection];
 
-    let validScaleNotes: NoteForScaleProps[] = [startingPitchObject!];
+    let validScaleNotes: NoteForScaleProps[] = [];
 
-    // NOW ITERATE
-    // Starting at startingPitchIndex, continuously increment the count by the values in the scaleIntervalsArray until you get to the end of it
-    // then continue moving through scaleIntervalsArray until you've reached the end of the allNotesAndPitchNumbersArray
-    // for each iteration, push the note object into the validScaleNotes array
-    // while (i = startingPitchIndex; i < allNotesAndPitchNumbersArray.length; i++;)
-    while (startingPitchIndex < allNotesAndPitchNumbers.length) {
-        debugger
+    // Iterate over scales intervals array until all valid notes from the full list have been added
+    for (let i = 0; i < scaleIntervalsArray.length; i++) {
+        if (startingPitchIndex >= allNotesAndPitchNumbers.length) {
+            return validScaleNotes;
+        }
         validScaleNotes.push(allNotesAndPitchNumbers[startingPitchIndex]);
-        startingPitchIndex++;
+        startingPitchIndex = startingPitchIndex + scaleIntervalsArray[i];
+        
+        // Reset scale intervals array loop
+        if (i === scaleIntervalsArray.length - 1) {
+            i = -1;
+        }
     }
-
 
     return validScaleNotes;
 };

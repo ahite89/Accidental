@@ -1,5 +1,3 @@
-// Ex: Major scale - W,W,H,W,W,W,H => startingPitch + 2 + 2 + 1 + 2 + 2 + 2 + 1
-
 export const scaleIntervalsArrayMap : Record<string, number[]> = {
     'Major': [3, 3, 1, 3, 3, 3, 1],
     'Natural Minor': [3, 1, 3, 3, 1, 3, 3],
