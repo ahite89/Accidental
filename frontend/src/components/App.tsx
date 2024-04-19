@@ -75,6 +75,7 @@ export default function App() {
     isGenerating.current = true;
     notationData.current.forEach(notationObj => {
       document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!.innerHTML = "";
+      notationObj.notationString = notationObj.notationString.replace(FIRST_FOUR_BARS, "");
       randomizeAndRenderNotes(notationObj);
     });
   };
@@ -158,23 +159,16 @@ export default function App() {
   // NOTE RENDERING //
 
   const playAndRenderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
-    let newNote = '', blankStaffSpaceFilled = notationObj.notationString.indexOf('x') === -1;
-    
+    let newNote = '';  
     newNote = note.abcName + note.durationProps.abcSyntax;
-    debugger
-    if (blankStaffSpaceFilled) {
-      notationObj.notesInBarCount += note.durationProps.audioDuration;
-      if (notationObj.notesInBarCount >= MAX_BEATS_PER_BAR) {
-        newNote += '|';
-        notationObj.notesInBarCount = 0;
-      }
+    
+    notationObj.notesInBarCount += note.durationProps.audioDuration;
+    if (notationObj.notesInBarCount >= MAX_BEATS_PER_BAR) {
+      newNote += '|';
+      notationObj.notesInBarCount = 0;
+    }
 
-      notationObj.notationString += newNote;
-    }
-    else {
-      // replace blank staff space until filled in with notes
-      notationObj.notationString = notationObj.notationString.replace('x', newNote);
-    }
+    notationObj.notationString += newNote;
 
     // Add notes to playback array for playback functionality
     // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
@@ -274,11 +268,11 @@ export default function App() {
         <div className="flex flex-row">
           <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">{notationObj.voiceNumber}</p>
           <p className="px-3 py-2 text-slate-600">{staffDescription}</p>
-          <Button disabled={isGenerating.current} outline onClick={() => handleOpenControlPanel(notationObj.voiceNumber, notationObj.randomizerParams)}>
+          <Button disabled={isGenerating.current} outline extraStyling='flex flex-row' onClick={() => handleOpenControlPanel(notationObj.voiceNumber, notationObj.randomizerParams)}>
             <MdEdit className="text-2xl"/>Edit Parameters
           </Button>
           {notationObj.voiceNumber !== 1 &&
-            <Button disabled={isGenerating.current} outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+            <Button disabled={isGenerating.current} extraStyling='flex flex-row' outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
               <MdPlaylistRemove className="text-3xl" />Remove Voice
             </Button>
           }
