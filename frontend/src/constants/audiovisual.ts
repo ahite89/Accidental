@@ -5,9 +5,9 @@ export const notationOptions: AbcVisualParams = {
     wrap: { 
         minSpacing: 1.8,
         maxSpacing: 2.7,
-        preferredMeasuresPerLine: 4
+        preferredMeasuresPerLine: 12
     }, 
     viewportHorizontal: true,
-    staffwidth: 800,
-    scrollHorizontal: true 
+    staffwidth: 1600,
+    scrollHorizontal: true
 };
