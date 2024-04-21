@@ -8,6 +8,6 @@ export const notationOptions: AbcVisualParams = {
         preferredMeasuresPerLine: 12
     }, 
     viewportHorizontal: true,
-    staffwidth: 1600,
+    staffwidth: 1200,
     scrollHorizontal: true
 };

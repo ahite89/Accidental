@@ -117,6 +117,7 @@ export default function App() {
 
   // Add
   const addVoiceToSystem = (): void => {
+    console.log(voiceCount);
     if (voiceCount < 4) {
       notationData.current.push(
         {
@@ -269,11 +270,11 @@ export default function App() {
           <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">{notationObj.voiceNumber}</p>
           <p className="px-3 py-2 text-slate-600">{staffDescription}</p>
           <Button disabled={isGenerating.current} outline extraStyling='flex flex-row' onClick={() => handleOpenControlPanel(notationObj.voiceNumber, notationObj.randomizerParams)}>
-            <MdEdit className="text-2xl"/>Edit Parameters
+            <MdEdit className="text-2xl"/>
           </Button>
           {notationObj.voiceNumber !== 1 &&
-            <Button disabled={isGenerating.current} extraStyling='flex flex-row' outline onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
-              <MdPlaylistRemove className="text-3xl" />Remove Voice
+            <Button disabled={isGenerating.current} outline extraStyling='flex flex-row' onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+              <MdPlaylistRemove className="text-3xl" />
             </Button>
           }
           <div onClick={() => handleDownloadMIDI(notationObj)} 
@@ -298,7 +299,7 @@ export default function App() {
         </p>
       </header>
       <div className="p-8 bg-slate-100">
-      <div className="flex flex-row self-center">
+      <div className="flex flex-row justify-center">
           <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleStartGenerating}>
             Generate Notes
           </Button>
@@ -315,11 +316,13 @@ export default function App() {
         <div className="flex flex-col p-4">
           {staves}
         </div> 
-        <div>
-          <Button disabled={isGenerating.current} extraStyling="shadow border border-2 border-white" primary rounded onClick={addVoiceToSystem}>
+        <div className="flex flex-row justify-center">
+          {voiceNumber < 4 &&
+          <Button disabled={isGenerating.current} outline onClick={addVoiceToSystem}>
             Add Voice
           </Button>
-        </div>         
+          }
+        </div>
       </div>
       <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
           {openControlPanel && <ControlPanel 
