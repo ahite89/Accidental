@@ -1,7 +1,7 @@
-import { Keys } from "../constants/keys";
+import { MajorKeys, MinorKeys } from "../constants/keys";
 import { AccidentalTypes } from "../constants/notes";
 
 export interface KeyQuality {
-    key: Keys,
+    key: MajorKeys | MinorKeys,
     accidentalType: AccidentalTypes
 }
