@@ -19,7 +19,7 @@ export enum MajorKeys {
     GFlat = 'Gb',
     DFlat = 'Db',
     AFlat = 'Ab',
-    EFlat = 'A',
+    EFlat = 'Eb',
     BFlat = 'Bb',
     F = 'F',
 }
@@ -94,7 +94,6 @@ export const scaleKeyQualityMap: Record<Scales, KeyProps> = {
 
 // Move this elsewhere
 export const keyOptions = (scale: Scales): DropDownOption[] => {
-    debugger
     const keys = [];
     const keyProps = scaleKeyQualityMap[scale];
     const keyQuality = keyProps.quality === KeyQuality.Major ? MajorKeys : MinorKeys;

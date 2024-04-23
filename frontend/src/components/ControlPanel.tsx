@@ -10,7 +10,7 @@ import SelectableList from './parameters/SelectableList';
 import { ControlPanelProps } from "../interfaces/controlPanel";
 import { DurationProps } from '../interfaces/selectable';
 
-import { keyOptions, MajorKeys, MinorKeys } from "../constants/keys";
+import { MajorKeys, MinorKeys, keyOptions } from "../constants/keys";
 import { Scales, scaleOptions } from "../constants/scales";
 import { instrumentOptions, Instruments } from "../constants/instruments";
 import { pitchNumberMap } from "../constants/pitchRange";
@@ -36,8 +36,6 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
     const [scaleSelection, setScaleSelection] = useState<Scales>(randomizerParameters.scaleSelection);
     const handleScaleSelection = (scale: Scales): void => {
         setScaleSelection(scale);
-        // This should be where the keys are updated
-        // If scale has major quality, then get major keys (same for minor)
     };
     
     // Key

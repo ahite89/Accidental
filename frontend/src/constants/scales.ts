@@ -23,7 +23,6 @@ export enum Scales {
 export const DEFAULT_SCALE = Scales.Major;
 
 // Move this elsewhere
-debugger
 export const scaleOptions = (): DropDownOption[] => {
     const scales = [];
     for (let scale of Object.values(Scales)) {
