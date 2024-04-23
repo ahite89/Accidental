@@ -1,7 +1,5 @@
 import { DropDownOption } from "../interfaces/dropdown";
 
-export const DEFAULT_SCALE = 'Major';
-
 export enum Scales {
     Major = 'Major',
     NaturalMinor = 'Natural Minor',
@@ -22,7 +20,10 @@ export enum Scales {
     Diminished = 'Diminished'
 }
 
+export const DEFAULT_SCALE = Scales.Major;
+
 // Move this elsewhere
+debugger
 export const scaleOptions = (): DropDownOption[] => {
     const scales = [];
     for (let scale of Object.values(Scales)) {

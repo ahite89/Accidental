@@ -9,7 +9,7 @@ import { DEFAULT_VOLUME } from "../constants/volume";
 import { RandomizerParameters } from "../interfaces/controlPanel";
 
 // Voice Notation
-export const FIRST_FOUR_BARS = "xxxx|xxxx|xxxx|xxxx|xxxx|xxxx|xxxx|xxxx|\n";
+export const FIRST_EIGHT_BARS = "xxxx|xxxx|xxxx|xxxx|xxxx|xxxx|xxxx|xxxx|\n";
 
 // Clefs
 export enum Clefs {

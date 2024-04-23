@@ -18,7 +18,7 @@ import { fetchClefBasedOnPitchRange } from '../services/clefFetcher';
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { instrumentMap } from '../constants/instruments';
 import { MAX_BEATS_PER_BAR } from "../constants/durations";
-import { FIRST_FOUR_BARS, Clefs, DEFAULT_CLEF } from '../constants/voices';
+import { FIRST_EIGHT_BARS, Clefs, DEFAULT_CLEF } from '../constants/voices';
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
 import { pitchNumberMap } from '../constants/pitchRange';
@@ -32,7 +32,7 @@ export default function App() {
     {
       voiceNumber: 1,
       randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
-      notationString: `X:1\nK:C ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${DEFAULT_TEMPO}\n${FIRST_FOUR_BARS}`,
+      notationString: `X:1\nK:C ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${DEFAULT_TEMPO}\n${FIRST_EIGHT_BARS}`,
       playBackNotes: [],
       notesInBarCount: 0,
       instrumentMidiNumber: 2,
@@ -64,7 +64,7 @@ export default function App() {
     isGenerating.current = false;
     // Only reveal the download link for a staff if generator has run and stopped
     for (let i = 0; i < notationData.current.length; i++) {
-      if (!notationData.current[i].notationString.includes(FIRST_FOUR_BARS)) {
+      if (!notationData.current[i].notationString.includes(FIRST_EIGHT_BARS)) {
         handleDownloadMIDI(notationData.current[i]);
       }
     }
@@ -75,7 +75,7 @@ export default function App() {
     isGenerating.current = true;
     notationData.current.forEach(notationObj => {
       document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!.innerHTML = "";
-      notationObj.notationString = notationObj.notationString.replace(FIRST_FOUR_BARS, "");
+      notationObj.notationString = notationObj.notationString.replace(FIRST_EIGHT_BARS, "");
       randomizeAndRenderNotes(notationObj);
     });
   };
@@ -88,10 +88,10 @@ export default function App() {
 
       // SHOULD NOT REVERT TEMPO
       if (i === 0) {
-        notationData.current[i].notationString = `X:1\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${notationData.current[i].randomizerParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
+        notationData.current[i].notationString = `X:1\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${notationData.current[i].randomizerParams.tempoSelection}\n${FIRST_EIGHT_BARS}`;
       }
       else {
-        notationData.current[i].notationString = `X:${i + 1}\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\n${FIRST_FOUR_BARS}`
+        notationData.current[i].notationString = `X:${i + 1}\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\n${FIRST_EIGHT_BARS}`
       }
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
       // Hide download link if staves have been cleared
@@ -123,7 +123,7 @@ export default function App() {
         {
           voiceNumber: voiceCount + 1,
           randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
-          notationString: `X:${voiceCount + 1}\nK:C ${DEFAULT_CLEF}\nM:4/4\nL:1/8\n${FIRST_FOUR_BARS}`,
+          notationString: `X:${voiceCount + 1}\nK:C ${DEFAULT_CLEF}\nM:4/4\nL:1/8\n${FIRST_EIGHT_BARS}`,
           playBackNotes: [],
           notesInBarCount: 0,
           instrumentMidiNumber: 2,
@@ -219,7 +219,7 @@ export default function App() {
       
       targetVoice.clef = fetchClefBasedOnPitchRange(controlPanelParams.pitchRangeSelection);
       targetVoice.instrumentMidiNumber = instrumentMap[controlPanelParams.instrumentSelection];
-      targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${controlPanelParams.keySelection} ${targetVoice.clef}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_FOUR_BARS}`;
+      targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${controlPanelParams.keySelection} ${targetVoice.clef}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_EIGHT_BARS}`;
       targetVoice.randomizerParams = controlPanelParams;
       
       abcjs.renderAbc(`staff-${targetVoice.voiceNumber}`, targetVoice.notationString, AudioVisual.notationOptions);

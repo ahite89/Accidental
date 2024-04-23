@@ -3,8 +3,6 @@ import { AccidentalTypes } from "./notes";
 import { KeyProps, Key } from "../interfaces/key";
 import { Scales } from "./scales";
 
-export const DEFAULT_KEY = 'C';
-
 export enum KeyQuality {
     Major,
     Minor
@@ -40,6 +38,8 @@ export enum MinorKeys {
     G = 'G',
     D = 'D'
 }
+
+export const DEFAULT_KEY = MajorKeys.C;
 
 export const majorKeys: Key[] = [
     {name: MajorKeys.C, accidentalType: AccidentalTypes.Natural},
@@ -93,15 +93,14 @@ export const scaleKeyQualityMap: Record<Scales, KeyProps> = {
 };
 
 // Move this elsewhere
-// This should take in whether the scale is major or minor and then choose the right enum
-export const keyOptions = (scaleQuality: string): DropDownOption[] => {
+export const keyOptions = (scale: Scales): DropDownOption[] => {
+    debugger
     const keys = [];
-    if (scaleQuality === 'Major') {
-        for (let key of Object.values(MajorKeys)) {
-            keys.push({ label: key, value: key })
-        }
+    const keyProps = scaleKeyQualityMap[scale];
+    const keyQuality = keyProps.quality === KeyQuality.Major ? MajorKeys : MinorKeys;
+    for (let key of Object.values(keyQuality)) {
+        keys.push({ label: key, value: key })
     }
-    else {}
 
     return keys;
 };

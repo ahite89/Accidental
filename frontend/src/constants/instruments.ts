@@ -1,6 +1,6 @@
 import { DropDownOption } from "../interfaces/dropdown";
 
-enum Instruments {
+export enum Instruments {
     GrandPiano = 'Grand Piano',
     ElectricPiano = 'Electric Piano',
     Organ = 'Organ',

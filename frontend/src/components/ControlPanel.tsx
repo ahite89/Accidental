@@ -10,9 +10,9 @@ import SelectableList from './parameters/SelectableList';
 import { ControlPanelProps } from "../interfaces/controlPanel";
 import { DurationProps } from '../interfaces/selectable';
 
-import { keyOptions } from "../constants/keys";
-import { scaleOptions } from "../constants/scales";
-import { instrumentOptions } from "../constants/instruments";
+import { keyOptions, MajorKeys, MinorKeys } from "../constants/keys";
+import { Scales, scaleOptions } from "../constants/scales";
+import { instrumentOptions, Instruments } from "../constants/instruments";
 import { pitchNumberMap } from "../constants/pitchRange";
 import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../constants/pitchRange";
 import { MIN_VOLUME, MAX_VOLUME, VOLUME_INTERVAL } from "../constants/volume";
@@ -33,22 +33,22 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
     };
 
     // Scale
-    const [scaleSelection, setScaleSelection] = useState<string>(randomizerParameters.scaleSelection);
-    const handleScaleSelection = (scale: string): void => {
+    const [scaleSelection, setScaleSelection] = useState<Scales>(randomizerParameters.scaleSelection);
+    const handleScaleSelection = (scale: Scales): void => {
         setScaleSelection(scale);
         // This should be where the keys are updated
         // If scale has major quality, then get major keys (same for minor)
     };
     
     // Key
-    const [keySelection, setKeySelection] = useState<string>(randomizerParameters.keySelection);
-    const handleKeySelection = (key: string): void => {
+    const [keySelection, setKeySelection] = useState<MajorKeys | MinorKeys>(randomizerParameters.keySelection);
+    const handleKeySelection = (key: MajorKeys | MinorKeys): void => {
         setKeySelection(key);
     };
 
     // Instrument
-    const [instrumentSelection, setInstrumentSelection] = useState<string>(randomizerParameters.instrumentSelection);
-    const handleInstrumentSelection = (instrument: string): void => {
+    const [instrumentSelection, setInstrumentSelection] = useState<Instruments>(randomizerParameters.instrumentSelection);
+    const handleInstrumentSelection = (instrument: Instruments): void => {
         setInstrumentSelection(instrument);
     };
 

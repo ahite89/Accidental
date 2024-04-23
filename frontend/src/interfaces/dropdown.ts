@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 export interface DropDownOptions {
     options: DropDownOption[],
     value: string | null,
-    onChange: (value: string) => void,
+    onChange: (value: any) => void,
     children?: ReactNode
 }
 

@@ -1,3 +1,6 @@
+import { Instruments } from "../constants/instruments";
+import { MajorKeys, MinorKeys } from "../constants/keys";
+import { Scales } from "../constants/scales";
 import { DurationProps } from "./selectable";
 
 export interface ControlPanelProps {
@@ -8,10 +11,10 @@ export interface ControlPanelProps {
 }
 
 export interface RandomizerParameters {
-    keySelection: string,
-    scaleSelection: string,
+    keySelection: MajorKeys | MinorKeys,
+    scaleSelection: Scales,
     pitchRangeSelection: number[],
-    instrumentSelection: string,
+    instrumentSelection: Instruments,
     tempoSelection: number,
     volumeSelection: number,
     durationSelection: DurationProps[]
