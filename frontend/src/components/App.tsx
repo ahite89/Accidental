@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import abcjs, { TuneObjectArray } from "abcjs";
 import Modal from 'react-modal';
-import { MdEdit, MdPlaylistRemove } from 'react-icons/md';
+import { MdPlaylistRemove } from 'react-icons/md';
 
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
@@ -269,9 +269,6 @@ export default function App() {
         <div className="flex flex-row">
           <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">{notationObj.voiceNumber}</p>
           <p className="px-3 py-2 text-slate-600">{staffDescription}</p>
-          <Button disabled={isGenerating.current} outline extraStyling='flex flex-row' onClick={() => handleOpenControlPanel(notationObj.voiceNumber, notationObj.randomizerParams)}>
-            <MdEdit className="text-2xl"/>
-          </Button>
           {notationObj.voiceNumber !== 1 &&
             <Button disabled={isGenerating.current} outline extraStyling='flex flex-row' onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
               <MdPlaylistRemove className="text-3xl" />
@@ -283,7 +280,12 @@ export default function App() {
           </div>
         </div>
         <div className="flex flex-row">
-          <Staff voiceNumber={notationObj.voiceNumber} />
+          <Staff 
+            voiceNumber={notationObj.voiceNumber}
+            randomizerParams={notationObj.randomizerParams}
+            isGenerating={isGenerating.current}
+            handleOpenControlPanel={handleOpenControlPanel}
+          />
         </div>          
       </div>
     );
@@ -300,13 +302,13 @@ export default function App() {
       </header>
       <div className="p-8 bg-slate-100">
       <div className="flex flex-row justify-center">
-          <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleStartGenerating}>
+          <Button disabled={isGenerating.current} extraStyling="mr-4" primary rounded onClick={handleStartGenerating}>
             Generate Notes
           </Button>
-          <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleStopGenerating}>
+          <Button disabled={isGenerating.current} extraStyling="mr-4" primary rounded onClick={handleStopGenerating}>
             Stop
           </Button>
-          <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handleClearStaff}>
+          <Button disabled={isGenerating.current} extraStyling="mr-4" primary rounded onClick={handleClearStaff}>
             Clear Staves
           </Button>
           {/* <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>

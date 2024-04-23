@@ -1,9 +1,11 @@
 import { StaffProps } from "../interfaces/staff";
 
-export default function Staff({voiceNumber}: StaffProps) {
+export default function Staff({voiceNumber, randomizerParams, isGenerating, handleOpenControlPanel}: StaffProps) {
     return (
-      <div>
-        <div className="bg-white shadow" id={`staff-${voiceNumber}`}></div>
+      <div className="cursor-pointer" onClick={() => handleOpenControlPanel(voiceNumber, randomizerParams)}>
+        <div 
+          className="bg-white shadow hover:border hover: border-cyan-500" id={`staff-${voiceNumber}`}>
+        </div>
       </div>
     );
 }
