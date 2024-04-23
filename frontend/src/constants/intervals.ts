@@ -1,4 +1,6 @@
-export const scaleIntervalsArrayMap : Record<string, number[]> = {
+import { Scales } from "./scales";
+
+export const scaleIntervalsArrayMap : Record<Scales, number[]> = {
     'Major': [2, 2, 1, 2, 2, 2, 1],
     'Natural Minor': [2, 1, 2, 2, 1, 2, 2],
     'Harmonic Minor': [2, 1, 2, 2, 1, 3, 1],
