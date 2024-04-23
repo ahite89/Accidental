@@ -8,5 +8,6 @@ export interface KeyProps {
 
 export interface Key {
     name: MajorKeys | MinorKeys,
-    accidentalType: AccidentalTypes
+    accidentalType: AccidentalTypes,
+    relativeMajorKey?: MajorKeys
 }

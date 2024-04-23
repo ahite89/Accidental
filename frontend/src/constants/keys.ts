@@ -32,6 +32,7 @@ export enum MinorKeys {
     CSharp = 'C#',
     GSharp = 'G#',
     DSharp = 'D#',
+    EFlat = 'Eb',
     BFlat = 'Bb',
     F = 'F',
     C = 'C',
@@ -58,18 +59,19 @@ export const majorKeys: Key[] = [
 ];
 
 export const minorKeys: Key[] = [
-    {name: MinorKeys.A, accidentalType: AccidentalTypes.Natural},
-    {name: MinorKeys.E, accidentalType: AccidentalTypes.Sharp},
-    {name: MinorKeys.B, accidentalType: AccidentalTypes.Sharp},
-    {name: MinorKeys.FSharp, accidentalType: AccidentalTypes.Sharp},
-    {name: MinorKeys.CSharp, accidentalType: AccidentalTypes.Sharp},
-    {name: MinorKeys.GSharp, accidentalType: AccidentalTypes.Sharp},
-    {name: MinorKeys.DSharp, accidentalType: AccidentalTypes.Sharp},
-    {name: MinorKeys.BFlat, accidentalType: AccidentalTypes.Flat},
-    {name: MinorKeys.F, accidentalType: AccidentalTypes.Flat},
-    {name: MinorKeys.C, accidentalType: AccidentalTypes.Flat},
-    {name: MinorKeys.G, accidentalType: AccidentalTypes.Flat},
-    {name: MinorKeys.D, accidentalType: AccidentalTypes.Flat},
+    {name: MinorKeys.A, accidentalType: AccidentalTypes.Natural, relativeMajorKey: MajorKeys.C},
+    {name: MinorKeys.E, accidentalType: AccidentalTypes.Sharp, relativeMajorKey: MajorKeys.G},
+    {name: MinorKeys.B, accidentalType: AccidentalTypes.Sharp, relativeMajorKey: MajorKeys.D},
+    {name: MinorKeys.FSharp, accidentalType: AccidentalTypes.Sharp, relativeMajorKey: MajorKeys.A},
+    {name: MinorKeys.CSharp, accidentalType: AccidentalTypes.Sharp, relativeMajorKey: MajorKeys.E},
+    {name: MinorKeys.GSharp, accidentalType: AccidentalTypes.Sharp, relativeMajorKey: MajorKeys.B},
+    {name: MinorKeys.DSharp, accidentalType: AccidentalTypes.Sharp, relativeMajorKey: MajorKeys.FSharp},
+    {name: MinorKeys.EFlat, accidentalType: AccidentalTypes.Flat, relativeMajorKey: MajorKeys.GFlat},
+    {name: MinorKeys.BFlat, accidentalType: AccidentalTypes.Flat, relativeMajorKey: MajorKeys.DFlat},
+    {name: MinorKeys.F, accidentalType: AccidentalTypes.Flat, relativeMajorKey: MajorKeys.AFlat},
+    {name: MinorKeys.C, accidentalType: AccidentalTypes.Flat, relativeMajorKey: MajorKeys.EFlat},
+    {name: MinorKeys.G, accidentalType: AccidentalTypes.Flat, relativeMajorKey: MajorKeys.BFlat},
+    {name: MinorKeys.D, accidentalType: AccidentalTypes.Flat, relativeMajorKey: MajorKeys.F},
 ];
 
 export const scaleKeyQualityMap: Record<Scales, KeyProps> = {

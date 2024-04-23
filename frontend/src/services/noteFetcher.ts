@@ -26,7 +26,6 @@ export const fetchValidNotes = (randomizerParams: RandomizerParameters): NoteFor
 const getNotesByScaleIntervals = (randomizerParams: RandomizerParameters): NoteForScaleProps[] => {
 
     // Start by filtering out the notes with undesired accidentals (based on key and scale)
-    debugger
     const keyProps = scaleKeyQualityMap[randomizerParams.scaleSelection];
     const keyObject = keyProps.keys.find(k => k.name === randomizerParams.keySelection)!;
     const filteredNotesAndPitchNumbers = allNotesAndPitchNumbers.filter((noteObject) => {
