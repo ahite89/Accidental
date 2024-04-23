@@ -1,26 +1,14 @@
 import { DropDownOption } from "../interfaces/dropdown";
 import { AccidentalTypes } from "./notes";
-import { KeyQuality } from "../interfaces/key";
+import { KeyProps, Key } from "../interfaces/key";
+import { Scales } from "./scales";
 
 export const DEFAULT_KEY = 'C';
 
-// 'Major': [2, 2, 1, 2, 2, 2, 1],      = Major Key
-// 'Natural Minor': [2, 1, 2, 2, 1, 2, 2],      = Minor Key
-// 'Harmonic Minor': [2, 1, 2, 2, 1, 3, 1],     = Minor Key
-// 'Melodic Minor': [2, 1, 2, 2, 2, 2, 1],      = Minor Key
-// 'Dorian': [2, 1, 2, 2, 2, 1, 2],     = Major Key
-// 'Phrygian': [1, 2, 2, 2, 1, 2, 2],   = Major Key
-// 'Lydian': [2, 2, 2, 1, 2, 2, 1],     = Major Key
-// 'Mixolydian': [2, 2, 1, 2, 2, 1, 2], = Major Key
-// 'Locrian': [1, 2, 2, 1, 2, 2, 2],    = Major Key
-// 'Chromatic': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],   = Sharp/Flat? Major?
-// 'Whole Tone': [2, 2, 2, 2, 2, 2],    = Major Key
-// 'Major Pentatonic': [2, 2, 3, 2, 3],     = Major Key
-// 'Minor Pentatonic': [3, 2, 2, 3, 2],     = Minor Key
-// 'Major Blues': [2, 1, 1, 3, 2, 3],       = Major Key
-// 'Minor Blues': [3, 2, 1, 1, 3, 2],       = Minor Key
-// 'Augmented': [3, 1, 3, 1, 3, 1],         = Major Key
-// 'Diminished': [2, 1, 2, 1, 2, 1, 2, 1]   = Minor Key
+export enum KeyQuality {
+    Major,
+    Minor
+}
 
 export enum MajorKeys {
     C = 'C',
@@ -53,137 +41,67 @@ export enum MinorKeys {
     D = 'D'
 }
 
-// Why do I need the key here? Don't I just need major/minor?
-export const scaleKeyQualityMap: Record<string, KeyQuality> = {
-    'CMajor': {key: MajorKeys.C, accidentalType: AccidentalTypes.Natural},
-    'DbMajor': {key: MajorKeys.DFlat, accidentalType: AccidentalTypes.Flat},
-    'DMajor': {key: MajorKeys.D, accidentalType: AccidentalTypes.Natural},
-    'EbMajor': {key: MajorKeys.EFlat, accidentalType: AccidentalTypes.Natural},
-    'EMajor': {key: MajorKeys.E, accidentalType: AccidentalTypes.Natural},
-    'FMajor': {key: MajorKeys.F, accidentalType: AccidentalTypes.Natural},
-    'F#Major': {key: MajorKeys.FSharp, accidentalType: AccidentalTypes.Natural},
-    'GbMajor': {key: MajorKeys.GFlat, accidentalType: AccidentalTypes.Natural},
-    'GMajor': {key: MajorKeys.G, accidentalType: AccidentalTypes.Natural},
-    'AbMajor': {key: MajorKeys.AFlat, accidentalType: AccidentalTypes.Natural},
-    'AMajor': {key: MajorKeys.A, accidentalType: AccidentalTypes.Natural},
-    'BbMajor': {key: MajorKeys.BFlat, accidentalType: AccidentalTypes.Natural},
-    'BMajor': {key: MajorKeys.B, accidentalType: AccidentalTypes.Natural},
-    
-    'CMinor': {key: MinorKeys.C, accidentalType: AccidentalTypes.Natural},
-    'C#Minor': {key: MinorKeys.CSharp, accidentalType: AccidentalTypes.Natural},
-    'DMinor': {key: MinorKeys.D, accidentalType: AccidentalTypes.Natural},
-    'EMinor': {key: MinorKeys.E, accidentalType: AccidentalTypes.Natural},
-    'FMinor': {key: MinorKeys.F, accidentalType: AccidentalTypes.Natural},
-    'F#Minor': {key: MinorKeys.FSharp, accidentalType: AccidentalTypes.Natural},
-    'GMinor': {key: MinorKeys.G, accidentalType: AccidentalTypes.Natural},
-    'G#Minor': {key: MinorKeys.GSharp, accidentalType: AccidentalTypes.Natural},
-    'AMinor': {key: MinorKeys.A, accidentalType: AccidentalTypes.Natural},
-    'BbMinor': {key: MinorKeys.BFlat, accidentalType: AccidentalTypes.Natural},
-    'BMinor': {key: MinorKeys.B, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
-    // 'CMajor': {key: Keys.C, accidentalType: AccidentalTypes.Natural},
+export const majorKeys: Key[] = [
+    {name: MajorKeys.C, accidentalType: AccidentalTypes.Natural},
+    {name: MajorKeys.G, accidentalType: AccidentalTypes.Sharp},
+    {name: MajorKeys.D, accidentalType: AccidentalTypes.Sharp},
+    {name: MajorKeys.A, accidentalType: AccidentalTypes.Sharp},
+    {name: MajorKeys.E, accidentalType: AccidentalTypes.Sharp},
+    {name: MajorKeys.B, accidentalType: AccidentalTypes.Sharp},
+    {name: MajorKeys.FSharp, accidentalType: AccidentalTypes.Sharp},
+    {name: MajorKeys.GFlat, accidentalType: AccidentalTypes.Flat},
+    {name: MajorKeys.DFlat, accidentalType: AccidentalTypes.Flat},
+    {name: MajorKeys.AFlat, accidentalType: AccidentalTypes.Flat},
+    {name: MajorKeys.EFlat, accidentalType: AccidentalTypes.Flat},
+    {name: MajorKeys.BFlat, accidentalType: AccidentalTypes.Flat},
+    {name: MajorKeys.F, accidentalType: AccidentalTypes.Flat}
+];
+
+export const minorKeys: Key[] = [
+    {name: MinorKeys.A, accidentalType: AccidentalTypes.Natural},
+    {name: MinorKeys.E, accidentalType: AccidentalTypes.Sharp},
+    {name: MinorKeys.B, accidentalType: AccidentalTypes.Sharp},
+    {name: MinorKeys.FSharp, accidentalType: AccidentalTypes.Sharp},
+    {name: MinorKeys.CSharp, accidentalType: AccidentalTypes.Sharp},
+    {name: MinorKeys.GSharp, accidentalType: AccidentalTypes.Sharp},
+    {name: MinorKeys.DSharp, accidentalType: AccidentalTypes.Sharp},
+    {name: MinorKeys.BFlat, accidentalType: AccidentalTypes.Flat},
+    {name: MinorKeys.F, accidentalType: AccidentalTypes.Flat},
+    {name: MinorKeys.C, accidentalType: AccidentalTypes.Flat},
+    {name: MinorKeys.G, accidentalType: AccidentalTypes.Flat},
+    {name: MinorKeys.D, accidentalType: AccidentalTypes.Flat},
+];
+
+export const scaleKeyQualityMap: Record<Scales, KeyProps> = {
+    'Major': {quality: KeyQuality.Major, keys: majorKeys},
+    'Natural Minor': {quality: KeyQuality.Minor, keys: minorKeys},
+    'Harmonic Minor': {quality: KeyQuality.Minor, keys: minorKeys},
+    'Melodic Minor': {quality: KeyQuality.Minor, keys: minorKeys},
+    'Dorian': {quality: KeyQuality.Major, keys: majorKeys},
+    'Phrygian': {quality: KeyQuality.Major, keys: majorKeys},
+    'Lydian': {quality: KeyQuality.Major, keys: majorKeys},
+    'Mixolydian': {quality: KeyQuality.Major, keys: majorKeys},
+    'Locrian': {quality: KeyQuality.Major, keys: majorKeys},
+    'Chromatic': {quality: KeyQuality.Major, keys: majorKeys},
+    'Whole Tone': {quality: KeyQuality.Major, keys: majorKeys},
+    'Major Pentatonic': {quality: KeyQuality.Major, keys: majorKeys},
+    'Minor Pentatonic': {quality: KeyQuality.Minor, keys: minorKeys},
+    'Major Blues': {quality: KeyQuality.Major, keys: majorKeys},
+    'Minor Blues': {quality: KeyQuality.Minor, keys: minorKeys},
+    'Augmented': {quality: KeyQuality.Major, keys: majorKeys},
+    'Diminished': {quality: KeyQuality.Minor, keys: minorKeys}
 };
 
+// Move this elsewhere
 // This should take in whether the scale is major or minor and then choose the right enum
-export const keyOptions = (): DropDownOption[] => {
+export const keyOptions = (scaleQuality: string): DropDownOption[] => {
     const keys = [];
-    for (let key of Object.values(MajorKeys)) {
-        keys.push({ label: key, value: key })
+    if (scaleQuality === 'Major') {
+        for (let key of Object.values(MajorKeys)) {
+            keys.push({ label: key, value: key })
+        }
     }
+    else {}
+
     return keys;
 };

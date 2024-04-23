@@ -1,7 +1,12 @@
-import { MajorKeys, MinorKeys } from "../constants/keys";
+import { KeyQuality, MajorKeys, MinorKeys } from "../constants/keys";
 import { AccidentalTypes } from "../constants/notes";
 
-export interface KeyQuality {
-    key: MajorKeys | MinorKeys,
+export interface KeyProps {
+    quality: KeyQuality,
+    keys: Key[]
+}
+
+export interface Key {
+    name: MajorKeys | MinorKeys,
     accidentalType: AccidentalTypes
 }

@@ -105,4 +105,4 @@ export const allNotesAndPitchNumbers: NoteForScaleProps[] = [
     {noteName: "D#", abcName: "^d''", pitchNumber: 99, accidentalType: AccidentalTypes.Sharp},
     {noteName: "Eb", abcName: "_e''", pitchNumber: 99, accidentalType: AccidentalTypes.Flat},
     {noteName: "E", abcName: "e''", pitchNumber: 100, accidentalType: AccidentalTypes.Natural}
-]
+];

@@ -31,17 +31,19 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
             durationSelection
         }, voiceNumber)
     };
-    
-    // Key
-    const [keySelection, setKeySelection] = useState<string>(randomizerParameters.keySelection);
-    const handleKeySelection = (key: string): void => {
-        setKeySelection(key);
-    };
 
     // Scale
     const [scaleSelection, setScaleSelection] = useState<string>(randomizerParameters.scaleSelection);
     const handleScaleSelection = (scale: string): void => {
         setScaleSelection(scale);
+        // This should be where the keys are updated
+        // If scale has major quality, then get major keys (same for minor)
+    };
+    
+    // Key
+    const [keySelection, setKeySelection] = useState<string>(randomizerParameters.keySelection);
+    const handleKeySelection = (key: string): void => {
+        setKeySelection(key);
     };
 
     // Instrument
@@ -96,8 +98,8 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
     return (
         <div className={classes}>
             <div className="flex flex-row mb-8">
-                <DropDown options={keyOptions()} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
                 <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
+                <DropDown options={keyOptions(scaleSelection)} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
                 <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
             </div>
             <div className="flex flex-col items-center mb-8">
