@@ -218,6 +218,7 @@ export default function App() {
       // Set valid notes for randomizing based on control panel params (assuming they've changed)
       targetVoice.validNotesForRandomizing = fetchValidNotes(controlPanelParams);
       
+      // Get clef and instrument
       targetVoice.clef = fetchClefBasedOnPitchRange(controlPanelParams.pitchRangeSelection);
       targetVoice.instrumentMidiNumber = instrumentMap[controlPanelParams.instrumentSelection];
 
@@ -225,6 +226,7 @@ export default function App() {
       const key = scaleKeyQualityMap[controlPanelParams.scaleSelection].keys.find(k => k.name === controlPanelParams.keySelection)!;
       const keySignature = key.relativeMajorKey ? key.relativeMajorKey : controlPanelParams.keySelection;
 
+      // Update notation string and randomizer parameters
       targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${keySignature} ${targetVoice.clef}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_EIGHT_BARS}`;
       targetVoice.randomizerParams = controlPanelParams;
       
