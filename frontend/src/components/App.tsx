@@ -44,7 +44,8 @@ export default function App() {
 
   // NOTE RENDERING BUTTONS //
 
-  const isGenerating = useRef<boolean>(false);
+  const isGenerating = useRef<boolean>(false);  // for stopping/starting
+  const [generating, setGenerating] = useState<boolean>(false); // for disabling buttons
 
   // MIDI Download
   const handleDownloadMIDI = (notationObj: NotationData): void => {
@@ -63,6 +64,7 @@ export default function App() {
   // Stop
   const handleStopGenerating = () => {
     isGenerating.current = false;
+    setGenerating(false);
     // Only reveal the download link for a staff if generator has run and stopped
     for (let i = 0; i < notationData.current.length; i++) {
       if (!notationData.current[i].notationString.includes(FIRST_EIGHT_BARS)) {
@@ -74,6 +76,7 @@ export default function App() {
   // Start
   const handleStartGenerating = async (): Promise<void> => {
     isGenerating.current = true;
+    setGenerating(true);
     notationData.current.forEach(notationObj => {
       document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!.innerHTML = "";
       notationObj.notationString = notationObj.notationString.replace(FIRST_EIGHT_BARS, "");
@@ -156,7 +159,7 @@ export default function App() {
     for (let i = 1; i < voiceCount + 1; i++) {
       staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
     }
-  }, [voiceCount, isGenerating.current]);
+  }, [voiceCount]);
 
   // NOTE RENDERING //
 
@@ -241,10 +244,12 @@ export default function App() {
   const [voiceNumber, setVoiceNumber] = useState<number>(1);
   const [openControlPanel, setOpenControlPanel] = useState<boolean>(false);
 
-  const handleOpenControlPanel = (voiceNumber: number, randomizerParams: RandomizerParameters): void => {
-    setRandomizerParameters(randomizerParams);
-    setVoiceNumber(voiceNumber);
-    setOpenControlPanel(true);
+  const handleOpenControlPanel = (voiceNumber: number, randomizerParams: RandomizerParameters, generating: boolean): void => {
+    if (!generating) {
+      setRandomizerParameters(randomizerParams);
+      setVoiceNumber(voiceNumber);
+      setOpenControlPanel(true);
+    }
   };
 
   const handleCloseControlPanel = () => {
@@ -278,7 +283,7 @@ export default function App() {
           <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">{notationObj.voiceNumber}</p>
           <p className="px-3 py-2 text-slate-600">{staffDescription}</p>
           {notationObj.voiceNumber !== 1 &&
-            <Button disabled={isGenerating.current} outline extraStyling='flex flex-row' onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+            <Button disabled={generating} outline extraStyling='flex flex-row' onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
               <MdPlaylistRemove className="text-3xl" />
             </Button>
           }
@@ -291,7 +296,7 @@ export default function App() {
           <Staff 
             voiceNumber={notationObj.voiceNumber}
             randomizerParams={notationObj.randomizerParams}
-            isGenerating={isGenerating.current}
+            generating={generating}
             handleOpenControlPanel={handleOpenControlPanel}
           />
         </div>          
@@ -310,13 +315,13 @@ export default function App() {
       </header>
       <div className="p-8 bg-slate-100">
       <div className="flex flex-row justify-center">
-          <Button disabled={isGenerating.current} extraStyling="mr-4" primary rounded onClick={handleStartGenerating}>
+          <Button disabled={generating} extraStyling="mr-4" primary rounded onClick={handleStartGenerating}>
             Generate Notes
           </Button>
-          <Button disabled={isGenerating.current} extraStyling="mr-4" primary rounded onClick={handleStopGenerating}>
+          <Button disabled={!generating} extraStyling="mr-4" primary rounded onClick={handleStopGenerating}>
             Stop
           </Button>
-          <Button disabled={isGenerating.current} extraStyling="mr-4" primary rounded onClick={handleClearStaff}>
+          <Button disabled={generating} extraStyling="mr-4" primary rounded onClick={handleClearStaff}>
             Clear Staves
           </Button>
           {/* <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>
@@ -328,7 +333,7 @@ export default function App() {
         </div> 
         <div className="flex flex-row justify-center">
           {voiceNumber < 4 &&
-          <Button disabled={isGenerating.current} outline onClick={addVoiceToSystem}>
+          <Button disabled={generating} outline onClick={addVoiceToSystem}>
             Add Voice
           </Button>
           }
