@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import abcjs, { TuneObjectArray } from "abcjs";
 import Modal from 'react-modal';
-import { MdPlaylistRemove } from 'react-icons/md';
+import { MdPlaylistRemove, MdInfoOutline, MdOutlinePlaylistAdd } from 'react-icons/md';
 
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
@@ -280,11 +280,11 @@ export default function App() {
     return (
       <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">
         <div className="flex flex-row">
-          <p className="border border-cyan-500 bg-cyan-500 px-3 py-2 text-white">{notationObj.voiceNumber}</p>
-          <p className="px-3 py-2 text-slate-600">{staffDescription}</p>
+          <p className="border border-cyan-500 bg-cyan-500 px-5 py-4 text-white text-2xl self-center">{notationObj.voiceNumber}</p>
+          <p className="px-3 py-2 text-slate-600 text-xl self-center">{staffDescription}</p>
           {notationObj.voiceNumber !== 1 &&
-            <Button disabled={generating} outline extraStyling='flex flex-row' onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
-              <MdPlaylistRemove className="text-3xl" />
+            <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+              <MdPlaylistRemove className="text-4xl" />
             </Button>
           }
           <div onClick={() => handleDownloadMIDI(notationObj)} 
@@ -309,19 +309,20 @@ export default function App() {
   return (
     <div>
       <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-between px-10 py-4">
-        <p className="text-white text-xl border-white border-2 border-solid p-2 rounded">
+        <p className="text-white text-3xl border-white border-2 border-solid p-2 rounded">
           &#9838;ccidental
         </p>
+        <MdInfoOutline className="text-white text-4xl self-center" />
       </header>
       <div className="p-8 bg-slate-100">
-      <div className="flex flex-row justify-center">
-          <Button disabled={generating} extraStyling="mr-4" primary rounded onClick={handleStartGenerating}>
+      <div className="flex flex-row justify-center my-4">
+          <Button disabled={generating} extraStyling="mr-4 text-xl" primary rounded onClick={handleStartGenerating}>
             Generate Notes
           </Button>
-          <Button disabled={!generating} extraStyling="mr-4" primary rounded onClick={handleStopGenerating}>
+          <Button disabled={!generating} extraStyling="mr-4 text-xl" primary rounded onClick={handleStopGenerating}>
             Stop
           </Button>
-          <Button disabled={generating} extraStyling="mr-4" primary rounded onClick={handleClearStaff}>
+          <Button disabled={generating} extraStyling="mr-4 text-xl" primary rounded onClick={handleClearStaff}>
             Clear Staves
           </Button>
           {/* <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>
@@ -333,8 +334,8 @@ export default function App() {
         </div> 
         <div className="flex flex-row justify-center">
           {voiceNumber < 4 &&
-          <Button disabled={generating} outline onClick={addVoiceToSystem}>
-            Add Voice
+          <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={addVoiceToSystem}>
+            <MdOutlinePlaylistAdd className="text-4xl" />
           </Button>
           }
         </div>
