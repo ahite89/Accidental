@@ -279,20 +279,22 @@ export default function App() {
 
     return (
       <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">
-        <div className="flex flex-row">
-          <p className="border border-cyan-500 bg-cyan-500 px-5 py-4 text-white text-2xl self-center">{notationObj.voiceNumber}</p>
-          <p className="px-3 py-2 text-slate-600 text-xl self-center">{staffDescription}</p>
-          {notationObj.voiceNumber !== 1 &&
-            <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
-              <MdPlaylistRemove className="text-4xl" />
-            </Button>
-          }
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-row">
+            <p className="border border-cyan-500 bg-cyan-500 px-5 py-4 text-white text-2xl self-center">{notationObj.voiceNumber}</p>
+            <p className="px-3 py-2 text-slate-600 text-xl self-center">{staffDescription}</p>
+            {notationObj.voiceNumber !== 1 && !generating &&
+              <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+                <MdPlaylistRemove className="text-4xl" />
+              </Button>
+            }
+          </div>
           <div onClick={() => handleDownloadMIDI(notationObj)} 
                id={`midi-link-` + notationObj.voiceNumber.toString()} 
-               className="px-3 py-1.5 text-slate-600 self-center">
+               className="px-3 py-1.5 text-xl text-blue-500 self-center justify-end">
           </div>
         </div>
-        <div className="flex flex-row">
+        <div>
           <Staff 
             voiceNumber={notationObj.voiceNumber}
             randomizerParams={notationObj.randomizerParams}
@@ -333,7 +335,7 @@ export default function App() {
           {staves}
         </div> 
         <div className="flex flex-row justify-center">
-          {voiceNumber < 4 &&
+          {voiceNumber < 4 && !generating &&
           <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={addVoiceToSystem}>
             <MdOutlinePlaylistAdd className="text-4xl" />
           </Button>
