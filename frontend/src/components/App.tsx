@@ -6,6 +6,7 @@ import { MdPlaylistRemove, MdInfoOutline, MdOutlinePlaylistAdd } from 'react-ico
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
 import Button from './parameters/Button';
+import InfoBox from './InfoBox';
 
 import { NoteProps } from '../interfaces/note';
 import { RandomizerParameters } from '../interfaces/controlPanel';
@@ -267,6 +268,14 @@ export default function App() {
     }
   };
 
+  // INFO BOX //
+
+  const [openInfoBox, setOpenInfoBox] = useState<boolean>(false);
+
+  const handleCloseInfoBox = () => {
+    setOpenInfoBox(false);
+  };
+
   // STAVES //
 
   const staves = notationData.current.map((notationObj) => {
@@ -311,21 +320,23 @@ export default function App() {
   return (
     <div>
       <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-between px-10 py-4">
-        <p className="text-white text-3xl border-white border-2 border-solid p-2 rounded">
+        <p className="text-white text-2xl border-white border-2 border-solid p-2 rounded self-center">
           &#9838;ccidental
         </p>
-        <MdInfoOutline className="text-white text-4xl self-center" />
+        <Button onClick={() => setOpenInfoBox(true)}>
+          <MdInfoOutline className="text-white text-4xl self-center" />
+        </Button>
       </header>
       <div className="p-8 bg-slate-100">
       <div className="flex flex-row justify-center my-4">
           <Button disabled={generating} extraStyling="mr-4 text-xl" primary rounded onClick={handleStartGenerating}>
-            Generate Notes
+            Start
           </Button>
           <Button disabled={!generating} extraStyling="mr-4 text-xl" primary rounded onClick={handleStopGenerating}>
             Stop
           </Button>
           <Button disabled={generating} extraStyling="mr-4 text-xl" primary rounded onClick={handleClearStaff}>
-            Clear Staves
+            Clear
           </Button>
           {/* <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>
             Play
@@ -349,6 +360,11 @@ export default function App() {
             randomizerParameters={randomizerParameters}
             handleCloseControlPanel={handleCloseControlPanel}
           />}
+      </Modal>
+      <Modal isOpen={openInfoBox} style={modalStyling} ariaHideApp={false}>
+        {openInfoBox && 
+          <InfoBox handleCloseInfoBox={handleCloseInfoBox} />
+        }
       </Modal>
     </div>
   );
