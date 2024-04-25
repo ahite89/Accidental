@@ -273,8 +273,17 @@ export default function App() {
   const [openInfoBox, setOpenInfoBox] = useState<boolean>(false);
 
   const handleCloseInfoBox = () => {
+    localStorage.setItem("seenDescription", "true");
     setOpenInfoBox(false);
   };
+
+  useEffect(() => {
+    debugger
+    const hasSeenDescription = localStorage.getItem("seenDescription");
+    if (hasSeenDescription === null) {
+      setOpenInfoBox(true);
+    }
+  }, []);
 
   // STAVES //
 
