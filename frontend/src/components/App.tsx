@@ -264,7 +264,7 @@ export default function App() {
       right: 'auto',
       bottom: 'auto',
       marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
+      transform: 'translate(-50%, -50%)'
     }
   };
 
@@ -277,8 +277,8 @@ export default function App() {
     setOpenInfoBox(false);
   };
 
+  // Show app description modal the first time a user loads the page 
   useEffect(() => {
-    debugger
     const hasSeenDescription = localStorage.getItem("seenDescription");
     if (hasSeenDescription === null) {
       setOpenInfoBox(true);

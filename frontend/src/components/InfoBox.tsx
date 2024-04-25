@@ -1,22 +1,35 @@
 import { InfoBoxProps } from "../interfaces/infoBox";
 import Button from "../components/parameters/Button"
+import { MdPlaylistRemove, MdOutlinePlaylistAdd } from 'react-icons/md';
 
 export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
 
-    const appDescription = `This application takes in parameters set by the user
-    (key, pitch range, note durations, etc.) and produces a randomized melodic line.
-    The melody is audible as it generates, and the notes appear as music notation on the page in real time.
-    The user can then download the melodies as MIDI files and use them however they wish.
-    This app is intended to test the dichotomy between randomness and control - 
-    while potentially making pleasant music in the process.`
+    const appDescription = `Generate fully-randomized melodies that are notated in real time. 
+    Adjust the parameters for each voice to suit your specific needs. After generating has finished,
+    each voice can be downloaded as a separate MIDI file.`
+
+    const fakeButtonStyling = "mx-2 text-sm px-3 py-1 border border-cyan-500 bg-cyan-500 text-white rounded-full cursor-default";
+    const instructionsStyling = "flex flex-row mb-4 items-center justify-center";
 
     return (
         <div className="p-2 flex flex-col items-center">
             <div className="mb-8">
-                <h3>Welcome to Accidental!</h3>
+                <p className="text-xl">Welcome to Accidental!</p>
             </div>
-            <div className="mb-8">
-                <p>{appDescription}</p>
+            <div className="mb-4">
+                <p className="flex flex-row mb-4 justify-center">{appDescription}</p>
+                <span className={instructionsStyling}>
+                    Click <button className={fakeButtonStyling}>Start</button>to begin generating,
+                    <button className={fakeButtonStyling}>Stop</button>to stop generating,
+                    and <button className={fakeButtonStyling}>Clear</button> to clear the staves of all notes
+                </span>
+                <span className={instructionsStyling}>
+                    Click <MdOutlinePlaylistAdd className="text-2xl text-blue-500 mx-2" /> to add a new staff
+                    and <MdPlaylistRemove className="text-2xl text-blue-500 mx-2" /> to remove a staff
+                </span>
+                <span className={instructionsStyling}>
+                    To adjust randomization parameters, simply click a staff to open up its control panel
+                </span>
             </div>
             <div className="flex justify-center mb-4">
                 <Button primary onClick={handleCloseInfoBox}>Got it!</Button>
