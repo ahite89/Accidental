@@ -95,7 +95,7 @@ export default function App() {
         notationData.current[i].notationString = `X:1\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${notationData.current[i].randomizerParams.tempoSelection}\n${FIRST_EIGHT_BARS}`;
       }
       else {
-        notationData.current[i].notationString = `X:${i + 1}\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\n${FIRST_EIGHT_BARS}`
+        notationData.current[i].notationString = `X:${i + 1}\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${notationData.current[i].randomizerParams.tempoSelection}\n${FIRST_EIGHT_BARS}`
       }
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
       // Hide download link if staves have been cleared
@@ -127,7 +127,7 @@ export default function App() {
         {
           voiceNumber: voiceCount + 1,
           randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
-          notationString: `X:${voiceCount + 1}\nK:C ${DEFAULT_CLEF}\nM:4/4\nL:1/8\n${FIRST_EIGHT_BARS}`,
+          notationString: `X:${voiceCount + 1}\nK:C ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${DEFAULT_TEMPO}\n${FIRST_EIGHT_BARS}`,
           playBackNotes: [],
           notesInBarCount: 0,
           instrumentMidiNumber: 2,
@@ -293,9 +293,9 @@ export default function App() {
 
     const noteDurations = notationObj.randomizerParams.durationSelection.filter(d => d.selected).map(d => d.noteLength);
     const staffDescription = `${notationObj.randomizerParams.instrumentSelection} in
-      ${notationObj.randomizerParams.keySelection} ${notationObj.randomizerParams.scaleSelection},
-      Range of ${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[0]]}-${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[1]]}, 
-      Durations of ${noteDurations.join(', ')} Note`
+      ${notationObj.randomizerParams.keySelection} ${notationObj.randomizerParams.scaleSelection} |
+      ${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[0]]}-${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[1]]} |
+      ${noteDurations.join(', ')} Notes`
 
     return (
       <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">
