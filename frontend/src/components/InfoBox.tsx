@@ -12,12 +12,14 @@ export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
     const instructionsStyling = "flex flex-row mb-4 items-center justify-center";
 
     return (
-        <div className="p-2 flex flex-col items-center">
-            <div className="mb-8">
+        <div className="divide-y divide-slate-300 p-2 flex flex-col items-center">
+            <div>
                 <p className="text-xl">Welcome to Accidental!</p>
             </div>
-            <div className="mb-4">
-                <p className="flex flex-row mb-4 justify-center">{appDescription}</p>
+            <div className="my-4 pt-4">
+                <div className="flex flex-row mb-8 justify-center text-center">
+                    <p>{appDescription}</p>
+                </div>
                 <span className={instructionsStyling}>
                     Click <button className={fakeButtonStyling}>Start</button>to begin generating,
                     <button className={fakeButtonStyling}>Stop</button>to stop generating,

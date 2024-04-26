@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import abcjs, { TuneObjectArray } from "abcjs";
 import Modal from 'react-modal';
+import '../index.css';
 import { MdPlaylistRemove, MdInfoOutline, MdOutlinePlaylistAdd } from 'react-icons/md';
 
 import Staff from './Staff';

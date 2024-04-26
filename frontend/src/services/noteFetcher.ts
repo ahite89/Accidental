@@ -22,8 +22,7 @@ export const fetchValidNotes = (randomizerParams: RandomizerParameters): NoteFor
     return validNotesForRandomizing;
 };
 
-const getNotesByScaleIntervals = (randomizerParams: RandomizerParameters): NoteForScaleProps[] => {
-
+const filterUndesiredAccidentals = (randomizerParams: RandomizerParameters): NoteForScaleProps[] => {
     // Start by filtering out the notes with undesired accidentals (based on key and scale)
     const keyProps = scaleKeyQualityMap[randomizerParams.scaleSelection];
     const keyObject = keyProps.keys.find(k => k.name === randomizerParams.keySelection)!;
@@ -39,6 +38,11 @@ const getNotesByScaleIntervals = (randomizerParams: RandomizerParameters): NoteF
                 return allNotesAndPitchNumbers;
         }
     });
+    return filteredNotesAndPitchNumbers;
+};
+
+const getNotesByScaleIntervals = (randomizerParams: RandomizerParameters): NoteForScaleProps[] => {
+    const filteredNotesAndPitchNumbers = filterUndesiredAccidentals(randomizerParams);
 
     // Find the starting pitch, the lowest possible pitch from the selected scale
     const startingPitchObject = filteredNotesAndPitchNumbers.find((note) => {

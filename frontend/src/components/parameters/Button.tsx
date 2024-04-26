@@ -12,7 +12,7 @@ export default function Button({
     ...rest
 }: ButtonProps) {
 
-    const classes = className('px-6 py-3', {
+    const classes = className('px-6 py-3 hover:opacity-75', {
         'border border-cyan-500 bg-cyan-500 text-white': primary,
         'border border-slate-400 bg-slate-400 text-white': disabled,
         'rounded-full': rounded,
