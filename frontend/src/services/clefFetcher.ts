@@ -1,8 +1,7 @@
 import { Clefs } from "../constants/voices";
 
 export const fetchClefBasedOnPitchRange = (pitchRangeSelection: number[]): Clefs => {
-    const pitchRangeMin = pitchRangeSelection[0];
-    const pitchRangeMax = pitchRangeSelection[1];
+    const [pitchRangeMin, pitchRangeMax] = pitchRangeSelection;
 
     // G3
     if (pitchRangeMin >= 55) {

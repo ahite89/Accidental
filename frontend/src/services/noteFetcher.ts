@@ -9,8 +9,7 @@ export const fetchValidNotes = (randomizerParams: RandomizerParameters): NoteFor
     const allValidNotesFromKeyAndScale = getNotesByScaleIntervals(randomizerParams);
 
     // Narrow down to only valid notes within selected pitch range
-    const pitchRangeMin = randomizerParams.pitchRangeSelection[0];
-    const pitchRangeMax = randomizerParams.pitchRangeSelection[1];
+    const [pitchRangeMin, pitchRangeMax] = randomizerParams.pitchRangeSelection;
     
     let validNotesForRandomizing: NoteForScaleProps[] = [];
     allValidNotesFromKeyAndScale.map((noteObject) => {

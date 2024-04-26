@@ -27,9 +27,7 @@ import { scaleKeyQualityMap } from '../constants/keys';
 
 export default function App() {
 
-  // REFS //
-
-  // Notation
+  // ----NOTATION REF---- //
   const notationData = useRef<NotationData[]>([
     {
       voiceNumber: 1,
@@ -43,7 +41,7 @@ export default function App() {
     }
   ]);
 
-  // NOTE RENDERING BUTTONS //
+  // ----PRIMARY ACTIONS---- //
 
   const isGenerating = useRef<boolean>(false);  // for stopping/starting
   const [generating, setGenerating] = useState<boolean>(false); // for disabling buttons
@@ -116,7 +114,7 @@ export default function App() {
   //   });
   // };
 
-  // VOICES //
+  // ----VOICE ACTIONS---- //
 
   const [voiceCount, setVoiceCount] = useState<number>(notationData.current.length);
 
@@ -149,7 +147,7 @@ export default function App() {
     }
   };
 
-  // INITIALIZE SYNTH AND STAFF //
+  // ----INITIALIZE SYNTH AND STAFF---- //
 
   let staffObj: TuneObjectArray, targetVoice: NotationData | undefined;
 
@@ -162,7 +160,22 @@ export default function App() {
     }
   }, [voiceCount]);
 
-  // NOTE RENDERING //
+  // ----NOTE PLAYING AND RENDERING---- //
+
+  const playNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
+    abcjs.synth.playEvent(
+      [
+        {
+          "pitch": note.pitchNumber,
+          "volume": notationObj.randomizerParams.volumeSelection,
+          "start": 0,
+          "duration": note.durationProps.audioDuration,
+          "instrument": notationObj.instrumentMidiNumber,
+          "gap": 0
+        },
+      ], [], 1000 // a measure takes one second.    
+    )
+  }
 
   const playAndRenderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
     let newNote = '';  
@@ -185,21 +198,6 @@ export default function App() {
     await playNote(note, notationObj);    
   };
 
-  const playNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
-    abcjs.synth.playEvent(
-      [
-        {
-          "pitch": note.pitchNumber,
-          "volume": notationObj.randomizerParams.volumeSelection,
-          "start": 0,
-          "duration": note.durationProps.audioDuration,
-          "instrument": notationObj.instrumentMidiNumber,
-          "gap": 0
-        },
-      ], [], 1000 // a measure takes one second.    
-    )
-  }
-
   const randomizeAndRenderNotes = async (notationObj: NotationData): Promise<void> => {
     let randomNote: NoteProps;
 
@@ -213,6 +211,8 @@ export default function App() {
       await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
     }
   };
+
+  // ----UPDATE STAFF AND PARAMETERS FOR SPECIFIC VOICE---- //
 
   // Save control panel changes for targeted voice
   const handleUpdateStaff = (controlPanelParams: RandomizerParameters, selectedVoiceNumber: number): void => {
@@ -234,12 +234,13 @@ export default function App() {
       targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${keySignature} ${targetVoice.clef}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_EIGHT_BARS}`;
       targetVoice.randomizerParams = controlPanelParams;
       
+      // Render new changes to staff/voice
       abcjs.renderAbc(`staff-${targetVoice.voiceNumber}`, targetVoice.notationString, AudioVisual.notationOptions);
     }
     setOpenControlPanel(false);
   };
 
-  // CONTROLS MODAL //
+  // ----CONTROL PANEL BEHAVIOR---- //
 
   const [randomizerParameters, setRandomizerParameters] = useState<RandomizerParameters>(DEFAULT_RANDOMIZER_PARAMS);
   const [voiceNumber, setVoiceNumber] = useState<number>(1);
@@ -268,7 +269,7 @@ export default function App() {
     }
   };
 
-  // INFO BOX //
+  // ----INFO BOX BEHAVIOR---- //
 
   const [openInfoBox, setOpenInfoBox] = useState<boolean>(false);
 
@@ -285,7 +286,7 @@ export default function App() {
     }
   }, []);
 
-  // STAVES //
+  // ----RENDER STAVES---- //
 
   const staves = notationData.current.map((notationObj) => {
 
@@ -324,7 +325,7 @@ export default function App() {
     );
   });
 
-  // JSX //
+  // ----JSX---- //
 
   return (
     <div>

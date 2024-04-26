@@ -5,7 +5,7 @@ import { MdPlaylistRemove, MdOutlinePlaylistAdd } from 'react-icons/md';
 export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
 
     const appDescription = `Generate fully-randomized melodies that are notated in real time. 
-    Adjust the parameters for each voice to suit your specific needs. After generating has finished,
+    Adjust the parameters for each voice to suit your specific needs. When you're done generating,
     each voice can be downloaded as a separate MIDI file.`
 
     const fakeButtonStyling = "mx-2 text-sm px-3 py-1 border border-cyan-500 bg-cyan-500 text-white rounded-full cursor-default";
