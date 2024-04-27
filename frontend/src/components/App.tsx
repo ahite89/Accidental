@@ -44,6 +44,8 @@ export default function App() {
 
   // ----PRIMARY ACTIONS---- //
 
+  let staffObj: TuneObjectArray;
+
   const isGenerating = useRef<boolean>(false);  // for stopping/starting
   const [generating, setGenerating] = useState<boolean>(false); // for disabling buttons
 
@@ -87,10 +89,7 @@ export default function App() {
   // Clear
   const handleClearStaff = () => {
     for (let i = 0; i < notationData.current.length; i++) {
-      // can consolidate if tempo is removed from the voice 1 staff
-      // could also add tempo to all staves
-
-      // SHOULD NOT REVERT TEMPO
+      // Maybe move tempo outside of staves
       if (i === 0) {
         notationData.current[i].notationString = `X:1\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${notationData.current[i].randomizerParams.tempoSelection}\n${FIRST_EIGHT_BARS}`;
       }
@@ -148,13 +147,9 @@ export default function App() {
     }
   };
 
-  // ----INITIALIZE SYNTH AND STAFF---- //
-
-  let staffObj: TuneObjectArray, targetVoice: NotationData | undefined;
-
+  // Re-render when voice count has changed
   useEffect(() => {   
     // need to remove element from dom when applicable
-    // re-run when any of the big voice objects has changed
     const voiceCount = notationData.current.length;
     for (let i = 1; i < voiceCount + 1; i++) {
       staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
@@ -163,20 +158,19 @@ export default function App() {
 
   // ----NOTE PLAYING AND RENDERING---- //
 
-  const playNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
-    abcjs.synth.playEvent(
-      [
-        {
-          "pitch": note.pitchNumber,
-          "volume": notationObj.randomizerParams.volumeSelection,
-          "start": 0,
-          "duration": note.durationProps.audioDuration,
-          "instrument": notationObj.instrumentMidiNumber,
-          "gap": 0
-        },
-      ], [], 1000 // a measure takes one second.    
-    )
-  }
+  const randomizeAndRenderNotes = async (notationObj: NotationData): Promise<void> => {
+    let randomNote: NoteProps;
+
+    while (isGenerating.current) {
+      if (!isGenerating.current) {
+        break;
+      }
+      randomNote = getRandomizedNote(notationObj);
+      await playAndRenderNoteToStaff(randomNote, notationObj);
+      // Need to pause to ensure note plays out for entire length
+      await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
+    }
+  };
 
   const playAndRenderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
     let newNote = '';  
@@ -199,25 +193,26 @@ export default function App() {
     await playNote(note, notationObj);    
   };
 
-  const randomizeAndRenderNotes = async (notationObj: NotationData): Promise<void> => {
-    let randomNote: NoteProps;
-
-    while (isGenerating.current) {
-      if (!isGenerating.current) {
-        break;
-      }
-      randomNote = getRandomizedNote(notationObj);
-      await playAndRenderNoteToStaff(randomNote, notationObj);
-      // Need to pause to ensure note plays out for entire length
-      await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
-    }
-  };
+  const playNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
+    abcjs.synth.playEvent(
+      [
+        {
+          "pitch": note.pitchNumber,
+          "volume": notationObj.randomizerParams.volumeSelection,
+          "start": 0,
+          "duration": note.durationProps.audioDuration,
+          "instrument": notationObj.instrumentMidiNumber,
+          "gap": 0
+        },
+      ], [], 1000 // a measure takes one second.    
+    )
+  }
 
   // ----UPDATE STAFF AND PARAMETERS FOR SPECIFIC VOICE---- //
 
   // Save control panel changes for targeted voice
   const handleUpdateStaff = (controlPanelParams: RandomizerParameters, selectedVoiceNumber: number): void => {
-    targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
+    let targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
 
     if (targetVoice && targetVoice.randomizerParams !== controlPanelParams) {
       // Set valid notes for randomizing based on control panel params (assuming they've changed)
