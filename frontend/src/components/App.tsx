@@ -25,6 +25,7 @@ import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
 import { pitchNumberMap } from '../constants/pitchRange';
 import { scaleKeyQualityMap } from '../constants/keys';
+import Header from './Header';
 
 export default function App() {
 
@@ -274,6 +275,10 @@ export default function App() {
     setOpenInfoBox(false);
   };
 
+  const handleOpenInfoBox = () => {
+    setOpenInfoBox(true);
+  };
+
   // Show app description modal the first time a user loads the page 
   useEffect(() => {
     const hasSeenDescription = localStorage.getItem("seenDescription");
@@ -325,16 +330,9 @@ export default function App() {
 
   return (
     <div>
-      <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-between px-10 py-4">
-        <p className="text-white text-2xl border-white border-2 border-solid p-2 rounded self-center">
-          &#9838;ccidental
-        </p>
-        <Button onClick={() => setOpenInfoBox(true)}>
-          <MdInfoOutline className="text-white text-4xl self-center" />
-        </Button>
-      </header>
+      <Header handleOpenInfoBox={handleOpenInfoBox} />
       <div className="p-8 bg-slate-100">
-      <div className="flex flex-row justify-center my-4">
+        <div className="flex flex-row justify-center my-4">
           <Button disabled={generating} extraStyling="mr-4 text-xl" primary rounded onClick={handleStartGenerating}>
             Start
           </Button>

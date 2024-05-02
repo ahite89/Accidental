@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import className from "classnames";
+import '../index.css';
 
 import Button from './parameters/Button';
 import DropDown from "./parameters/Dropdown";
@@ -119,6 +120,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
             >
                 Pitch Range
             </MultiRangeSlider>
+            <div className="notes-on-staff-image"></div>
             <RangeSlider
                 min={Tempo.MIN_TEMPO}
                 max={Tempo.MAX_TEMPO}

@@ -20,3 +20,8 @@ code {
 .ReactModal__Content {
   max-width: 67%;
 }
+
+.notes-on-staff-image {
+  background-image: url('./images/SPN-on-the-staff.jpg');
+  padding: 20px;
+}
