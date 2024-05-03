@@ -50,7 +50,15 @@ export default function App() {
   const isGenerating = useRef<boolean>(false);  // for stopping/starting
   const [generating, setGenerating] = useState<boolean>(false); // for disabling buttons
 
-  // MIDI Download
+  // Toggle MIDI Download Button
+  const toggleMIDIDownloadButton = (display: Boolean, notationObj: NotationData, midi = ""): void => {
+    const midiLink = document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!;
+    midiLink.innerHTML = display ? midi: "";
+    const buttonClasses = ["px-3", "py-1.5", "text-xl", "self-center", "justify-end", "rounded-full", "border", "border-cyan-500", "bg-cyan-500", "text-white"];
+    buttonClasses.forEach(className => display ? midiLink.classList.add(className): midiLink.classList.remove(className));
+  };
+
+  // Download MIDI
   const handleDownloadMIDI = (notationObj: NotationData): void => {
     const staffObjForDownload = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
     const midi = abcjs.synth.getMidiFile(staffObjForDownload[0],
@@ -61,9 +69,7 @@ export default function App() {
         downloadLabel: `Download MIDI`
       }
     );
-    const midiLink = document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!
-    midiLink.innerHTML = midi;
-    midiLink.classList.add("px-3", "py-1.5", "text-xl", "self-center", "justify-end", "rounded-full", "border", "border-cyan-500", "bg-cyan-500", "text-white");
+    toggleMIDIDownloadButton(true, notationObj, midi.toString());
   };
 
   // Stop
@@ -100,11 +106,8 @@ export default function App() {
         notationData.current[i].notationString = `X:${i + 1}\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${notationData.current[i].randomizerParams.tempoSelection}\n${FIRST_EIGHT_BARS}`
       }
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
-      // Hide download link if staves have been cleared
-      const midiLink = document.getElementById("midi-link-" + notationData.current[i].voiceNumber)!;
-      midiLink.innerHTML = "";
-      midiLink.classList.remove("px-3", "py-1.5", "text-xl", "self-center", "justify-end", "rounded-full", "border", "border-cyan-500", "bg-cyan-500", "text-white");
       notationData.current[i].notesInBarCount = 0;
+      toggleMIDIDownloadButton(false, notationData.current[i]);
     }
   };
 
