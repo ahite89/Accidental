@@ -61,7 +61,9 @@ export default function App() {
         downloadLabel: `Download MIDI`
       }
     );
-    document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!.innerHTML = midi;
+    const midiLink = document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!
+    midiLink.innerHTML = midi;
+    midiLink.classList.add("px-3", "py-1.5", "text-xl", "self-center", "justify-end", "rounded-full", "border", "border-cyan-500", "bg-cyan-500", "text-white");
   };
 
   // Stop
@@ -99,7 +101,9 @@ export default function App() {
       }
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
       // Hide download link if staves have been cleared
-      document.getElementById("midi-link-" + notationData.current[i].voiceNumber)!.innerHTML = "";
+      const midiLink = document.getElementById("midi-link-" + notationData.current[i].voiceNumber)!;
+      midiLink.innerHTML = "";
+      midiLink.classList.remove("px-3", "py-1.5", "text-xl", "self-center", "justify-end", "rounded-full", "border", "border-cyan-500", "bg-cyan-500", "text-white");
       notationData.current[i].notesInBarCount = 0;
     }
   };
@@ -310,8 +314,7 @@ export default function App() {
             }
           </div>
           <div onClick={() => handleDownloadMIDI(notationObj)} 
-               id={`midi-link-` + notationObj.voiceNumber.toString()} 
-               className="px-3 py-1.5 text-xl text-blue-500 self-center justify-end">
+               id={`midi-link-` + notationObj.voiceNumber.toString()}>
           </div>
         </div>
         <div>
