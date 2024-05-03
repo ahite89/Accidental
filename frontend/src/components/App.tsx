@@ -220,9 +220,11 @@ export default function App() {
 
   // Save control panel changes for targeted voice
   const handleUpdateStaff = (controlPanelParams: RandomizerParameters, selectedVoiceNumber: number): void => {
+
     let targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
 
     if (targetVoice && targetVoice.randomizerParams !== controlPanelParams) {
+
       // Set valid notes for randomizing based on control panel params (assuming they've changed)
       targetVoice.validNotesForRandomizing = fetchValidNotes(controlPanelParams);
       
@@ -234,8 +236,14 @@ export default function App() {
       const key = scaleKeyQualityMap[controlPanelParams.scaleSelection].keys.find(k => k.name === controlPanelParams.keySelection)!;
       const keySignature = key.relativeMajorKey ? key.relativeMajorKey : controlPanelParams.keySelection;
 
-      // Update notation string and randomizer parameters
-      targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${keySignature} ${targetVoice.clef}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_EIGHT_BARS}`;
+      // Update notation string and randomizer parameters (don't erase already generated notes if present)
+      if (targetVoice.notationString.includes(FIRST_EIGHT_BARS)) {
+        targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${keySignature} ${targetVoice.clef}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_EIGHT_BARS}`;
+      }
+      else {
+        targetVoice.notationString += `| [K:${keySignature}]`;
+      }
+      
       targetVoice.randomizerParams = controlPanelParams;
       
       // Render new changes to staff/voice
