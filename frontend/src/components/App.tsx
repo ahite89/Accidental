@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import abcjs, { TuneObjectArray } from "abcjs";
 import Modal from 'react-modal';
 import '../index.css';
-import { MdPlaylistRemove, MdInfoOutline, MdOutlinePlaylistAdd } from 'react-icons/md';
+import { MdPlaylistRemove, MdOutlinePlaylistAdd } from 'react-icons/md';
 
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
@@ -24,7 +24,7 @@ import { FIRST_EIGHT_BARS, Clefs, DEFAULT_CLEF } from '../constants/voices';
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
 import { pitchNumberMap } from '../constants/pitchRange';
-import { scaleKeyQualityMap } from '../constants/keys';
+import { scaleKeyQualityMap, DEFAULT_KEY } from '../constants/keys';
 import Header from './Header';
 
 export default function App() {
@@ -34,7 +34,7 @@ export default function App() {
     {
       voiceNumber: 1,
       randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
-      notationString: `X:1\nK:C ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${DEFAULT_TEMPO}\n${FIRST_EIGHT_BARS}`,
+      notationString: `X:1\nK:${DEFAULT_KEY} ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${DEFAULT_TEMPO}\n${FIRST_EIGHT_BARS}`,
       playBackNotes: [],
       notesInBarCount: 0,
       instrumentMidiNumber: 2,
@@ -98,13 +98,9 @@ export default function App() {
   // Clear
   const handleClearStaff = () => {
     for (let i = 0; i < notationData.current.length; i++) {
-      // Maybe move tempo outside of staves
-      if (i === 0) {
-        notationData.current[i].notationString = `X:1\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${notationData.current[i].randomizerParams.tempoSelection}\n${FIRST_EIGHT_BARS}`;
-      }
-      else {
-        notationData.current[i].notationString = `X:${i + 1}\nK:C ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${notationData.current[i].randomizerParams.tempoSelection}\n${FIRST_EIGHT_BARS}`
-      }
+      const params = notationData.current[i].randomizerParams;
+      notationData.current[i].notationString = 
+        `X:${i + 1}\nK:${params.keySelection} ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${params.tempoSelection}\n${FIRST_EIGHT_BARS}`;
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
       notationData.current[i].notesInBarCount = 0;
       toggleMIDIDownloadButton(false, notationData.current[i]);
@@ -134,7 +130,7 @@ export default function App() {
         {
           voiceNumber: voiceCount + 1,
           randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
-          notationString: `X:${voiceCount + 1}\nK:C ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${DEFAULT_TEMPO}\n${FIRST_EIGHT_BARS}`,
+          notationString: `X:${voiceCount + 1}\nK:${DEFAULT_KEY} ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${DEFAULT_TEMPO}\n${FIRST_EIGHT_BARS}`,
           playBackNotes: [],
           notesInBarCount: 0,
           instrumentMidiNumber: 2,
