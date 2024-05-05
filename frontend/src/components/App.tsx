@@ -89,7 +89,7 @@ export default function App() {
     isGenerating.current = true;
     setGenerating(true);
     notationData.current.forEach(notationObj => {
-      document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!.innerHTML = "";
+      toggleMIDIDownloadButton(false, notationObj);
       notationObj.notationString = notationObj.notationString.replace(FIRST_EIGHT_BARS, "");
       randomizeAndRenderNotes(notationObj);
     });
