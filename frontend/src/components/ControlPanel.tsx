@@ -18,6 +18,7 @@ import { pitchNumberMap } from "../constants/pitchRange";
 import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../constants/pitchRange";
 import { MIN_VOLUME, MAX_VOLUME, VOLUME_INTERVAL } from "../constants/volume";
 import * as Tempo from "../constants/tempo";
+import * as Steps from "../constants/steps";
 
 export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControlPanel, randomizerParameters }: ControlPanelProps) {
 
@@ -26,6 +27,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
             keySelection,
             scaleSelection,
             instrumentSelection,
+            stepsSelection,
             pitchRangeSelection,
             tempoSelection,
             volumeSelection,
@@ -51,7 +53,13 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
         setInstrumentSelection(instrument);
     };
 
-    // Range
+    // Steps
+    const [stepsSelection, setStepsSelection] = useState<number>(randomizerParameters.stepsSelection);
+    const handleStepsSelection = (steps: number): void => {
+        setStepsSelection(steps);
+    };
+
+    // Pitch Range
     const [pitchRangeSelection, setPitchRangeSelection] = useState<number[]>(randomizerParameters.pitchRangeSelection);
     const handlePitchRangeSelection = (pitchRange: number[]): void => {
         setPitchRangeSelection([pitchRange[0], pitchRange[1]]);
@@ -129,6 +137,15 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                 interval={Tempo.TEMPO_INTERVAL}
             >
                 Tempo
+            </RangeSlider>
+            <RangeSlider
+                min={Steps.MIN_STEPS}
+                max={Steps.MAX_STEPS}
+                value={stepsSelection}
+                onChangeValue={handleStepsSelection}
+                interval={Steps.STEPS_INTERVAL}
+            >
+                Steps
             </RangeSlider>
             <RangeSlider
                 min={MIN_VOLUME}
