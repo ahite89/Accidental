@@ -231,7 +231,7 @@ export default function App() {
       // Change key signature based on scale quality (major/minor)
       const key = scaleKeyQualityMap[controlPanelParams.scaleSelection].keys.find(k => k.name === controlPanelParams.keySelection)!;
       const keySignature = key.relativeMajorKey ? key.relativeMajorKey : controlPanelParams.keySelection;
-      debugger
+      
       // Update notation string and randomizer parameters (don't erase already generated notes if present)
       if (targetVoice.notationString.includes(FIRST_EIGHT_BARS)) {
         targetVoice.notationString = `X:${targetVoice.voiceNumber}\nK:${keySignature} ${targetVoice.clef}\nM:4/4\nQ:1/4=${controlPanelParams.tempoSelection}\n${FIRST_EIGHT_BARS}`;
