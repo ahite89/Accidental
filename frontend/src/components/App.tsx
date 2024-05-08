@@ -190,9 +190,10 @@ export default function App() {
     }
     // If note is too long for current bar, split it into two and tie it over the bar
     else if (notationObj.notesInBarCount > MAX_BEATS_PER_BAR) {
+      debugger
       const firstNoteOfTieLength = notationObj.notesInBarCount - MAX_BEATS_PER_BAR;
       const firstNoteOfTie = durationOptions.find(duration => duration.audioDuration === firstNoteOfTieLength)!;
-      newNote = note.abcName + firstNoteOfTie.abcSyntax + '|';
+      newNote = note.abcName + firstNoteOfTie.abcSyntax + '-|';
       notationObj.notationString += newNote;
       
       const secondNoteOfTieLength = note.durationProps.audioDuration - firstNoteOfTieLength;
