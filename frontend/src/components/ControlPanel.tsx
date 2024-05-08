@@ -128,7 +128,15 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
             >
                 Pitch Range
             </MultiRangeSlider>
-            <div className="notes-on-staff-image"></div>
+            <RangeSlider
+                min={Steps.MIN_STEPS}
+                max={Steps.MAX_STEPS}
+                value={stepsSelection}
+                onChangeValue={handleStepsSelection}
+                interval={Steps.STEPS_INTERVAL}
+            >
+                Steps Between Notes
+            </RangeSlider>
             <RangeSlider
                 min={Tempo.MIN_TEMPO}
                 max={Tempo.MAX_TEMPO}
@@ -137,15 +145,6 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                 interval={Tempo.TEMPO_INTERVAL}
             >
                 Tempo
-            </RangeSlider>
-            <RangeSlider
-                min={Steps.MIN_STEPS}
-                max={Steps.MAX_STEPS}
-                value={stepsSelection}
-                onChangeValue={handleStepsSelection}
-                interval={Steps.STEPS_INTERVAL}
-            >
-                Steps
             </RangeSlider>
             <RangeSlider
                 min={MIN_VOLUME}

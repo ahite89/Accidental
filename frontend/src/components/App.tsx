@@ -103,6 +103,7 @@ export default function App() {
         `X:${i + 1}\nK:${params.keySelection} ${notationData.current[i].clef}\nM:4/4\nL:1/8\nQ:1/4=${params.tempoSelection}\n${FIRST_EIGHT_BARS}`;
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
       notationData.current[i].notesInBarCount = 0;
+      notationData.current[i].previousNotePitch = undefined;
       toggleMIDIDownloadButton(false, notationData.current[i]);
     }
   };
@@ -191,6 +192,9 @@ export default function App() {
     // Add notes to playback array for playback functionality
     // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
     // probably need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches
+
+    // Set for steps functionality
+    notationObj.previousNotePitch = note.pitchNumber;
 
     // Play audio and add note to staff
     staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
@@ -306,7 +310,8 @@ export default function App() {
     const staffDescription = `${notationObj.randomizerParams.instrumentSelection} in
       ${notationObj.randomizerParams.keySelection} ${notationObj.randomizerParams.scaleSelection} |
       ${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[0]]}-${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[1]]} |
-      ${noteDurations.join(', ')} Notes`
+      ${noteDurations.join(', ')} Notes |
+      ${notationObj.randomizerParams.stepsSelection.toString()} Step${notationObj.randomizerParams.stepsSelection === 1 ? "" : "s"} Between Notes`
 
     return (
       <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">

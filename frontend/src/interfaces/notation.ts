@@ -11,5 +11,6 @@ export interface NotationData {
     notesInBarCount: number,
     instrumentMidiNumber: number,
     validNotesForRandomizing: NoteForScaleProps[],
+    previousNotePitch?: number,
     clef: Clefs
 }
