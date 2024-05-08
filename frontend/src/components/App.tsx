@@ -12,6 +12,7 @@ import InfoBox from './InfoBox';
 import { NoteProps } from '../interfaces/note';
 import { RandomizerParameters } from '../interfaces/controlPanel';
 import { NotationData } from '../interfaces/notation';
+import { DurationProps } from '../interfaces/selectable';
 
 import { getRandomizedNote } from '../services/noteRandomizer';
 import { fetchValidNotes } from '../services/noteFetcher';
@@ -179,33 +180,58 @@ export default function App() {
   };
 
   const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
-    let newNote = '';  
-    
+    let newNote = '', tieNoteLeftover: DurationProps | undefined;
     // Deal with ties and bar lines
-    notationObj.notesInBarCount += note.durationProps.audioDuration;
-    if (notationObj.notesInBarCount === MAX_BEATS_PER_BAR) {
+    if (notationObj.notesInBarCount + note.durationProps.audioDuration === MAX_BEATS_PER_BAR) {
       newNote = note.abcName + note.durationProps.abcSyntax + '|';
       notationObj.notesInBarCount = 0;
       notationObj.notationString += newNote;
     }
     // If note is too long for current bar, split it into two and tie it over the bar
-    else if (notationObj.notesInBarCount > MAX_BEATS_PER_BAR) {
-      debugger
-      const firstNoteOfTieLength = notationObj.notesInBarCount - MAX_BEATS_PER_BAR;
-      const firstNoteOfTie = durationOptions.find(duration => duration.audioDuration === firstNoteOfTieLength)!;
-      newNote = note.abcName + firstNoteOfTie.abcSyntax + '-|';
-      notationObj.notationString += newNote;
-      
-      const secondNoteOfTieLength = note.durationProps.audioDuration - firstNoteOfTieLength;
-      const secondNoteOfTie = durationOptions.find(duration => duration.audioDuration === secondNoteOfTieLength);
-      newNote = note.abcName + secondNoteOfTie?.abcSyntax;
-      notationObj.notationString += newNote;
+    else if (notationObj.notesInBarCount + note.durationProps.audioDuration > MAX_BEATS_PER_BAR) {
+      const firstNoteOfTieLength = MAX_BEATS_PER_BAR - notationObj.notesInBarCount;
 
+      if (firstNoteOfTieLength !== 5 && firstNoteOfTieLength !== 7) {
+        const firstNoteOfTie = durationOptions.find(duration => duration.audioDuration === firstNoteOfTieLength);
+        newNote = note.abcName + firstNoteOfTie?.abcSyntax + '-|';
+        notationObj.notationString += newNote;
+      }
+      else {
+        // If non-existent duration, add eighth note first so that the resulting duration is a half or dotted half
+        newNote = note.abcName + '-';
+        notationObj.notationString += newNote;
+
+        // Add the remainder of the duration
+        tieNoteLeftover = durationOptions.find(duration => duration.audioDuration === firstNoteOfTieLength - 1);
+        newNote = note.abcName + tieNoteLeftover?.abcSyntax + '-|';
+        notationObj.notationString += newNote;
+      }
+      
+      notationObj.notesInBarCount = 0;   
+      const secondNoteOfTieLength = note.durationProps.audioDuration - firstNoteOfTieLength;
+
+      // Check for note durations that don't exist (e.g. half + eighth)
+      if (secondNoteOfTieLength !== 5 && secondNoteOfTieLength !== 7) {
+        const secondNoteOfTie = durationOptions.find(duration => duration.audioDuration === secondNoteOfTieLength);
+        newNote = note.abcName + secondNoteOfTie?.abcSyntax;
+        notationObj.notationString += newNote;
+      }
+      else {
+        // If non-existent duration, add eighth note first so that the resulting duration is a half or dotted half
+        newNote = note.abcName + '-';
+        notationObj.notationString += newNote;
+
+        // Add the remainder of the duration
+        tieNoteLeftover = durationOptions.find(duration => duration.audioDuration === secondNoteOfTieLength - 1);
+        newNote = note.abcName + tieNoteLeftover?.abcSyntax;
+        notationObj.notationString += newNote;
+      }
       notationObj.notesInBarCount = secondNoteOfTieLength;
     }
     else {
       newNote += (note.abcName + note.durationProps.abcSyntax);
       notationObj.notationString += newNote;
+      notationObj.notesInBarCount += note.durationProps.audioDuration;
     }
       
     // Add notes to playback array for playback functionality
