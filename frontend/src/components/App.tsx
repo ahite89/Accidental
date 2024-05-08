@@ -19,7 +19,7 @@ import { fetchClefBasedOnPitchRange } from '../services/clefFetcher';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { instrumentMap } from '../constants/instruments';
-import { MAX_BEATS_PER_BAR } from "../constants/durations";
+import { MAX_BEATS_PER_BAR, durationOptions } from "../constants/durations";
 import { FIRST_EIGHT_BARS, Clefs, DEFAULT_CLEF } from '../constants/voices';
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
@@ -183,11 +183,19 @@ export default function App() {
     newNote = note.abcName + note.durationProps.abcSyntax;
     
     notationObj.notesInBarCount += note.durationProps.audioDuration;
-    if (notationObj.notesInBarCount >= MAX_BEATS_PER_BAR) {
+    if (notationObj.notesInBarCount === MAX_BEATS_PER_BAR) {
       newNote += '|';
       notationObj.notesInBarCount = 0;
     }
-
+    else if (notationObj.notesInBarCount > MAX_BEATS_PER_BAR) {
+      const beatsDifference = notationObj.notesInBarCount - MAX_BEATS_PER_BAR;
+      const firstNoteOfTie = durationOptions.find(duration => duration.audioDuration === beatsDifference)!;
+      newNote += (note.abcName + firstNoteOfTie.abcSyntax + '|');
+      const secondNoteOfTie = durationOptions.find(duration => duration.audioDuration === note.durationProps.audioDuration);
+      newNote += (note.abcName + secondNoteOfTie?.abcSyntax);
+      notationObj.notesInBarCount = beatsDifference;
+    }
+      
     notationObj.notationString += newNote;
 
     // Add notes to playback array for playback functionality
