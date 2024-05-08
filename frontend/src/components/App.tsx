@@ -180,24 +180,33 @@ export default function App() {
 
   const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
     let newNote = '';  
-    newNote = note.abcName + note.durationProps.abcSyntax;
     
+    // Deal with ties and bar lines
     notationObj.notesInBarCount += note.durationProps.audioDuration;
     if (notationObj.notesInBarCount === MAX_BEATS_PER_BAR) {
-      newNote += '|';
+      newNote = note.abcName + note.durationProps.abcSyntax + '|';
       notationObj.notesInBarCount = 0;
+      notationObj.notationString += newNote;
     }
+    // If note is too long for current bar, split it into two and tie it over the bar
     else if (notationObj.notesInBarCount > MAX_BEATS_PER_BAR) {
-      const beatsDifference = notationObj.notesInBarCount - MAX_BEATS_PER_BAR;
-      const firstNoteOfTie = durationOptions.find(duration => duration.audioDuration === beatsDifference)!;
-      newNote += (note.abcName + firstNoteOfTie.abcSyntax + '|');
-      const secondNoteOfTie = durationOptions.find(duration => duration.audioDuration === note.durationProps.audioDuration);
-      newNote += (note.abcName + secondNoteOfTie?.abcSyntax);
-      notationObj.notesInBarCount = beatsDifference;
+      const firstNoteOfTieLength = notationObj.notesInBarCount - MAX_BEATS_PER_BAR;
+      const firstNoteOfTie = durationOptions.find(duration => duration.audioDuration === firstNoteOfTieLength)!;
+      newNote = note.abcName + firstNoteOfTie.abcSyntax + '|';
+      notationObj.notationString += newNote;
+      
+      const secondNoteOfTieLength = note.durationProps.audioDuration - firstNoteOfTieLength;
+      const secondNoteOfTie = durationOptions.find(duration => duration.audioDuration === secondNoteOfTieLength);
+      newNote = note.abcName + secondNoteOfTie?.abcSyntax;
+      notationObj.notationString += newNote;
+
+      notationObj.notesInBarCount = secondNoteOfTieLength;
+    }
+    else {
+      newNote += (note.abcName + note.durationProps.abcSyntax);
+      notationObj.notationString += newNote;
     }
       
-    notationObj.notationString += newNote;
-
     // Add notes to playback array for playback functionality
     // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
     // probably need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches
