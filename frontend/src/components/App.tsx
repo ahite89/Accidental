@@ -171,13 +171,14 @@ export default function App() {
         break;
       }
       randomNote = getRandomizedNote(notationObj);
-      await playAndRenderNoteToStaff(randomNote, notationObj);
+      await renderNoteToStaff(randomNote, notationObj);
+      await playNote(randomNote, notationObj);
       // Need to pause to ensure note plays out for entire length
       await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
     }
   };
 
-  const playAndRenderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
+  const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
     let newNote = '';  
     newNote = note.abcName + note.durationProps.abcSyntax;
     
@@ -196,9 +197,8 @@ export default function App() {
     // Set for steps functionality
     notationObj.previousNotePitch = note.pitchNumber;
 
-    // Play audio and add note to staff
+    // Add note to staff
     staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
-    await playNote(note, notationObj);    
   };
 
   const playNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
@@ -212,7 +212,7 @@ export default function App() {
           "instrument": notationObj.instrumentMidiNumber,
           "gap": 0
         },
-      ], [], 1000 // a measure takes one second.    
+      ], [], 1000 // a measure takes one second.
     )
   }
 
