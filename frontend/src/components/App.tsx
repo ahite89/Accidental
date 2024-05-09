@@ -337,7 +337,9 @@ export default function App() {
   };
 
   const handleOpenInfoBox = () => {
-    setOpenInfoBox(true);
+    if (!generating) {
+      setOpenInfoBox(true);
+    }
   };
 
   // Show app description modal the first time a user loads the page 
