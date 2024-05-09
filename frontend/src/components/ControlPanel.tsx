@@ -145,7 +145,12 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
             >
                 Steps Between Notes
             </RangeSlider>
-            <Checkbox label="Repeat Notes" checked={repeatNoteSelection} onCheck={handleRepeatNote} />
+            <Checkbox 
+                label="Repeat Notes" 
+                checked={repeatNoteSelection} 
+                onCheck={handleRepeatNote}
+                extraStyling="py-3"
+            />
             <RangeSlider
                 min={Tempo.MIN_TEMPO}
                 max={Tempo.MAX_TEMPO}
