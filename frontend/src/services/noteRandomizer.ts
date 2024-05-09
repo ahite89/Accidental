@@ -21,6 +21,9 @@ export const getRandomizedNote = (notationObj: NotationData): NoteProps => {
         const highestPitchIndex = previousNotePitchIndex + steps + 1 > validNotesMultiArray.length - 1 ?
             validNotesMultiArray.length - 1: previousNotePitchIndex + steps + 1;
         validNotesMultiArray = validNotesMultiArray.slice(lowestPitchIndex, highestPitchIndex);
+        if (!notationObj.randomizerParams.repeatNoteSelection) {
+           validNotesMultiArray = validNotesMultiArray.filter(note => note.pitchNumber !== notationObj.previousNotePitch);
+        }
     }
 
     const randomPitchIndex = Math.floor(Math.random() * validNotesMultiArray.length);

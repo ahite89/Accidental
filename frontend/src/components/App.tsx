@@ -357,7 +357,8 @@ export default function App() {
       ${notationObj.randomizerParams.keySelection} ${notationObj.randomizerParams.scaleSelection} |
       ${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[0]]}-${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[1]]} |
       ${noteDurations.join(', ')} Notes |
-      ${notationObj.randomizerParams.stepsSelection.toString()} Step${notationObj.randomizerParams.stepsSelection === 1 ? "" : "s"} Between Notes`
+      ${notationObj.randomizerParams.stepsSelection.toString()} Step${notationObj.randomizerParams.stepsSelection === 1 ? "" : "s"} Between Notes |
+      ${notationObj.randomizerParams.repeatNoteSelection ? "" : "No "} Repeated Notes`
 
     return (
       <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">

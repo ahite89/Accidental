@@ -137,7 +137,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                 Pitch Range
             </MultiRangeSlider>
             <RangeSlider
-                min={Steps.MIN_STEPS}
+                min={repeatNoteSelection ? Steps.MIN_STEPS: 1}
                 max={Steps.MAX_STEPS}
                 value={stepsSelection}
                 onChangeValue={handleStepsSelection}
