@@ -3,7 +3,7 @@ import { DEFAULT_INSTRUMENT } from "../constants/instruments";
 import { DEFAULT_KEY } from "../constants/keys";
 import { DEFAULT_PITCH_RANGE } from "../constants/pitchRange";
 import { DEFAULT_SCALE } from "../constants/scales";
-import { DEFAULT_STEPS } from "./steps";
+import { DEFAULT_STEPS, DEFAULT_REPEAT_NOTE } from "./steps";
 import { DEFAULT_TEMPO } from "../constants/tempo";
 import { DEFAULT_VOLUME } from "../constants/volume";
 
@@ -27,6 +27,7 @@ export const DEFAULT_RANDOMIZER_PARAMS: RandomizerParameters = {
     scaleSelection: DEFAULT_SCALE,
     pitchRangeSelection: DEFAULT_PITCH_RANGE,
     stepsSelection: DEFAULT_STEPS,
+    repeatNoteSelection: DEFAULT_REPEAT_NOTE,
     instrumentSelection: DEFAULT_INSTRUMENT,
     tempoSelection: DEFAULT_TEMPO,
     volumeSelection: DEFAULT_VOLUME,

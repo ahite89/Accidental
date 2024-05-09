@@ -287,6 +287,8 @@ export default function App() {
       else if (targetVoice.randomizerParams.keySelection !== controlPanelParams.keySelection) {
         targetVoice.notationString += `| [K:${keySignature}]`;
       }
+
+      debugger
       
       targetVoice.randomizerParams = controlPanelParams;
       

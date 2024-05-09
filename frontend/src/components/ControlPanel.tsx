@@ -29,6 +29,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
             scaleSelection,
             instrumentSelection,
             stepsSelection,
+            repeatNoteSelection,
             pitchRangeSelection,
             tempoSelection,
             volumeSelection,
@@ -61,9 +62,9 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
     };
 
     // Repeat Note
-    const [repeatNote, setRepeatNote] = useState<boolean>(true);
+    const [repeatNoteSelection, setRepeatNoteSelection] = useState<boolean>(randomizerParameters.repeatNoteSelection);
     const handleRepeatNote = (repeat: boolean): void => {
-        setRepeatNote(repeat);
+        setRepeatNoteSelection(repeat);
     };
 
     // Pitch Range
@@ -144,7 +145,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
             >
                 Steps Between Notes
             </RangeSlider>
-            <Checkbox label='Repeat Notes?' checked={repeatNote} onCheck={handleRepeatNote} />
+            <Checkbox label="Repeat Notes" checked={repeatNoteSelection} onCheck={handleRepeatNote} />
             <RangeSlider
                 min={Tempo.MIN_TEMPO}
                 max={Tempo.MAX_TEMPO}

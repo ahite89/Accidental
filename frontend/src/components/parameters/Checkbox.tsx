@@ -9,7 +9,9 @@ export default function Checkbox({checked, onCheck, label}: CheckboxProps) {
     return (
         <label>
             <input type="checkbox" checked={checked} onChange={handleCheck} />
-            {label}
+            <span className="mx-2">
+                {label}
+            </span>
         </label>
     );
 };

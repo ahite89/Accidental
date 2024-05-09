@@ -16,6 +16,7 @@ export interface RandomizerParameters {
     pitchRangeSelection: number[],
     instrumentSelection: Instruments,
     stepsSelection: number,
+    repeatNoteSelection: boolean,
     tempoSelection: number,
     volumeSelection: number,
     durationSelection: DurationProps[]
