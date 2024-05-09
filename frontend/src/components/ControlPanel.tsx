@@ -7,6 +7,7 @@ import DropDown from "./parameters/Dropdown";
 import MultiRangeSlider from "./parameters/MultiRangeSlider";
 import RangeSlider from "./parameters/RangeSlider";
 import SelectableList from './parameters/SelectableList';
+import Checkbox from './parameters/Checkbox';
 
 import { ControlPanelProps } from "../interfaces/controlPanel";
 import { DurationProps } from '../interfaces/selectable';
@@ -57,6 +58,12 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
     const [stepsSelection, setStepsSelection] = useState<number>(randomizerParameters.stepsSelection);
     const handleStepsSelection = (steps: number): void => {
         setStepsSelection(steps);
+    };
+
+    // Repeat Note
+    const [repeatNote, setRepeatNote] = useState<boolean>(true);
+    const handleRepeatNote = (repeat: boolean): void => {
+        setRepeatNote(repeat);
     };
 
     // Pitch Range
@@ -137,6 +144,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
             >
                 Steps Between Notes
             </RangeSlider>
+            <Checkbox label='Repeat Notes?' checked={repeatNote} onCheck={handleRepeatNote} />
             <RangeSlider
                 min={Tempo.MIN_TEMPO}
                 max={Tempo.MAX_TEMPO}
