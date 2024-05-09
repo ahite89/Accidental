@@ -1,4 +1,5 @@
 import { DurationProps } from "../interfaces/selectable";
+import * as NoteIcons from "../svgs/noteIconSvgs";
 
 export const MAX_BEATS_PER_BAR = 8;
 
@@ -16,15 +17,15 @@ export const durationOptions: DurationProps[] = [
 ];
 
 // TODO: Map to note icons
-export const noteDurationSymbolMap: Record<string, string> = {
-    'Sixteenth': '16',
-    'Dotted Sixteenth': '16.',
-    'Eighth': '8',
-    'Dotted Eighth': '8.',
-    'Quarter': '4',
-    'Dotted Quarter': '4.',
-    'Half': '2',
-    'Dotted Half': '2.',
-    'Whole': '1',
-    'Dotted Whole': '1.'
+export const noteDurationSymbolMap: Record<string, JSX.Element> = {
+    'Sixteenth': NoteIcons.SixteenthNoteIcon(),
+    'Dotted Sixteenth': NoteIcons.QuarterNoteIcon(),
+    'Eighth': NoteIcons.QuarterNoteIcon(),
+    'Dotted Eighth': NoteIcons.QuarterNoteIcon(),
+    'Quarter': NoteIcons.QuarterNoteIcon(),
+    'Dotted Quarter': NoteIcons.QuarterNoteIcon(),
+    'Half': NoteIcons.HalfNoteIcon(),
+    'Dotted Half': NoteIcons.QuarterNoteIcon(),
+    'Whole': NoteIcons.WholeNoteIcon(),
+    'Dotted Whole': NoteIcons.QuarterNoteIcon()
 };
