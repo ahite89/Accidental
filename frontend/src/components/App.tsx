@@ -287,8 +287,6 @@ export default function App() {
       else if (targetVoice.randomizerParams.keySelection !== controlPanelParams.keySelection) {
         targetVoice.notationString += `| [K:${keySignature}]`;
       }
-
-      debugger
       
       targetVoice.randomizerParams = controlPanelParams;
       
@@ -352,22 +350,24 @@ export default function App() {
 
   // ----RENDER STAVES---- //
 
-  const staves = notationData.current.map((notationObj) => {
+  const staffDescription = (randomizerParams: RandomizerParameters): string => {
+    const noteDurations = randomizerParams.durationSelection.filter(d => d.selected).map(d => d.noteLength);
 
-    const noteDurations = notationObj.randomizerParams.durationSelection.filter(d => d.selected).map(d => d.noteLength);
-    const staffDescription = `${notationObj.randomizerParams.instrumentSelection} in
-      ${notationObj.randomizerParams.keySelection} ${notationObj.randomizerParams.scaleSelection} |
-      ${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[0]]}-${pitchNumberMap[notationObj.randomizerParams.pitchRangeSelection[1]]} |
+    return `${randomizerParams.instrumentSelection} in
+      ${randomizerParams.keySelection} ${randomizerParams.scaleSelection} |
+      ${pitchNumberMap[randomizerParams.pitchRangeSelection[0]]}-${pitchNumberMap[randomizerParams.pitchRangeSelection[1]]} |
       ${noteDurations.join(', ')} Notes |
-      ${notationObj.randomizerParams.stepsSelection.toString()} Step${notationObj.randomizerParams.stepsSelection === 1 ? "" : "s"} Between Notes |
-      ${notationObj.randomizerParams.repeatNoteSelection ? "" : "No "} Repeated Notes`
+      ${randomizerParams.stepsSelection.toString()} Step${randomizerParams.stepsSelection === 1 ? "" : "s"} Between Notes |
+      ${randomizerParams.repeatNoteSelection ? "" : "No "} Repeated Notes`
+  };
 
+  const staves = notationData.current.map((notationObj) => {
     return (
       <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">
         <div className="flex flex-row justify-between">
           <div className="flex flex-row">
             <p className="border border-cyan-500 bg-cyan-500 px-5 py-4 text-white text-2xl self-center">{notationObj.voiceNumber}</p>
-            <p className="px-3 py-2 text-slate-600 text-xl self-center">{staffDescription}</p>
+            <p className="px-3 py-2 text-slate-600 text-xl self-center">{staffDescription(notationObj.randomizerParams)}</p>
             {notationObj.voiceNumber !== 1 && !generating &&
               <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
                 <MdPlaylistRemove className="text-4xl" />
