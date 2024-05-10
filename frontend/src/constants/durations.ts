@@ -4,8 +4,7 @@ import * as NoteIcons from "../svgs/noteIconSvgs";
 export const MAX_BEATS_PER_BAR = 8;
 
 export const durationOptions: DurationProps[] = [
-    {noteLength: 'Sixteenth', selected: false, abcSyntax: '/2', audioDuration: .5},
-    // {noteLength: 'Dotted Sixteenth', selected: false, abcSyntax: '/3', audioDuration: .75},
+    // {noteLength: 'Sixteenth', selected: false, abcSyntax: '/2', audioDuration: .5},
     {noteLength: 'Eighth', selected: false, abcSyntax: '', audioDuration: 1},
     // {noteLength: 'Dotted Eighth', selected: false, abcSyntax: '1.5', audioDuration: 1.5},
     {noteLength: 'Quarter', selected: true, abcSyntax: '2', audioDuration: 2},
@@ -19,13 +18,12 @@ export const durationOptions: DurationProps[] = [
 // TODO: Map to note icons
 export const noteDurationSymbolMap: Record<string, JSX.Element> = {
     'Sixteenth': NoteIcons.SixteenthNoteIcon(),
-    'Dotted Sixteenth': NoteIcons.QuarterNoteIcon(),
-    'Eighth': NoteIcons.QuarterNoteIcon(),
-    'Dotted Eighth': NoteIcons.QuarterNoteIcon(),
+    'Eighth': NoteIcons.EighthNoteIcon(),
+    'Dotted Eighth': NoteIcons.DottedEighthNoteIcon(),
     'Quarter': NoteIcons.QuarterNoteIcon(),
-    'Dotted Quarter': NoteIcons.QuarterNoteIcon(),
+    'Dotted Quarter': NoteIcons.DottedQuarterNoteIcon(),
     'Half': NoteIcons.HalfNoteIcon(),
-    'Dotted Half': NoteIcons.QuarterNoteIcon(),
+    'Dotted Half': NoteIcons.DottedHalfNoteIcon(),
     'Whole': NoteIcons.WholeNoteIcon(),
-    'Dotted Whole': NoteIcons.QuarterNoteIcon()
+    'Dotted Whole': NoteIcons.DottedWholeNoteIcon()
 };

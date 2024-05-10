@@ -149,7 +149,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                 label="Repeat Notes" 
                 checked={repeatNoteSelection} 
                 onCheck={handleRepeatNote}
-                extraStyling="py-3"
+                extraStyling="pb-3"
             />
             <RangeSlider
                 min={Tempo.MIN_TEMPO}

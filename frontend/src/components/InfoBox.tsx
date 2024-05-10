@@ -23,14 +23,14 @@ export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
                 <span className={instructionsStyling}>
                     Click <button className={fakeButtonStyling}>Start</button>to begin generating,
                     <button className={fakeButtonStyling}>Stop</button>to stop generating,
-                    and <button className={fakeButtonStyling}>Clear</button> to clear the staves of all notes
+                    and <button className={fakeButtonStyling}>Clear</button> to clear the staves of all notes.
                 </span>
                 <span className={instructionsStyling}>
                     Click <MdOutlinePlaylistAdd className="text-2xl text-blue-500 mx-2" /> to add a new staff
-                    and <MdPlaylistRemove className="text-2xl text-blue-500 mx-2" /> to remove a staff
+                    and <MdPlaylistRemove className="text-2xl text-blue-500 mx-2" /> to remove a staff.
                 </span>
                 <span className={instructionsStyling}>
-                    To adjust randomization parameters, simply click a staff to open up its control panel
+                    To adjust randomization parameters, simply click a staff to open up its control panel.
                 </span>
             </div>
             <div className="flex justify-center mb-4">
