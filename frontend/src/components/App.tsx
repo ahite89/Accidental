@@ -55,7 +55,7 @@ export default function App() {
   const toggleMIDIDownloadButton = (display: Boolean, notationObj: NotationData, midi = ""): void => {
     const midiLink = document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!;
     midiLink.innerHTML = display ? midi: "";
-    const buttonClasses = ["px-3", "py-1.5", "text-xl", "self-center", "justify-end", "rounded-full", "border", "border-cyan-500", "bg-cyan-500", "text-white"];
+    const buttonClasses = ["px-3", "py-1.5", "text-xl", "self-center", "justify-end", "rounded-full", "border", "hover:opacity-75", "bg-cyan-500", "text-white"];
     buttonClasses.forEach(className => display ? midiLink.classList.add(className): midiLink.classList.remove(className));
   };
 
