@@ -173,7 +173,9 @@ export default function App() {
       }
       randomNote = getRandomizedNote(notationObj);
       await renderNoteToStaff(randomNote, notationObj);
-      await playNote(randomNote, notationObj);
+      if (!randomNote.isRest) {
+        await playNote(randomNote, notationObj);
+      }
       // Need to pause to ensure note plays out for entire length
       await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
     }
@@ -193,7 +195,7 @@ export default function App() {
 
       if (firstNoteOfTieLength !== 5 && firstNoteOfTieLength !== 7) {
         const firstNoteOfTie = durationOptions.find(duration => duration.audioDuration === firstNoteOfTieLength);
-        newNote = note.abcName + firstNoteOfTie?.abcSyntax + '-|';
+        newNote = note.abcName + firstNoteOfTie?.abcSyntax + (note.isRest ? '|' : '-|');
         notationObj.notationString += newNote;
       }
       else {
@@ -203,7 +205,7 @@ export default function App() {
 
         // Add the remainder of the duration
         tieNoteLeftover = durationOptions.find(duration => duration.audioDuration === firstNoteOfTieLength - 1);
-        newNote = note.abcName + tieNoteLeftover?.abcSyntax + '-|';
+        newNote = note.abcName + tieNoteLeftover?.abcSyntax + (note.isRest ? '|' : '-|');
         notationObj.notationString += newNote;
       }
       
@@ -356,7 +358,7 @@ export default function App() {
     return `${randomizerParams.instrumentSelection} in
       ${randomizerParams.keySelection} ${randomizerParams.scaleSelection} |
       ${pitchNumberMap[randomizerParams.pitchRangeSelection[0]]}-${pitchNumberMap[randomizerParams.pitchRangeSelection[1]]} |
-      ${noteDurations.join(', ')} Notes |
+      ${noteDurations.join(', ')} |
       ${randomizerParams.stepsSelection.toString()} Step${randomizerParams.stepsSelection === 1 ? "" : "s"} Between Notes |
       ${randomizerParams.repeatNoteSelection ? "" : "No "} Repeated Notes`
   };

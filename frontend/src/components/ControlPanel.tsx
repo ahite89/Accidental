@@ -96,7 +96,8 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                     noteLength: duration.noteLength,
                     selected: !duration.selected,
                     abcSyntax: duration.abcSyntax,
-                    audioDuration: duration.audioDuration
+                    audioDuration: duration.audioDuration,
+                    isRest: duration.isRest
                 };
             }
             

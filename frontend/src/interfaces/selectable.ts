@@ -15,5 +15,6 @@ export interface DurationProps {
     noteLength: string,
     selected: boolean,
     abcSyntax: string,
-    audioDuration: number
+    audioDuration: number,
+    isRest?: boolean
 }
