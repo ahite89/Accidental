@@ -147,6 +147,20 @@ export const HalfRestIcon = () => {
     );
 }
 
+export const DottedHalfRestIcon = () => {
+    return (
+        <svg 
+            version="1.1" 
+            x="0px" y="0px" 
+            viewBox="0 0 100 100"
+            enableBackground="new 0 0 100 100"
+        >
+            <polygon points="67.291,46.048 67.291,30.375 32.5,30.375 32.5,46.048 11.376,46.048 11.376,49.625 32.5,49.625 67.291,49.625   89.058,49.625 89.058,46.048 "/>
+            <circle cx="71.903" cy="88.035" r="3.557"/>
+        </svg>
+    );
+}
+
 export const WholeRestIcon = () => {
     return (
         <svg 
