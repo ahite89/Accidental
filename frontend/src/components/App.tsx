@@ -194,7 +194,8 @@ export default function App() {
       const firstNoteOfTieLength = MAX_BEATS_PER_BAR - notationObj.notesInBarCount;
 
       if (firstNoteOfTieLength !== 5 && firstNoteOfTieLength !== 7) {
-        const firstNoteOfTie = durationOptions.find(duration => duration.audioDuration === firstNoteOfTieLength);
+        const firstNoteOfTie = durationOptions.filter(duration => note.isRest ? duration.isRest : duration)
+          .find(duration => duration.audioDuration === firstNoteOfTieLength);
         newNote = note.abcName + firstNoteOfTie?.abcSyntax + (note.isRest ? '|' : '-|');
         notationObj.notationString += newNote;
       }
@@ -204,7 +205,8 @@ export default function App() {
         notationObj.notationString += newNote;
 
         // Add the remainder of the duration
-        tieNoteLeftover = durationOptions.find(duration => duration.audioDuration === firstNoteOfTieLength - 1);
+        tieNoteLeftover = durationOptions.filter(duration => note.isRest ? duration.isRest : duration)
+          .find(duration => duration.audioDuration === firstNoteOfTieLength - 1);
         newNote = note.abcName + tieNoteLeftover?.abcSyntax + (note.isRest ? '|' : '-|');
         notationObj.notationString += newNote;
       }
@@ -214,7 +216,8 @@ export default function App() {
 
       // Check for note durations that don't exist (e.g. half + eighth)
       if (secondNoteOfTieLength !== 5 && secondNoteOfTieLength !== 7) {
-        const secondNoteOfTie = durationOptions.find(duration => duration.audioDuration === secondNoteOfTieLength);
+        const secondNoteOfTie = durationOptions.filter(duration => note.isRest ? duration.isRest : duration)
+          .find(duration => duration.audioDuration === secondNoteOfTieLength);
         newNote = note.abcName + secondNoteOfTie?.abcSyntax;
         notationObj.notationString += newNote;
       }
@@ -224,7 +227,8 @@ export default function App() {
         notationObj.notationString += newNote;
 
         // Add the remainder of the duration
-        tieNoteLeftover = durationOptions.find(duration => duration.audioDuration === secondNoteOfTieLength - 1);
+        tieNoteLeftover = durationOptions.filter(duration => note.isRest ? duration.isRest : duration)
+          .find(duration => duration.audioDuration === secondNoteOfTieLength - 1);
         newNote = note.abcName + tieNoteLeftover?.abcSyntax;
         notationObj.notationString += newNote;
       }
