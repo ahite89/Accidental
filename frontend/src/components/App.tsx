@@ -12,7 +12,6 @@ import InfoBox from './InfoBox';
 import { NoteProps } from '../interfaces/note';
 import { RandomizerParameters } from '../interfaces/controlPanel';
 import { NotationData } from '../interfaces/notation';
-import { DurationProps } from '../interfaces/selectable';
 
 import { getRandomizedNote } from '../services/noteRandomizer';
 import { fetchValidNotes } from '../services/noteFetcher';
@@ -424,12 +423,15 @@ export default function App() {
         </div>
       </div>
       <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
-          {openControlPanel && <ControlPanel 
-            onSubmit={handleUpdateStaff} 
-            voiceNumber={voiceNumber}
-            randomizerParameters={randomizerParameters}
-            handleCloseControlPanel={handleCloseControlPanel}
-          />}
+        <div className="bg-gradient-to-r from-cyan-500 to-blue-500">
+          <p className="text-center text-white py-2 text-2xl">Voice {voiceNumber}</p>
+        </div>
+        {openControlPanel && <ControlPanel 
+          onSubmit={handleUpdateStaff} 
+          voiceNumber={voiceNumber}
+          randomizerParameters={randomizerParameters}
+          handleCloseControlPanel={handleCloseControlPanel}
+        />}
       </Modal>
       <Modal isOpen={openInfoBox} style={modalStyling} ariaHideApp={false}>
         {openInfoBox && 

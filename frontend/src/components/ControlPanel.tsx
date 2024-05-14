@@ -118,7 +118,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                 <DropDown options={keyOptions(scaleSelection)} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
                 <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
             </div>
-            <div className="flex flex-col items-center mb-8">
+            <div className="flex flex-col items-center mb-8 px-4">
                 <SelectableList 
                     options={durationSelection}
                     onSelect={handleDurationSelection}
