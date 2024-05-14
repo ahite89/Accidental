@@ -12,7 +12,7 @@ export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
     const instructionsStyling = "flex flex-row mb-4 items-center justify-center";
 
     return (
-        <div className="divide-y divide-slate-300 px-4 flex flex-col items-center">
+        <div className="divide-y divide-slate-300 p-4 flex flex-col items-center">
             <div>
                 <p className="text-xl">Welcome to Accidental!</p>
             </div>
