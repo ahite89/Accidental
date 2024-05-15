@@ -181,9 +181,10 @@ export default function App() {
   };
 
   const getTiedNote = (firstNote: boolean, tieLength: number, note: NoteProps): string => {
-    const tieNote = durationOptions.filter(duration => note.isRest ? duration.isRest : duration)
+    const tieNoteDuration = durationOptions.filter(duration => note.isRest ? duration.isRest : duration)
           .find(duration => duration.audioDuration ===  tieLength);
-    return note.abcName + tieNote?.abcSyntax + firstNote ? (note.isRest ? '|' : '-|') : '';
+
+    return note.abcName + tieNoteDuration?.abcSyntax + (firstNote ? (note.isRest ? '|' : '-|') : '');
   };
 
   const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
