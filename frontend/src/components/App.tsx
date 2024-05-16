@@ -269,7 +269,7 @@ export default function App() {
 
     let targetVoice = notationData.current.find(notationObj => notationObj.voiceNumber === selectedVoiceNumber);
 
-    if (targetVoice && targetVoice.randomizerParams !== controlPanelParams) {
+    if (targetVoice) {
 
       // Set valid notes for randomizing based on control panel params (assuming they've changed)
       targetVoice.validNotesForRandomizing = fetchValidNotes(controlPanelParams);

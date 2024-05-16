@@ -12,11 +12,11 @@ export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
     const instructionsStyling = "flex flex-row mb-4 items-center justify-center";
 
     return (
-        <div className="divide-y divide-slate-300 p-4 flex flex-col items-center">
-            <div>
-                <p className="text-xl">Welcome to Accidental!</p>
+        <div className="flex flex-col">
+            <div className="bg-gradient-to-r from-cyan-500 to-blue-500 px-10 py-4">
+                <p className="text-2xl text-white text-center">Welcome to Accidental!</p>
             </div>
-            <div className="my-4 pt-4">
+            <div className="mt-4 p-4">
                 <div className="flex flex-row mb-8 justify-center text-center">
                     <p>{appDescription}</p>
                 </div>
