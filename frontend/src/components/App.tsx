@@ -251,7 +251,7 @@ export default function App() {
     abcjs.synth.playEvent(
       [
         {
-          "pitch": note.pitchNumber,
+          "pitch": note.pitchNumber!,
           "volume": notationObj.randomizerParams.volumeSelection,
           "start": 0,
           "duration": note.durationProps.audioDuration,

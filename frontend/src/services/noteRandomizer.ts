@@ -1,7 +1,6 @@
 import { NoteProps } from '../interfaces/note';
 import { NotationData } from '../interfaces/notation';
 import { NoteForScaleProps } from '../interfaces/scale';
-import { AccidentalTypes } from '../constants/notes';
 
 export const getRandomizedNote = (notationObj: NotationData): NoteProps => {
 
@@ -12,10 +11,8 @@ export const getRandomizedNote = (notationObj: NotationData): NoteProps => {
     const randomDurationIndex = Math.floor(Math.random() * selectedDurations.length);
     const randomDuration = selectedDurations[randomDurationIndex];
 
-    debugger
-
     // Default object to use for rests
-    let randomNameAndPitch: NoteForScaleProps = {abcName: "", pitchNumber: 60, noteName: "", accidentalType: AccidentalTypes.Natural};
+    let randomNameAndPitch: NoteForScaleProps = {abcName: "", noteName: ""};
 
     if (!randomDuration.isRest) {
         // Get random pitch

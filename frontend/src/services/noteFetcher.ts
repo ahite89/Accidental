@@ -13,7 +13,7 @@ export const fetchValidNotes = (randomizerParams: RandomizerParameters): NoteFor
     
     let validNotesForRandomizing: NoteForScaleProps[] = [];
     allValidNotesFromKeyAndScale.map((noteObject) => {
-        if (noteObject.pitchNumber >= pitchRangeMin && noteObject.pitchNumber <= pitchRangeMax) {
+        if (noteObject.pitchNumber! >= pitchRangeMin && noteObject.pitchNumber! <= pitchRangeMax) {
             validNotesForRandomizing.push(noteObject);
         }
         return validNotesForRandomizing;
