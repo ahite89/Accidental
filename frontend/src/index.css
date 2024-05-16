@@ -22,6 +22,10 @@ code {
   padding: 0 !important
 }
 
+.ReactModal__Overlay {
+  background-color: rgba(221, 225, 229, 0.75) !important;
+}
+
 .notes-on-staff-image {
   background-image: url('./images/SPN-on-the-staff.jpg');
   padding: 20px;
