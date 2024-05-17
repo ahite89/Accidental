@@ -416,7 +416,7 @@ export default function App() {
           {staves}
         </div> 
         <div className="flex flex-row justify-center">
-          {voiceNumber < 4 && !generating &&
+          {voiceCount < 4 && !generating &&
           <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={addVoiceToSystem}>
             <MdOutlinePlaylistAdd className="text-4xl" />
           </Button>
