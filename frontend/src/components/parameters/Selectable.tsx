@@ -12,9 +12,6 @@ export default function Selectable({ duration, onSelect }: SelectableOption) {
             audioDuration: duration.audioDuration
         });
     };
-
-    // pass current in and append based on selected status?
-    // use string array for current instead?
     
     const classes = className(
         'border cursor-pointer p-1 w-14 text-3xl', {'bg-slate-100': duration.selected}

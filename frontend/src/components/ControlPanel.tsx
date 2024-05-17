@@ -123,7 +123,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                     options={durationSelection}
                     onSelect={handleDurationSelection}
                 >
-                    Note Durations
+                    Durations
                 </SelectableList>
             </div>
             {/* Custom scale buttons */}
@@ -144,10 +144,10 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                 onChangeValue={handleStepsSelection}
                 interval={Steps.STEPS_INTERVAL}
             >
-                Steps Between Notes
+                Maximum Steps Between Pitches
             </RangeSlider>
             <Checkbox 
-                label="Repeat Notes" 
+                label="Repeat Pitches"
                 checked={repeatNoteSelection} 
                 onCheck={handleRepeatNote}
                 extraStyling="pb-3"

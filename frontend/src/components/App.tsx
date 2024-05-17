@@ -3,6 +3,7 @@ import abcjs, { TuneObjectArray } from "abcjs";
 import Modal from 'react-modal';
 import '../index.css';
 import { MdPlaylistRemove, MdOutlinePlaylistAdd } from 'react-icons/md';
+import * as NoteIcons from "../svgs/noteIconSvgs";
 
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
@@ -19,7 +20,7 @@ import { fetchClefBasedOnPitchRange } from '../services/clefFetcher';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { instrumentMap } from '../constants/instruments';
-import { MAX_BEATS_PER_BAR, durationOptions } from "../constants/durations";
+import { MAX_BEATS_PER_BAR, durationOptions, noteDurationSymbolMap } from "../constants/durations";
 import { FIRST_EIGHT_BARS, Clefs, DEFAULT_CLEF } from '../constants/voices';
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
@@ -352,15 +353,24 @@ export default function App() {
 
   // ----RENDER STAVES---- //
 
-  const staffDescription = (randomizerParams: RandomizerParameters): string => {
-    const noteDurations = randomizerParams.durationSelection.filter(d => d.selected).map(d => d.noteLength);
+  const staffDescription = (randomizerParams: RandomizerParameters): JSX.Element => {
+    const noteDurations = randomizerParams.durationSelection.filter(d => d.selected).map((d) => {
+      return <span style={{width: "30px", paddingTop: "18px"}}>{noteDurationSymbolMap[d.noteLength]}</span>
+    });
 
-    return `${randomizerParams.instrumentSelection} in
+    const desc = `${randomizerParams.instrumentSelection} in
       ${randomizerParams.keySelection} ${randomizerParams.scaleSelection} |
       ${pitchNumberMap[randomizerParams.pitchRangeSelection[0]]}-${pitchNumberMap[randomizerParams.pitchRangeSelection[1]]} |
-      ${noteDurations.join(', ')} |
-      ${randomizerParams.stepsSelection.toString()} Step${randomizerParams.stepsSelection === 1 ? "" : "s"} Between Notes |
-      ${randomizerParams.repeatNoteSelection ? "" : "No "} Repeated Notes`
+      
+      ${randomizerParams.stepsSelection.toString()} Step${randomizerParams.stepsSelection === 1 ? "" : "s"} |
+      ${randomizerParams.repeatNoteSelection ? "" : "No "} Repeats | `;
+
+      return (
+        <>
+          <p className="px-3 py-2 text-slate-600 text-xl self-center">{desc}</p>
+          <p className="flex flex-row">{noteDurations}</p>
+        </>
+      );
   };
 
   const staves = notationData.current.map((notationObj) => {
@@ -369,7 +379,7 @@ export default function App() {
         <div className="flex flex-row justify-between">
           <div className="flex flex-row">
             <p className="border border-cyan-500 bg-cyan-500 px-5 py-4 text-white text-2xl self-center">{notationObj.voiceNumber}</p>
-            <p className="px-3 py-2 text-slate-600 text-xl self-center">{staffDescription(notationObj.randomizerParams)}</p>
+            {staffDescription(notationObj.randomizerParams)}
             {notationObj.voiceNumber !== 1 && !generating &&
               <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
                 <MdPlaylistRemove className="text-4xl" />
