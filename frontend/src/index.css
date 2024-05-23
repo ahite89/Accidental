@@ -26,6 +26,13 @@ code {
   background-color: rgba(221, 225, 229, 0.75) !important;
 }
 
+.react-tooltip {
+  background-color: rgba(221, 225, 229, 0.75) !important;
+  color: black !important;
+  font-size: medium !important;
+  padding: 0 10px 0 10px !important;
+}
+
 .notes-on-staff-image {
   background-image: url('./images/SPN-on-the-staff.jpg');
   padding: 20px;

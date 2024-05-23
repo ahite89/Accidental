@@ -1,13 +1,20 @@
+import { Tooltip } from 'react-tooltip';
+
 export const QuarterNoteIcon = () => {
     return (
-        <svg 
-            version="1.1" 
-            x="0px" y="0px" 
-            viewBox="0 0 100 100" 
-            enableBackground="new 0 0 100 100"
-        >
-            <path d="M60.45,5v66.236c-4.146-3.207-11.431-3.148-18.014,0.567c-8.01,4.521-11.938,12.731-8.773,18.339s12.224,6.489,20.234,1.969  c6.258-3.532,10.005-9.312,9.844-14.348h0.024V5H60.45z"/>
-        </svg>
+        <>
+            <Tooltip id="my-tooltip" />
+            <a data-tooltip-id="my-tooltip" data-tooltip-content="Quarter Note" data-tooltip-place="top">
+                <svg 
+                    version="1.1" 
+                    x="0px" y="0px" 
+                    viewBox="0 0 100 100" 
+                    enableBackground="new 0 0 100 100"
+                >
+                    <path d="M60.45,5v66.236c-4.146-3.207-11.431-3.148-18.014,0.567c-8.01,4.521-11.938,12.731-8.773,18.339s12.224,6.489,20.234,1.969  c6.258-3.532,10.005-9.312,9.844-14.348h0.024V5H60.45z"/>
+                </svg>
+            </a>
+        </>
     );
 }
 
@@ -120,6 +127,8 @@ export const DottedWholeNoteIcon = () => {
         </svg>
     );
 }
+
+// https://react-tooltip.com/docs/getting-started
 
 export const EighthRestIcon = () => {
     return (
