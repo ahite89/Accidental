@@ -4,8 +4,8 @@ import { MdPlaylistRemove, MdOutlinePlaylistAdd } from 'react-icons/md';
 
 export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
 
-    const appDescription = `Generate fully-randomized melodies that are notated in real time. 
-    Adjust the parameters for each voice to suit your specific needs. When you're done generating,
+    const appDescription = `Generate unique melodies that are notated in real time. 
+    Adjust the parameters for each voice to suit your specific needs. When done,
     each voice can be downloaded as a separate MIDI file.`
 
     const fakeButtonStyling = "mx-2 text-sm px-3 py-1 border border-cyan-500 bg-cyan-500 text-white rounded-full cursor-default";
@@ -14,7 +14,7 @@ export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
     return (
         <div className="flex flex-col">
             <div className="bg-gradient-to-r from-cyan-500 to-blue-500 px-10 py-4">
-                <p className="text-2xl text-white text-center">Welcome to Accidental!</p>
+                <p className="text-3xl text-white text-center">Hi, Welcome to Accidental!</p>
             </div>
             <div className="mt-4 p-4">
                 <div className="flex flex-row mb-8 justify-center text-center">
@@ -34,7 +34,7 @@ export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
                 </span>
             </div>
             <div className="flex justify-center mb-4">
-                <Button primary onClick={handleCloseInfoBox}>Got it!</Button>
+                <Button primary onClick={handleCloseInfoBox}>Start Generating!</Button>
             </div>
         </div>
     );

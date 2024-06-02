@@ -122,17 +122,21 @@ export default function App() {
 
   // ----VOICE ACTIONS---- //
 
-  const [voiceCount, setVoiceCount] = useState<number>(notationData.current.length);
+  const [activeVoices, setActiveVoices] = useState<number[]>([notationData.current.length]);
+
+  const getCorrectVoiceToAdd = (voiceCount: number): number => {
+    debugger
+    return !activeVoices.includes(voiceCount) ? voiceCount : voiceCount + 1;
+  }
 
   // Add
   const addVoiceToSystem = (): void => {
-    console.log(voiceCount);
-    if (voiceCount < 4) {
+    if (activeVoices.length < 4) {
       notationData.current.push(
         {
-          voiceNumber: voiceCount + 1,
+          voiceNumber: getCorrectVoiceToAdd(activeVoices.length),
           randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
-          notationString: `X:${voiceCount + 1}\nK:${DEFAULT_KEY} ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${DEFAULT_TEMPO}\n${FIRST_EIGHT_BARS}`,
+          notationString: `X:${activeVoices.length + 1}\nK:${DEFAULT_KEY} ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${DEFAULT_TEMPO}\n${FIRST_EIGHT_BARS}`,
           playBackNotes: [],
           notesInBarCount: 0,
           instrumentMidiNumber: 2,
@@ -140,16 +144,16 @@ export default function App() {
           clef: Clefs.Treble
         }
       )
-      setVoiceCount(voiceCount + 1);
+      setActiveVoices([...activeVoices, getCorrectVoiceToAdd(activeVoices.length)]);
     }
   };
 
   // Remove
   const removeVoiceFromSystem = (voiceNumber: number): void => {
-    if (voiceCount > 1) {
+    if (activeVoices.length > 1) {
       const selectedVoice = notationData.current.indexOf(notationData.current[voiceNumber - 1]);
       notationData.current.splice(selectedVoice, 1);
-      setVoiceCount(voiceCount - 1);
+      setActiveVoices(activeVoices.filter(voice => voice !== selectedVoice + 1));
     }
   };
 
@@ -160,7 +164,7 @@ export default function App() {
     for (let i = 1; i < voiceCount + 1; i++) {
       staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);
     }
-  }, [voiceCount]);
+  }, [activeVoices.length]);
 
   // ----NOTE PLAYING AND RENDERING---- //
 
@@ -358,7 +362,7 @@ export default function App() {
       return <span style={{width: "30px", paddingTop: "18px"}}>{noteDurationSymbolMap[d.noteLength]}</span>
     });
 
-    const desc = `${randomizerParams.instrumentSelection} in
+    const desc = `${randomizerParams.instrumentSelection} |
       ${randomizerParams.keySelection} ${randomizerParams.scaleSelection} |
       ${pitchNumberMap[randomizerParams.pitchRangeSelection[0]]}-${pitchNumberMap[randomizerParams.pitchRangeSelection[1]]} |
       
@@ -373,7 +377,7 @@ export default function App() {
       );
   };
 
-  const staves = notationData.current.map((notationObj) => {
+  const staves = notationData.current.sort((a, b) => a.voiceNumber - b.voiceNumber).map((notationObj) => {
     return (
       <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">
         <div className="flex flex-row justify-between">
@@ -426,7 +430,7 @@ export default function App() {
           {staves}
         </div> 
         <div className="flex flex-row justify-center">
-          {voiceCount < 4 && !generating &&
+          {activeVoices.length < 4 && !generating &&
           <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={addVoiceToSystem}>
             <MdOutlinePlaylistAdd className="text-4xl" />
           </Button>
