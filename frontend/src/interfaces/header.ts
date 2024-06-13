@@ -3,5 +3,6 @@ export interface HeaderProps {
     generating: boolean,
     handleStopGenerating: () => void,
     handleClearAllStaves: () => void,
+    handleOpenConfirmDialog: () => void,
     handleStartGenerating: () => Promise<void>
 }

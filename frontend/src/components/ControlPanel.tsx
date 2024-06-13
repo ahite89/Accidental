@@ -174,7 +174,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                 <Button disabled={durationSelection.find(d => d.selected) ? false : true} primary extraStyling="mr-4" 
                     onClick={handleSubmitParameters}>Save Changes</Button>
                 <Button onClick={handleCloseControlPanel}>Cancel</Button>
-          </div>
+            </div>
         </div>
     );
 }

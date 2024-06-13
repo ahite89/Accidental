@@ -3,12 +3,12 @@ import abcjs, { TuneObjectArray } from "abcjs";
 import Modal from 'react-modal';
 import '../index.css';
 import { MdPlaylistRemove, MdOutlinePlaylistAdd } from 'react-icons/md';
-import * as NoteIcons from "../svgs/noteIconSvgs";
 
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
 import Button from './parameters/Button';
 import InfoBox from './InfoBox';
+import ConfirmDialog from './ConfirmDialog';
 
 import { NoteProps } from '../interfaces/note';
 import { RandomizerParameters } from '../interfaces/controlPanel';
@@ -107,6 +107,7 @@ export default function App() {
       notationData.current[i].previousNotePitch = undefined;
       toggleMIDIDownloadButton(false, notationData.current[i]);
     }
+    setOpenConfirmDialog(false);
   };
 
   // const handlePlayback = (): void => {
@@ -332,6 +333,18 @@ export default function App() {
     }
   };
 
+  // ----CONFIRM DIALOG BEHAVIOR---- //
+
+  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+
+  const handleOpenConfirmDialog = () => {
+    setOpenConfirmDialog(true);
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
   // ----INFO BOX BEHAVIOR---- //
 
   const [openInfoBox, setOpenInfoBox] = useState<boolean>(false);
@@ -359,7 +372,7 @@ export default function App() {
 
   const staffDescription = (randomizerParams: RandomizerParameters): JSX.Element => {
     const noteDurations = randomizerParams.durationSelection.filter(d => d.selected).map((d) => {
-      return <span style={{width: "30px", paddingTop: "18px"}}>{noteDurationSymbolMap[d.noteLength]}</span>
+      return <span key={d.noteLength} style={{width: "30px", paddingTop: "18px"}}>{noteDurationSymbolMap[d.noteLength]}</span>
     });
 
     const desc = `${randomizerParams.instrumentSelection} |
@@ -416,6 +429,7 @@ export default function App() {
         handleClearAllStaves={handleClearAllStaves}
         handleStartGenerating={handleStartGenerating}
         handleStopGenerating={handleStopGenerating}
+        handleOpenConfirmDialog={handleOpenConfirmDialog}
       />
       <div className="p-8 bg-slate-100">
         <div className="flex flex-col p-4">
@@ -443,6 +457,11 @@ export default function App() {
       <Modal isOpen={openInfoBox} style={modalStyling} ariaHideApp={false}>
         {openInfoBox && 
           <InfoBox handleCloseInfoBox={handleCloseInfoBox} />
+        }
+      </Modal>
+      <Modal isOpen={openConfirmDialog} style={modalStyling} ariaHideApp={false}>
+        {openConfirmDialog && 
+          <ConfirmDialog onSubmit={handleClearAllStaves} handleCloseConfirmDialog={handleCloseConfirmDialog} />
         }
       </Modal>
     </div>
