@@ -16,7 +16,7 @@ export default function Button({
         'border border-cyan-500 bg-cyan-500 text-white': primary,
         'border border-slate-400 bg-slate-400 text-white hover:opacity-100': disabled,
         'rounded-full': rounded,
-        'bg-transparent border-blue-500 text-blue-500': outline
+        'bg-cyan-500 border border-white text-white': outline
     }, extraStyling);
 
     return (

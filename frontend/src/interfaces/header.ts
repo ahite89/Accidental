@@ -1,3 +1,7 @@
 export interface HeaderProps {
-    handleOpenInfoBox: () => void
+    handleOpenInfoBox: () => void,
+    generating: boolean,
+    handleStopGenerating: () => void,
+    handleClearAllStaves: () => void,
+    handleStartGenerating: () => Promise<void>
 }

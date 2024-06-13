@@ -97,7 +97,7 @@ export default function App() {
   };
 
   // Clear
-  const handleClearStaff = () => {
+  const handleClearAllStaves = () => {
     for (let i = 0; i < notationData.current.length; i++) {
       const params = notationData.current[i].randomizerParams;
       notationData.current[i].notationString = 
@@ -410,22 +410,14 @@ export default function App() {
 
   return (
     <div>
-      <Header handleOpenInfoBox={handleOpenInfoBox} />
+      <Header 
+        handleOpenInfoBox={handleOpenInfoBox} 
+        generating={generating} 
+        handleClearAllStaves={handleClearAllStaves}
+        handleStartGenerating={handleStartGenerating}
+        handleStopGenerating={handleStopGenerating}
+      />
       <div className="p-8 bg-slate-100">
-        <div className="flex flex-row justify-center my-4">
-          <Button disabled={generating} extraStyling="mr-4 text-xl" primary rounded onClick={handleStartGenerating}>
-            Start
-          </Button>
-          <Button disabled={!generating} extraStyling="mr-4 text-xl" primary rounded onClick={handleStopGenerating}>
-            Stop
-          </Button>
-          <Button disabled={generating} extraStyling="mr-4 text-xl" primary rounded onClick={handleClearStaff}>
-            Clear
-          </Button>
-          {/* <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>
-            Play
-          </Button> */}
-        </div>
         <div className="flex flex-col p-4">
           {staves}
         </div> 
