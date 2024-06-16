@@ -4,7 +4,6 @@ import { HeaderProps } from "../interfaces/header";
 
 export default function Header({ 
     handleOpenInfoBox, 
-    handleClearAllStaves, 
     handleStartGenerating, 
     handleStopGenerating,
     handleOpenConfirmDialog,
@@ -17,15 +16,21 @@ export default function Header({
                 &#9838;ccidental
             </p>
             <div className="flex flex-row justify-center">
-            <Button disabled={generating} extraStyling="mr-4 text-xl" outline rounded onClick={handleStartGenerating}>
-                Start
-            </Button>
-            <Button disabled={!generating} extraStyling="mr-4 text-xl" outline rounded onClick={handleStopGenerating}>
-                Stop
-            </Button>
-            <Button disabled={generating} extraStyling="mr-4 text-xl" outline rounded onClick={handleOpenConfirmDialog}>
-                Clear All
-            </Button>
+            {!generating &&
+                <Button disabled={generating} extraStyling="mr-4 text-xl" outline rounded onClick={handleStartGenerating}>
+                    Start
+                </Button>
+            }
+            {generating &&
+                <Button disabled={!generating} extraStyling="mr-4 text-xl" outline rounded onClick={handleStopGenerating}>
+                    Stop
+                </Button>
+            }
+            {!generating &&
+                <Button disabled={generating} extraStyling="mr-4 text-xl" outline rounded onClick={handleOpenConfirmDialog}>
+                    Clear All
+                </Button>
+            }
           {/* <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>
             Play
           </Button> */}

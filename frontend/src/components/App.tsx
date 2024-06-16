@@ -426,7 +426,6 @@ export default function App() {
       <Header 
         handleOpenInfoBox={handleOpenInfoBox} 
         generating={generating} 
-        handleClearAllStaves={handleClearAllStaves}
         handleStartGenerating={handleStartGenerating}
         handleStopGenerating={handleStopGenerating}
         handleOpenConfirmDialog={handleOpenConfirmDialog}
