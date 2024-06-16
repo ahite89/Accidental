@@ -50,6 +50,7 @@ export default function App() {
 
   const isGenerating = useRef<boolean>(false);  // for stopping/starting
   const [generating, setGenerating] = useState<boolean>(false); // for disabling buttons
+  const [notesOnStaff, setNotesOnStaff] = useState<boolean>(false);
 
   // Toggle MIDI Download Button
   const toggleMIDIDownloadButton = (display: Boolean, notationObj: NotationData, midi = ""): void => {
@@ -83,6 +84,7 @@ export default function App() {
         handleDownloadMIDI(notationData.current[i]);
       }
     }
+    setNotesOnStaff(true);
   };
 
   // Start
@@ -108,6 +110,7 @@ export default function App() {
       toggleMIDIDownloadButton(false, notationData.current[i]);
     }
     setOpenConfirmDialog(false);
+    setNotesOnStaff(false);
   };
 
   // const handlePlayback = (): void => {
@@ -425,7 +428,8 @@ export default function App() {
     <div>
       <Header 
         handleOpenInfoBox={handleOpenInfoBox} 
-        generating={generating} 
+        generating={generating}
+        notesOnStaff={notesOnStaff}
         handleStartGenerating={handleStartGenerating}
         handleStopGenerating={handleStopGenerating}
         handleOpenConfirmDialog={handleOpenConfirmDialog}

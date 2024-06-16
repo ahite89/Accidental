@@ -7,7 +7,8 @@ export default function Header({
     handleStartGenerating, 
     handleStopGenerating,
     handleOpenConfirmDialog,
-    generating 
+    generating,
+    notesOnStaff 
 }: HeaderProps) {
     
     return (
@@ -17,17 +18,17 @@ export default function Header({
             </p>
             <div className="flex flex-row justify-center">
             {!generating &&
-                <Button disabled={generating} extraStyling="mr-4 text-xl" outline rounded onClick={handleStartGenerating}>
+                <Button extraStyling="mr-4 text-xl" outline rounded onClick={handleStartGenerating}>
                     Start
                 </Button>
             }
             {generating &&
-                <Button disabled={!generating} extraStyling="mr-4 text-xl" outline rounded onClick={handleStopGenerating}>
+                <Button extraStyling="mr-4 text-xl" outline rounded onClick={handleStopGenerating}>
                     Stop
                 </Button>
             }
-            {!generating &&
-                <Button disabled={generating} extraStyling="mr-4 text-xl" outline rounded onClick={handleOpenConfirmDialog}>
+            {(!generating && notesOnStaff) &&
+                <Button extraStyling="mr-4 text-xl" outline rounded onClick={handleOpenConfirmDialog}>
                     Clear All
                 </Button>
             }
