@@ -2,6 +2,7 @@ import { DurationProps } from "../interfaces/selectable";
 import * as NoteIcons from "../svgs/noteIconSvgs";
 
 export const MAX_BEATS_PER_BAR = 8;
+export const NONEXISTENT_DURATIONS = [5, 7];
 
 export const durationOptions: DurationProps[] = [
     // {noteLength: 'Sixteenth', selected: false, abcSyntax: '/2', audioDuration: .5},
@@ -12,16 +13,15 @@ export const durationOptions: DurationProps[] = [
     {noteLength: 'Half', selected: false, abcSyntax: '4', audioDuration: 4},
     {noteLength: 'Dotted Half', selected: false, abcSyntax: '6', audioDuration: 6},
     {noteLength: 'Whole', selected: false, abcSyntax: '8', audioDuration: 8},
-    {noteLength: 'Eighth Rest', selected: false, abcSyntax: 'z', audioDuration: 1},
+    {noteLength: 'Eighth Rest', selected: false, abcSyntax: 'z', audioDuration: 1, isRest: true},
     {noteLength: 'Quarter Rest', selected: false, abcSyntax: 'z2', audioDuration: 2, isRest: true},
-    {noteLength: 'Dotted Quarter Rest', selected: false, abcSyntax: 'z3', audioDuration: 3},
+    {noteLength: 'Dotted Quarter Rest', selected: false, abcSyntax: 'z3', audioDuration: 3, isRest: true},
     {noteLength: 'Half Rest', selected: false, abcSyntax: 'z4', audioDuration: 4, isRest: true},
     {noteLength: 'Dotted Half Rest', selected: false, abcSyntax: 'z6', audioDuration: 6, isRest: true},
-    {noteLength: 'Whole Rest', selected: false, abcSyntax: 'z8', audioDuration: 8, isRest: true},
+    {noteLength: 'Whole Rest', selected: false, abcSyntax: 'z8', audioDuration: 8, isRest: true}
     // {noteLength: 'Dotted Whole', selected: false, abcSyntax: '12', audioDuration: 12}
 ];
 
-// TODO: Map to note icons
 export const noteDurationSymbolMap: Record<string, JSX.Element> = {
     'Sixteenth': NoteIcons.SixteenthNoteIcon(),
     'Eighth': NoteIcons.EighthNoteIcon(),

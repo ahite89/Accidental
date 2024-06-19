@@ -16,7 +16,7 @@ export default function Header({
             <p className="text-white text-2xl border-white border-2 border-solid p-2 rounded self-center">
                 &#9838;ccidental
             </p>
-            <div className="flex flex-row justify-center">
+            <div className="flex flex-row justify-center self-center">
             {!generating &&
                 <Button extraStyling="mr-4 text-xl" outline rounded onClick={handleStartGenerating}>
                     Start

@@ -20,7 +20,7 @@ import { fetchClefBasedOnPitchRange } from '../services/clefFetcher';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { instrumentMap } from '../constants/instruments';
-import { MAX_BEATS_PER_BAR, durationOptions, noteDurationSymbolMap } from "../constants/durations";
+import { MAX_BEATS_PER_BAR, NONEXISTENT_DURATIONS, durationOptions, noteDurationSymbolMap } from "../constants/durations";
 import { FIRST_EIGHT_BARS, Clefs, DEFAULT_CLEF } from '../constants/voices';
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
@@ -129,7 +129,6 @@ export default function App() {
   const [activeVoices, setActiveVoices] = useState<number[]>([notationData.current.length]);
 
   const getCorrectVoiceToAdd = (voiceCount: number): number => {
-    debugger
     return !activeVoices.includes(voiceCount) ? voiceCount : voiceCount + 1;
   }
 
@@ -209,13 +208,13 @@ export default function App() {
       const firstNoteOfTieLength = MAX_BEATS_PER_BAR - notationObj.notesInBarCount;
 
       // Check for note durations that don't exist (e.g. half + eighth)
-      if (firstNoteOfTieLength !== 5 && firstNoteOfTieLength !== 7) {
+      if (!NONEXISTENT_DURATIONS.includes(firstNoteOfTieLength)) {
         const firstNoteOfTie = getTiedNote(true, firstNoteOfTieLength, note);
         notationObj.notationString += firstNoteOfTie;
       }
       else {
         // If non-existent duration, add eighth note first so that the resulting duration is a half or dotted half
-        newNote = note.abcName + '-';
+        newNote = note.abcName + (note.isRest ? 'z' : '-');
         notationObj.notationString += newNote;
 
         // Add the remainder of the duration
@@ -226,12 +225,12 @@ export default function App() {
       notationObj.notesInBarCount = 0;   
       const secondNoteOfTieLength = note.durationProps.audioDuration - firstNoteOfTieLength;
 
-      if (secondNoteOfTieLength !== 5 && secondNoteOfTieLength !== 7) {
+      if (!NONEXISTENT_DURATIONS.includes(secondNoteOfTieLength)) {
         const secondNoteOfTie = getTiedNote(false, secondNoteOfTieLength, note)
         notationObj.notationString += secondNoteOfTie;
       }
       else {
-        newNote = note.abcName + '-';
+        newNote = note.abcName + (note.isRest ? 'z' : '-');
         notationObj.notationString += newNote;
 
         tieNoteLeftover = getTiedNote(false, secondNoteOfTieLength - 1, note);
