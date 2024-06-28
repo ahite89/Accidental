@@ -17,7 +17,7 @@ export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
                 <p className="text-3xl text-white text-center">Hi, Welcome to Accidental!</p>
             </div>
             <div className="mt-4 p-4">
-                <div className="flex flex-row mb-8 justify-center text-center">
+                <div className="flex flex-row mb-8 pb-6 justify-center text-center border-0 border-b border-slate-200">
                     <p>{appDescription}</p>
                 </div>
                 <span className={instructionsStyling}>
