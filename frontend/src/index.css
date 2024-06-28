@@ -27,8 +27,8 @@ code {
 }
 
 .react-tooltip {
-  background-color: rgba(221, 225, 229, 0.75) !important;
-  color: black !important;
+  background-color: #06b6d4 !important;
+  color: white !important;
   font-size: medium !important;
   padding: 0 10px 0 10px !important;
 }
