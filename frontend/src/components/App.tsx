@@ -447,7 +447,7 @@ export default function App() {
       </div>
       <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
         <div className="bg-gradient-to-r from-cyan-500 to-blue-500">
-          <p className="text-center text-white py-2 text-2xl">Voice {voiceNumber}</p>
+          <p className="text-center text-white py-3 text-3xl">Voice {voiceNumber}</p>
         </div>
         {openControlPanel && <ControlPanel 
           onSubmit={handleUpdateStaff} 

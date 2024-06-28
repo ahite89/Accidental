@@ -41,7 +41,7 @@ export default function DropDown({ options, value, onChange, children }: DropDow
     });
 
     return (
-        <div ref={divEl} className="w-40 relative mr-4">
+        <div ref={divEl} className="w-80 relative mr-4 py-2">
             <label>{children}</label>
             <Panel extraStyling="flex justify-between items-center cursor-pointer mt-1"
                 onClick={handleClick}>

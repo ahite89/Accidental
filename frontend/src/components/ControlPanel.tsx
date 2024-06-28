@@ -107,73 +107,72 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
         setDurationSelection(updatedDurations);
     };
 
-    const classes = className(
-        'p-2 flex flex-col items-center'
-    );
-
     return (
-        <div className={classes}>
-            <div className="flex flex-row mb-8">
-                <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
-                <DropDown options={keyOptions(scaleSelection)} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
-                <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
+        <div className="p-4 flex flex-row">
+            <div className="w-80 mr-6">
+                <div className="flex flex-col pb-2">
+                    <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
+                    <DropDown options={keyOptions(scaleSelection)} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
+                    <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
+                </div>
+                <div className="flex flex-wrap items-center pb-2">
+                    <SelectableList 
+                        options={durationSelection}
+                        onSelect={handleDurationSelection}
+                    >
+                        Durations
+                    </SelectableList>
+                </div>
+                <Checkbox 
+                    label="Repeat Pitches"
+                    checked={repeatNoteSelection} 
+                    onCheck={handleRepeatNote}
+                    extraStyling="pt-4"
+                />
             </div>
-            <div className="flex flex-col items-center mb-8 px-4">
-                <SelectableList 
-                    options={durationSelection}
-                    onSelect={handleDurationSelection}
+            <div className="w-96 border-solid border-0 border-l border-slate-200 pl-6">
+                <MultiRangeSlider 
+                    min={MIN_PITCH_NUMBER}
+                    max={MAX_PITCH_NUMBER}
+                    minDistance={MIN_PITCH_DISTANCE}
+                    valueRange={pitchRangeSelection}
+                    onChangeValues={handlePitchRangeSelection}
+                    map={pitchNumberMap}
                 >
-                    Durations
-                </SelectableList>
-            </div>
-            {/* Custom scale buttons */}
-            <MultiRangeSlider 
-                min={MIN_PITCH_NUMBER}
-                max={MAX_PITCH_NUMBER}
-                minDistance={MIN_PITCH_DISTANCE}
-                valueRange={pitchRangeSelection}
-                onChangeValues={handlePitchRangeSelection}
-                map={pitchNumberMap}
-            >
-                Pitch Range
-            </MultiRangeSlider>
-            <RangeSlider
-                min={repeatNoteSelection ? Steps.MIN_STEPS: 1}
-                max={Steps.MAX_STEPS}
-                value={stepsSelection}
-                onChangeValue={handleStepsSelection}
-                interval={Steps.STEPS_INTERVAL}
-            >
-                Maximum Steps Between Pitches
-            </RangeSlider>
-            <Checkbox 
-                label="Repeat Pitches"
-                checked={repeatNoteSelection} 
-                onCheck={handleRepeatNote}
-                extraStyling="pb-3"
-            />
-            <RangeSlider
-                min={Tempo.MIN_TEMPO}
-                max={Tempo.MAX_TEMPO}
-                value={tempoSelection}
-                onChangeValue={handleTempoSelection}
-                interval={Tempo.TEMPO_INTERVAL}
-            >
-                Tempo
-            </RangeSlider>
-            <RangeSlider
-                min={MIN_VOLUME}
-                max={MAX_VOLUME}
-                value={volumeSelection}
-                onChangeValue={handleVolumeSelection}
-                interval={VOLUME_INTERVAL}
-            >
-                Volume
-            </RangeSlider>
-            <div className="flex justify-center mb-4">
-                <Button disabled={durationSelection.find(d => d.selected) ? false : true} primary extraStyling="mr-4" 
-                    onClick={handleSubmitParameters}>Save Changes</Button>
-                <Button onClick={handleCloseControlPanel}>Cancel</Button>
+                    Pitch Range
+                </MultiRangeSlider>
+                <RangeSlider
+                    min={repeatNoteSelection ? Steps.MIN_STEPS: 1}
+                    max={Steps.MAX_STEPS}
+                    value={stepsSelection}
+                    onChangeValue={handleStepsSelection}
+                    interval={Steps.STEPS_INTERVAL}
+                >
+                    Maximum Steps Between Pitches
+                </RangeSlider>
+                <RangeSlider
+                    min={Tempo.MIN_TEMPO}
+                    max={Tempo.MAX_TEMPO}
+                    value={tempoSelection}
+                    onChangeValue={handleTempoSelection}
+                    interval={Tempo.TEMPO_INTERVAL}
+                >
+                    Tempo
+                </RangeSlider>
+                <RangeSlider
+                    min={MIN_VOLUME}
+                    max={MAX_VOLUME}
+                    value={volumeSelection}
+                    onChangeValue={handleVolumeSelection}
+                    interval={VOLUME_INTERVAL}
+                >
+                    Volume
+                </RangeSlider>
+                <div className="flex justify-center mb-4">
+                    <Button disabled={durationSelection.find(d => d.selected) ? false : true} primary extraStyling="mr-4" 
+                        onClick={handleSubmitParameters}>Save Changes</Button>
+                    <Button onClick={handleCloseControlPanel}>Cancel</Button>
+                </div>
             </div>
         </div>
     );

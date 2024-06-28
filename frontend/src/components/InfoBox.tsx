@@ -8,7 +8,7 @@ export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
     Adjust the parameters for each voice to suit your specific needs. When done,
     each voice can be downloaded as a separate MIDI file.`
 
-    const fakeButtonStyling = "mx-2 text-sm px-3 py-1 border border-cyan-500 bg-cyan-500 text-white rounded-full cursor-default";
+    const fakeButtonStyling = "mx-2 text-sm px-3 py-1 border border-blue-500 bg-blue-500 text-white rounded-full cursor-default";
     const instructionsStyling = "flex flex-row mb-4 items-center justify-center";
 
     return (
@@ -23,7 +23,7 @@ export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
                 <span className={instructionsStyling}>
                     Click <button className={fakeButtonStyling}>Start</button>to begin generating,
                     <button className={fakeButtonStyling}>Stop</button>to stop generating,
-                    and <button className={fakeButtonStyling}>Clear</button> to clear the staves of all notes.
+                    and <button className={fakeButtonStyling}>Clear All</button> to clear the staves of all notes.
                 </span>
                 <span className={instructionsStyling}>
                     Click <MdOutlinePlaylistAdd className="text-2xl text-blue-500 mx-2" /> to add a new staff
