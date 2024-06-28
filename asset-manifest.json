@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/Accidental/static/css/main.4b5e7a32.css",
-    "main.js": "/Accidental/static/js/main.70e49c9e.js",
+    "main.css": "/Accidental/static/css/main.d1b6231e.css",
+    "main.js": "/Accidental/static/js/main.777621e7.js",
     "static/js/453.d855a71b.chunk.js": "/Accidental/static/js/453.d855a71b.chunk.js",
     "static/media/SPN-on-the-staff.jpg": "/Accidental/static/media/SPN-on-the-staff.78a5c0b4f9e3b4eb7a44.jpg",
     "index.html": "/Accidental/index.html",
-    "main.4b5e7a32.css.map": "/Accidental/static/css/main.4b5e7a32.css.map",
-    "main.70e49c9e.js.map": "/Accidental/static/js/main.70e49c9e.js.map",
+    "main.d1b6231e.css.map": "/Accidental/static/css/main.d1b6231e.css.map",
+    "main.777621e7.js.map": "/Accidental/static/js/main.777621e7.js.map",
     "453.d855a71b.chunk.js.map": "/Accidental/static/js/453.d855a71b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4b5e7a32.css",
-    "static/js/main.70e49c9e.js"
+    "static/css/main.d1b6231e.css",
+    "static/js/main.777621e7.js"
   ]
 }
