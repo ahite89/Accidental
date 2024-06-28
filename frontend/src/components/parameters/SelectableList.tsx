@@ -15,8 +15,8 @@ export default function SelectableList({ options, onSelect, children }: Selectab
 
     return (
         <>
-            <label className="mb-2">{children}</label>
-            <div className="flex shadow bg-white w-full text-center">
+            <label>{children}</label>
+            <div className="flex flex-wrap bg-white w-full text-center pt-2">
                 {renderedSelectables}
             </div>
         </>

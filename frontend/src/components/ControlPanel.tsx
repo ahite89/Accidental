@@ -108,14 +108,14 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
     };
 
     return (
-        <div className="p-4 flex flex-row">
-            <div className="w-80 mr-6">
+        <div className="px-8 py-4 flex flex-row">
+            <div className="w-60 mr-6">
                 <div className="flex flex-col pb-2">
                     <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
                     <DropDown options={keyOptions(scaleSelection)} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
                     <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
                 </div>
-                <div className="flex flex-wrap items-center pb-2">
+                <div className="items-center pb-2">
                     <SelectableList 
                         options={durationSelection}
                         onSelect={handleDurationSelection}
@@ -127,10 +127,10 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                     label="Repeat Pitches"
                     checked={repeatNoteSelection} 
                     onCheck={handleRepeatNote}
-                    extraStyling="pt-4"
+                    extraStyling="py-4"
                 />
             </div>
-            <div className="w-96 border-solid border-0 border-l border-slate-200 pl-6">
+            <div className="w-96 border-solid border-0 border-l border-slate-200 pl-8 flex flex-col justify-between">
                 <MultiRangeSlider 
                     min={MIN_PITCH_NUMBER}
                     max={MAX_PITCH_NUMBER}

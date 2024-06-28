@@ -18,8 +18,8 @@ code {
 }
 
 .ReactModal__Content {
-  max-width: 67%;
-  padding: 0 !important
+  max-width: 67% !important;
+  padding: 0 !important;
 }
 
 .ReactModal__Overlay {

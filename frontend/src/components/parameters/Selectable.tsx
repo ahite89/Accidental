@@ -14,7 +14,7 @@ export default function Selectable({ duration, onSelect }: SelectableOption) {
     };
     
     const classes = className(
-        'border cursor-pointer p-1 w-14 text-3xl', {'bg-slate-100': duration.selected}
+        'border shadow cursor-pointer p-1 w-14 text-3xl', {'bg-slate-100': duration.selected}
     );
     
     return (
