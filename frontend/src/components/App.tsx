@@ -394,29 +394,33 @@ export default function App() {
 
   const staves = notationData.current.sort((a, b) => a.voiceNumber - b.voiceNumber).map((notationObj) => {
     return (
-      <div key={notationObj.voiceNumber} className="flex flex-col justify-center pb-3">
-        <div className="flex flex-row justify-between">
-          <div className="flex flex-row">
-            <p className="border border-cyan-500 bg-cyan-500 px-5 py-4 text-white text-2xl self-center">{notationObj.voiceNumber}</p>
-            {staffDescription(notationObj.randomizerParams)}
-            {notationObj.voiceNumber !== 1 && !generating &&
-              <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
-                <MdPlaylistRemove className="text-4xl" />
-              </Button>
-            }
-          </div>
-          <div onClick={() => handleDownloadMIDI(notationObj)} 
-               id={`midi-link-` + notationObj.voiceNumber.toString()}>
-          </div>
-        </div>
+      <div className="flex flex-row" key={notationObj.voiceNumber}>
         <div>
-          <Staff 
-            voiceNumber={notationObj.voiceNumber}
-            randomizerParams={notationObj.randomizerParams}
-            generating={generating}
-            handleOpenControlPanel={handleOpenControlPanel}
-          />
-        </div>          
+          {notationObj.voiceNumber !== 1 && !generating &&
+            <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+              <MdPlaylistRemove className="text-4xl" />
+            </Button>
+          }
+        </div>
+        <div className="flex flex-col justify-center pb-3">
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-row">
+              <p className="border border-cyan-500 bg-cyan-500 px-5 py-4 text-white text-2xl self-center">{notationObj.voiceNumber}</p>
+              {staffDescription(notationObj.randomizerParams)}
+            </div>
+            <div onClick={() => handleDownloadMIDI(notationObj)} 
+                id={`midi-link-` + notationObj.voiceNumber.toString()}>
+            </div>
+          </div>
+          <div>
+            <Staff 
+              voiceNumber={notationObj.voiceNumber}
+              randomizerParams={notationObj.randomizerParams}
+              generating={generating}
+              handleOpenControlPanel={handleOpenControlPanel}
+            />
+          </div>          
+        </div>
       </div>
     );
   });
