@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import abcjs, { TuneObjectArray } from "abcjs";
 import Modal from 'react-modal';
 import '../index.css';
-import { MdPlaylistRemove, MdOutlinePlaylistAdd } from 'react-icons/md';
+import { MdPlaylistRemove, MdOutlinePlaylistAdd, MdEdit } from 'react-icons/md';
 
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
@@ -180,9 +180,7 @@ export default function App() {
       }
       randomNote = getRandomizedNote(notationObj);
       await renderNoteToStaff(randomNote, notationObj);
-      if (!randomNote.isRest) {
-        await playNote(randomNote, notationObj);
-      }
+
       // Need to pause to ensure note plays out for entire length
       await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
     }
@@ -253,9 +251,12 @@ export default function App() {
 
     // Add note to staff
     staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
+    if (!note.isRest) {
+      playNote(note, notationObj);
+    }
   };
 
-  const playNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
+  const playNote = (note: NoteProps, notationObj: NotationData): void => {
     abcjs.synth.playEvent(
       [
         {
@@ -395,9 +396,14 @@ export default function App() {
   const staves = notationData.current.sort((a, b) => a.voiceNumber - b.voiceNumber).map((notationObj) => {
     return (
       <div className="flex flex-row" key={notationObj.voiceNumber}>
-        <div>
+        <div className="flex flex-col justify-center">
+          {false &&
+            <Button disabled={generating} extraStyling="text-blue-500" onClick={() => handleOpenControlPanel(notationObj.voiceNumber, notationObj.randomizerParams, generating)}>
+              <MdEdit className="text-3xl" />
+            </Button>
+          }
           {notationObj.voiceNumber !== 1 && !generating &&
-            <Button disabled={generating} extraStyling="flex flex-row text-blue-500" onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+            <Button disabled={generating} extraStyling="text-blue-500" onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
               <MdPlaylistRemove className="text-4xl" />
             </Button>
           }
