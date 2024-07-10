@@ -1,5 +1,6 @@
 import { MdInfoOutline } from "react-icons/md";
 import Button from "./parameters/Button";
+import className from 'classnames';
 import { HeaderProps } from "../interfaces/header";
 
 export default function Header({ 
@@ -10,6 +11,11 @@ export default function Header({
     generating,
     notesOnStaff 
 }: HeaderProps) {
+
+    const classes = className({
+        'button-info': !generating,
+        'button-disabled': generating      
+    });
     
     return (
         <header className="bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-between px-10 py-6">
@@ -36,7 +42,7 @@ export default function Header({
             Play
           </Button> */}
         </div>
-            <Button onClick={handleOpenInfoBox}>
+            <Button onClick={handleOpenInfoBox} extraStyling={classes}>
                 <MdInfoOutline className="text-white text-4xl self-center" />
             </Button>
         </header>

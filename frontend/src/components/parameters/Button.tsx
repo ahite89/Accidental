@@ -13,10 +13,10 @@ export default function Button({
 }: ButtonProps) {
 
     const classes = className('px-6 py-3', {
-        'border border-cyan-500 bg-cyan-500 text-white hover:opacity-75': primary,
-        'border border-slate-400 bg-slate-400 text-white hover:opacity-100': disabled,
+        'border border-cyan-500 bg-cyan-500 text-white button-primary': primary,
+        'border border-slate-400 bg-slate-400 text-white button-disabled': disabled,
         'rounded-full': rounded,
-        'bg-transparent border border-white text-white hover:bg-cyan-500': outline
+        'bg-transparent border border-white text-white hover:bg-cyan-500 button-outline': outline
     }, extraStyling);
 
     return (

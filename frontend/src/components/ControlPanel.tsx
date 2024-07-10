@@ -86,6 +86,7 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
 
     // Duration
     const [durationSelection, setDurationSelection] = useState<DurationProps[]>(randomizerParameters.durationSelection);
+    const validParams = durationSelection.find(d => d.selected) ? true : false;
 
     const handleDurationSelection = (durationObject: DurationProps) => {
         const updatedDurations = durationSelection.map((duration) => {
@@ -168,7 +169,9 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
                     Volume
                 </RangeSlider>
                 <div className="flex justify-center mb-4">
-                    <Button disabled={durationSelection.find(d => d.selected) ? false : true} primary extraStyling="mr-4" 
+                    <Button disabled={!validParams} 
+                        primary={validParams}
+                        extraStyling="mr-4" 
                         onClick={handleSubmitParameters}>Save Changes</Button>
                     <Button onClick={handleCloseControlPanel}>Cancel</Button>
                 </div>

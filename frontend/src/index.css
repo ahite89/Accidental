@@ -37,3 +37,18 @@ code {
   background-image: url('./images/SPN-on-the-staff.jpg');
   padding: 20px;
 }
+
+.button-primary:hover {
+  background-color: transparent;
+  color: #06b6d4;
+  border: 1px solid #06b6d4;
+}
+
+.button-disabled:hover {
+  opacity: 100%;
+  cursor: default;
+}
+
+.button-info:hover {
+  color: #06b6d4;
+}
