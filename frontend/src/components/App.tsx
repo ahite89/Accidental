@@ -21,7 +21,7 @@ import { fetchClefBasedOnPitchRange } from '../services/clefFetcher';
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { instrumentMap } from '../constants/instruments';
 import { MAX_BEATS_PER_BAR, NONEXISTENT_DURATIONS, durationOptions, noteDurationSymbolMap } from "../constants/durations";
-import { FIRST_EIGHT_BARS, Clefs, DEFAULT_CLEF } from '../constants/voices';
+import { FIRST_EIGHT_BARS, Clefs, DEFAULT_CLEF, VOICE_NUMBERS } from '../constants/voices';
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
 import { pitchNumberMap } from '../constants/pitchRange';
@@ -126,18 +126,19 @@ export default function App() {
 
   // ----VOICE ACTIONS---- //
 
-  const [activeVoices, setActiveVoices] = useState<number[]>([notationData.current.length]);
+  const [activeVoices, setActiveVoices] = useState<number[]>([1]);
 
-  const getCorrectVoiceToAdd = (voiceCount: number): number => {
-    return !activeVoices.includes(voiceCount) ? voiceCount : voiceCount + 1;
-  }
+  const getNextVoiceToAdd = (): number => {
+    const remainingVoices = VOICE_NUMBERS.filter(x => !activeVoices.includes(x));
+    return Math.min(...remainingVoices);
+  };
 
   // Add
   const addVoiceToSystem = (): void => {
     if (activeVoices.length < 4) {
       notationData.current.push(
         {
-          voiceNumber: getCorrectVoiceToAdd(activeVoices.length),
+          voiceNumber: getNextVoiceToAdd(),
           randomizerParams: DEFAULT_RANDOMIZER_PARAMS,
           notationString: `X:${activeVoices.length + 1}\nK:${DEFAULT_KEY} ${DEFAULT_CLEF}\nM:4/4\nL:1/8\nQ:1/4=${DEFAULT_TEMPO}\n${FIRST_EIGHT_BARS}`,
           playBackNotes: [],
@@ -147,22 +148,28 @@ export default function App() {
           clef: Clefs.Treble
         }
       )
-      setActiveVoices([...activeVoices, getCorrectVoiceToAdd(activeVoices.length)]);
+      setActiveVoices([...activeVoices, getNextVoiceToAdd()]);
     }
   };
 
   // Remove
   const removeVoiceFromSystem = (voiceNumber: number): void => {
+    let voiceNumberIndex: number;
     if (activeVoices.length > 1) {
-      const selectedVoice = notationData.current.indexOf(notationData.current[voiceNumber - 1]);
+      if (activeVoices.length < voiceNumber) { // in case inner voices have been removed first
+        voiceNumberIndex = notationData.current.length - 1;
+      }
+      else {
+        voiceNumberIndex = voiceNumber - 1;
+      }
+      const selectedVoice = notationData.current.indexOf(notationData.current[voiceNumberIndex]);
       notationData.current.splice(selectedVoice, 1);
-      setActiveVoices(activeVoices.filter(voice => voice !== selectedVoice + 1));
+      setActiveVoices(activeVoices.filter(voice => voice !== voiceNumber));
     }
   };
 
-  // Re-render when voice count has changed
+  // Re-render when voice count has changed so new staves are displayed
   useEffect(() => {   
-    // need to remove element from dom when applicable
     const voiceCount = notationData.current.length;
     for (let i = 1; i < voiceCount + 1; i++) {
       staffObj = abcjs.renderAbc(`staff-${i}`, notationData.current[i - 1].notationString, AudioVisual.notationOptions);

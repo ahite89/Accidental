@@ -12,6 +12,8 @@ import { RandomizerParameters } from "../interfaces/controlPanel";
 // Voice Notation
 export const FIRST_EIGHT_BARS = "xxxx|xxxx|xxxx|xxxx|xxxx|xxxx|xxxx|xxxx|\n";
 
+export const VOICE_NUMBERS = [1, 2, 3, 4];
+
 // Clefs
 export enum Clefs {
     Treble = 'treble',
