@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/Accidental/static/css/main.58191686.css",
-    "main.js": "/Accidental/static/js/main.5cc59130.js",
+    "main.css": "/Accidental/static/css/main.5358dae7.css",
+    "main.js": "/Accidental/static/js/main.8e281cd8.js",
     "static/js/453.d855a71b.chunk.js": "/Accidental/static/js/453.d855a71b.chunk.js",
     "static/media/SPN-on-the-staff.jpg": "/Accidental/static/media/SPN-on-the-staff.78a5c0b4f9e3b4eb7a44.jpg",
     "index.html": "/Accidental/index.html",
-    "main.58191686.css.map": "/Accidental/static/css/main.58191686.css.map",
-    "main.5cc59130.js.map": "/Accidental/static/js/main.5cc59130.js.map",
+    "main.5358dae7.css.map": "/Accidental/static/css/main.5358dae7.css.map",
+    "main.8e281cd8.js.map": "/Accidental/static/js/main.8e281cd8.js.map",
     "453.d855a71b.chunk.js.map": "/Accidental/static/js/453.d855a71b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.58191686.css",
-    "static/js/main.5cc59130.js"
+    "static/css/main.5358dae7.css",
+    "static/js/main.8e281cd8.js"
   ]
 }
