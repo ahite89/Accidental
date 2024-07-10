@@ -4,7 +4,7 @@ import { MdPlaylistRemove, MdOutlinePlaylistAdd } from 'react-icons/md';
 
 export default function InfoBox({ handleCloseInfoBox }: InfoBoxProps) {
 
-    const appDescription = `Generate unique melodies that are notated in real time. 
+    const appDescription = `Generate unique, fully-randomized melodies that are notated in real time.
     Adjust the parameters for each voice to suit your specific needs. When done,
     each voice can be downloaded as a separate MIDI file.`
 
