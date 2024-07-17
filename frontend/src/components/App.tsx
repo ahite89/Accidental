@@ -148,24 +148,18 @@ export default function App() {
           clef: Clefs.Treble
         }
       )
-      setActiveVoices([...activeVoices, getNextVoiceToAdd()]);
+      setActiveVoices([...activeVoices, getNextVoiceToAdd()].sort((a, b) => a - b));
     }
   };
 
   // Remove
   const removeVoiceFromSystem = (voiceNumber: number): void => {
-    let voiceNumberIndex: number;
     if (activeVoices.length > 1) {
-      if (activeVoices.length < voiceNumber) { // in case inner voices have been removed first
-        voiceNumberIndex = notationData.current.length - 1;
-      }
-      else {
-        voiceNumberIndex = voiceNumber - 1;
-      }
+      const voiceNumberIndex = activeVoices.indexOf(voiceNumber);
       const selectedVoice = notationData.current.indexOf(notationData.current[voiceNumberIndex]);
       notationData.current.splice(selectedVoice, 1);
       setActiveVoices(activeVoices.filter(voice => voice !== voiceNumber));
-    }
+    }   
   };
 
   // Re-render when voice count has changed so new staves are displayed
