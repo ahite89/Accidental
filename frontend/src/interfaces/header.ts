@@ -4,5 +4,8 @@ export interface HeaderProps {
     notesOnStaff: boolean,
     handleStopGenerating: () => void,
     handleOpenConfirmDialog: () => void,
-    handleStartGenerating: () => Promise<void>
+    handleStartGenerating: () => Promise<void>,
+    handleCloseConfirmDialog: () => void,
+    openConfirmDialog: boolean,
+    handleClearStaves: () => void
 }

@@ -9,6 +9,7 @@ import ControlPanel from './ControlPanel';
 import Button from './parameters/Button';
 import InfoBox from './InfoBox';
 import ConfirmDialog from './ConfirmDialog';
+import Header from './Header';
 
 import { NoteProps } from '../interfaces/note';
 import { RandomizerParameters } from '../interfaces/controlPanel';
@@ -26,7 +27,7 @@ import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
 import { pitchNumberMap } from '../constants/pitchRange';
 import { scaleKeyQualityMap, DEFAULT_KEY } from '../constants/keys';
-import Header from './Header';
+import { MODAL_STYLING } from '../constants/modal';
 
 export default function App() {
 
@@ -129,6 +130,7 @@ export default function App() {
   const [activeVoices, setActiveVoices] = useState<number[]>([1]);
 
   const getNextVoiceToAdd = (): number => {
+    // Always add the lowest voice number next
     const remainingVoices = VOICE_NUMBERS.filter(x => !activeVoices.includes(x));
     return Math.min(...remainingVoices);
   };
@@ -326,17 +328,6 @@ export default function App() {
     setOpenControlPanel(false);
   };
 
-  const modalStyling = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)'
-    }
-  };
-
   // ----CONFIRM DIALOG BEHAVIOR---- //
 
   const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
@@ -443,6 +434,9 @@ export default function App() {
         handleStartGenerating={handleStartGenerating}
         handleStopGenerating={handleStopGenerating}
         handleOpenConfirmDialog={handleOpenConfirmDialog}
+        handleCloseConfirmDialog={handleCloseConfirmDialog}
+        openConfirmDialog={openConfirmDialog}
+        handleClearStaves={handleClearAllStaves}
       />
       <div className="p-8 bg-slate-100">
         <div className="flex flex-col p-4">
@@ -456,7 +450,7 @@ export default function App() {
           }
         </div>
       </div>
-      <Modal isOpen={openControlPanel} style={modalStyling} ariaHideApp={false}>
+      <Modal isOpen={openControlPanel} style={MODAL_STYLING} ariaHideApp={false}>
         <div className="bg-gradient-to-r from-cyan-500 to-blue-500">
           <p className="text-center text-white py-3 text-3xl">Voice {voiceNumber}</p>
         </div>
@@ -467,14 +461,9 @@ export default function App() {
           handleCloseControlPanel={handleCloseControlPanel}
         />}
       </Modal>
-      <Modal isOpen={openInfoBox} style={modalStyling} ariaHideApp={false}>
+      <Modal isOpen={openInfoBox} style={MODAL_STYLING} ariaHideApp={false}>
         {openInfoBox && 
           <InfoBox handleCloseInfoBox={handleCloseInfoBox} />
-        }
-      </Modal>
-      <Modal isOpen={openConfirmDialog} style={modalStyling} ariaHideApp={false}>
-        {openConfirmDialog && 
-          <ConfirmDialog onSubmit={handleClearAllStaves} handleCloseConfirmDialog={handleCloseConfirmDialog} />
         }
       </Modal>
     </div>
