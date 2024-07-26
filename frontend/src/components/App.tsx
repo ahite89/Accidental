@@ -110,7 +110,6 @@ export default function App() {
       notationData.current[i].previousNotePitch = undefined;
       toggleMIDIDownloadButton(false, notationData.current[i]);
     }
-    setOpenConfirmDialog(false);
     setNotesOnStaff(false);
   };
 
@@ -328,16 +327,19 @@ export default function App() {
     setOpenControlPanel(false);
   };
 
-  // ----CONFIRM DIALOG BEHAVIOR---- //
+  // ----REMOVE STAFF DIALOG BEHAVIOR---- //
 
-  const [openConfirmDialog, setOpenConfirmDialog] = useState<boolean>(false);
+  const [openRemoveStaffDialog, setopenRemoveStaffDialog] = useState<boolean>(false);
+  const [voiceToRemove, setVoiceToRemove] = useState<number>();
 
-  const handleOpenConfirmDialog = () => {
-    setOpenConfirmDialog(true);
+  const handleOpenRemoveStaffDialog = (voiceNumber: number) => {
+    setopenRemoveStaffDialog(true);
+    setVoiceToRemove(voiceNumber);
   };
 
-  const handleCloseConfirmDialog = () => {
-    setOpenConfirmDialog(false);
+  const handleSubmitRemoveStaff = () => {
+    removeVoiceFromSystem(voiceToRemove!);
+    setopenRemoveStaffDialog(false);
   };
 
   // ----INFO BOX BEHAVIOR---- //
@@ -395,7 +397,7 @@ export default function App() {
             </Button>
           }
           {notationObj.voiceNumber !== 1 && !generating &&
-            <Button disabled={generating} extraStyling="text-blue-500" onClick={() => removeVoiceFromSystem(notationObj.voiceNumber)}>
+            <Button disabled={generating} extraStyling="text-blue-500" onClick={() => handleOpenRemoveStaffDialog(notationObj.voiceNumber)}>
               <MdPlaylistRemove className="text-4xl" />
             </Button>
           }
@@ -433,9 +435,6 @@ export default function App() {
         notesOnStaff={notesOnStaff}
         handleStartGenerating={handleStartGenerating}
         handleStopGenerating={handleStopGenerating}
-        handleOpenConfirmDialog={handleOpenConfirmDialog}
-        handleCloseConfirmDialog={handleCloseConfirmDialog}
-        openConfirmDialog={openConfirmDialog}
         handleClearStaves={handleClearAllStaves}
       />
       <div className="p-8 bg-slate-100">
@@ -458,14 +457,24 @@ export default function App() {
           onSubmit={handleUpdateStaff} 
           voiceNumber={voiceNumber}
           randomizerParameters={randomizerParameters}
-          handleCloseControlPanel={handleCloseControlPanel}
-        />}
+          handleCloseControlPanel={handleCloseControlPanel} />
+        }
       </Modal>
       <Modal isOpen={openInfoBox} style={MODAL_STYLING} ariaHideApp={false}>
         {openInfoBox && 
           <InfoBox handleCloseInfoBox={handleCloseInfoBox} />
         }
       </Modal>
+      {openRemoveStaffDialog &&
+        <ConfirmDialog
+          openDialog={openRemoveStaffDialog}
+          dialogTitle="Remove Staff"
+          submitButtonText="Remove" 
+          onSubmit={handleSubmitRemoveStaff}
+          handleCloseConfirmDialog={() => setopenRemoveStaffDialog(false)}>
+            Are you sure you want to remove this staff?
+        </ConfirmDialog>
+      }
     </div>
   );
 }

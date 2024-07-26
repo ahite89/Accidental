@@ -1,7 +1,7 @@
+import { useState } from "react";
 import { MdInfoOutline } from "react-icons/md";
-import Modal from 'react-modal';
 import ConfirmDialog from "./ConfirmDialog";
-import { MODAL_STYLING } from "../constants/modal";
+
 import Button from "./parameters/Button";
 import className from 'classnames';
 import { HeaderProps } from "../interfaces/header";
@@ -10,13 +10,17 @@ export default function Header({
     handleOpenInfoBox, 
     handleStartGenerating, 
     handleStopGenerating,
-    handleOpenConfirmDialog,
-    handleCloseConfirmDialog,
-    openConfirmDialog,
     handleClearStaves,
     generating,
     notesOnStaff 
 }: HeaderProps) {
+
+    const [openClearStavesDialog, setOpenClearStavesDialog] = useState<boolean>(false);
+    
+    const handleSubmitClearStaves = () => {
+        handleClearStaves();
+        setOpenClearStavesDialog(false);
+    };
 
     const classes = className({
         'button-info': !generating,
@@ -41,7 +45,7 @@ export default function Header({
                     </Button>
                 }
                 {(!generating && notesOnStaff) &&
-                    <Button extraStyling="mr-4 text-xl" outline rounded onClick={handleOpenConfirmDialog}>
+                    <Button extraStyling="mr-4 text-xl" outline rounded onClick={() => setOpenClearStavesDialog(true)}>
                         Clear All
                     </Button>
                 }
@@ -53,15 +57,16 @@ export default function Header({
                     <MdInfoOutline className="text-white text-4xl self-center" />
                 </Button>
             </header>
-            <Modal isOpen={openConfirmDialog} style={MODAL_STYLING} ariaHideApp={false}>
-                {openConfirmDialog && 
+            {openClearStavesDialog && 
                 <ConfirmDialog 
+                    openDialog={openClearStavesDialog}
                     dialogTitle="Clear Staves" 
-                    dialogDescription="Are you sure you want to clear all staves?" 
-                    onSubmit={handleClearStaves} 
-                    handleCloseConfirmDialog={handleCloseConfirmDialog} />
-                }
-            </Modal>
+                    submitButtonText="Clear" 
+                    onSubmit={handleSubmitClearStaves} 
+                    handleCloseConfirmDialog={() => setOpenClearStavesDialog(false)}>
+                        Are you sure you want to clear all staves?
+                </ConfirmDialog>
+            }
         </>
     );
 }

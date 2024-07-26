@@ -1,6 +1,10 @@
+import { ReactNode } from "react";
+
 export interface ConfirmDialogProps {
     dialogTitle: string,
-    dialogDescription: string,
+    submitButtonText: string,
     handleCloseConfirmDialog: () => void,
-    onSubmit: () => void
+    onSubmit: () => void,
+    openDialog: boolean,
+    children: ReactNode;
 }
