@@ -1,8 +1,7 @@
-import { useState } from "react";
 import Modal from 'react-modal';
+import Button from "../components/parameters/Button"
 
 import { ConfirmDialogProps } from "../interfaces/confirmDialog";
-import Button from "../components/parameters/Button"
 import { MODAL_STYLING } from "../constants/modal";
 
 export default function ConfirmDialog({

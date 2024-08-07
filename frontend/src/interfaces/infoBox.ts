@@ -1,3 +1,4 @@
 export interface InfoBoxProps {
-    handleCloseInfoBox: () => void
+    handleCloseInfoBox: () => void,
+    openInfoBox: boolean
 }

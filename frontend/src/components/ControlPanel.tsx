@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import '../index.css';
 
+import Modal from 'react-modal';
 import Button from './parameters/Button';
 import DropDown from "./parameters/Dropdown";
 import MultiRangeSlider from "./parameters/MultiRangeSlider";
@@ -17,10 +18,12 @@ import { instrumentOptions, Instruments } from "../constants/instruments";
 import { pitchNumberMap } from "../constants/pitchRange";
 import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../constants/pitchRange";
 import { MIN_VOLUME, MAX_VOLUME, VOLUME_INTERVAL } from "../constants/volume";
+import { MODAL_STYLING } from "../constants/modal";
 import * as Tempo from "../constants/tempo";
 import * as Steps from "../constants/steps";
 
-export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControlPanel, randomizerParameters }: ControlPanelProps) {
+export default function ControlPanel({ 
+    voiceNumber, onSubmit, handleCloseControlPanel, openControlPanel, randomizerParameters }: ControlPanelProps) {
 
     const handleSubmitParameters = (): void => {
         onSubmit({
@@ -108,74 +111,79 @@ export default function ControlPanel({ voiceNumber, onSubmit, handleCloseControl
     };
 
     return (
-        <div className="px-8 py-4 flex flex-row">
-            <div className="w-60 mr-6">
-                <div className="flex flex-col pb-2">
-                    <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
-                    <DropDown options={keyOptions(scaleSelection)} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
-                    <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
+        <Modal isOpen={openControlPanel} style={MODAL_STYLING} ariaHideApp={false}>
+            <div className="bg-gradient-to-r from-cyan-500 to-blue-500">
+                <p className="text-center text-white py-3 text-3xl">Voice {voiceNumber}</p>
+            </div>
+            <div className="px-8 py-4 flex flex-row">
+                <div className="w-60 mr-6">
+                    <div className="flex flex-col pb-2">
+                        <DropDown options={scaleOptions()} value={scaleSelection} onChange={handleScaleSelection}>Scale</DropDown>
+                        <DropDown options={keyOptions(scaleSelection)} value={keySelection} onChange={handleKeySelection}>Key</DropDown>
+                        <DropDown options={instrumentOptions()} value={instrumentSelection} onChange={handleInstrumentSelection}>Instrument</DropDown>
+                    </div>
+                    <div className="items-center pb-2">
+                        <SelectableList 
+                            options={durationSelection}
+                            onSelect={handleDurationSelection}
+                        >
+                            Durations
+                        </SelectableList>
+                    </div>
+                    <Checkbox 
+                        label="Repeat Pitches"
+                        checked={repeatNoteSelection} 
+                        onCheck={handleRepeatNote}
+                        extraStyling="py-4"
+                    />
                 </div>
-                <div className="items-center pb-2">
-                    <SelectableList 
-                        options={durationSelection}
-                        onSelect={handleDurationSelection}
+                <div className="w-96 border-solid border-0 border-l border-slate-200 pl-8 flex flex-col justify-between">
+                    <MultiRangeSlider 
+                        min={MIN_PITCH_NUMBER}
+                        max={MAX_PITCH_NUMBER}
+                        minDistance={MIN_PITCH_DISTANCE}
+                        valueRange={pitchRangeSelection}
+                        onChangeValues={handlePitchRangeSelection}
+                        map={pitchNumberMap}
                     >
-                        Durations
-                    </SelectableList>
-                </div>
-                <Checkbox 
-                    label="Repeat Pitches"
-                    checked={repeatNoteSelection} 
-                    onCheck={handleRepeatNote}
-                    extraStyling="py-4"
-                />
-            </div>
-            <div className="w-96 border-solid border-0 border-l border-slate-200 pl-8 flex flex-col justify-between">
-                <MultiRangeSlider 
-                    min={MIN_PITCH_NUMBER}
-                    max={MAX_PITCH_NUMBER}
-                    minDistance={MIN_PITCH_DISTANCE}
-                    valueRange={pitchRangeSelection}
-                    onChangeValues={handlePitchRangeSelection}
-                    map={pitchNumberMap}
-                >
-                    Pitch Range
-                </MultiRangeSlider>
-                <RangeSlider
-                    min={repeatNoteSelection ? Steps.MIN_STEPS: 1}
-                    max={Steps.MAX_STEPS}
-                    value={stepsSelection}
-                    onChangeValue={handleStepsSelection}
-                    interval={Steps.STEPS_INTERVAL}
-                >
-                    Maximum Steps Between Pitches
-                </RangeSlider>
-                <RangeSlider
-                    min={Tempo.MIN_TEMPO}
-                    max={Tempo.MAX_TEMPO}
-                    value={tempoSelection}
-                    onChangeValue={handleTempoSelection}
-                    interval={Tempo.TEMPO_INTERVAL}
-                >
-                    Tempo
-                </RangeSlider>
-                <RangeSlider
-                    min={MIN_VOLUME}
-                    max={MAX_VOLUME}
-                    value={volumeSelection}
-                    onChangeValue={handleVolumeSelection}
-                    interval={VOLUME_INTERVAL}
-                >
-                    Volume
-                </RangeSlider>
-                <div className="flex justify-center mb-4">
-                    <Button disabled={!validParams} 
-                        primary={validParams}
-                        extraStyling="mr-4" 
-                        onClick={handleSubmitParameters}>Save Changes</Button>
-                    <Button onClick={handleCloseControlPanel}>Cancel</Button>
+                        Pitch Range
+                    </MultiRangeSlider>
+                    <RangeSlider
+                        min={repeatNoteSelection ? Steps.MIN_STEPS: 1}
+                        max={Steps.MAX_STEPS}
+                        value={stepsSelection}
+                        onChangeValue={handleStepsSelection}
+                        interval={Steps.STEPS_INTERVAL}
+                    >
+                        Maximum Steps Between Pitches
+                    </RangeSlider>
+                    <RangeSlider
+                        min={Tempo.MIN_TEMPO}
+                        max={Tempo.MAX_TEMPO}
+                        value={tempoSelection}
+                        onChangeValue={handleTempoSelection}
+                        interval={Tempo.TEMPO_INTERVAL}
+                    >
+                        Tempo
+                    </RangeSlider>
+                    <RangeSlider
+                        min={MIN_VOLUME}
+                        max={MAX_VOLUME}
+                        value={volumeSelection}
+                        onChangeValue={handleVolumeSelection}
+                        interval={VOLUME_INTERVAL}
+                    >
+                        Volume
+                    </RangeSlider>
+                    <div className="flex justify-center mb-4">
+                        <Button disabled={!validParams} 
+                            primary={validParams}
+                            extraStyling="mr-4" 
+                            onClick={handleSubmitParameters}>Save Changes</Button>
+                        <Button onClick={handleCloseControlPanel}>Cancel</Button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Modal>
     );
 }

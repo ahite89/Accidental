@@ -323,10 +323,6 @@ export default function App() {
     }
   };
 
-  const handleCloseControlPanel = () => {
-    setOpenControlPanel(false);
-  };
-
   // ----REMOVE STAFF DIALOG BEHAVIOR---- //
 
   const [openRemoveStaffDialog, setopenRemoveStaffDialog] = useState<boolean>(false);
@@ -448,23 +444,18 @@ export default function App() {
           </Button>
           }
         </div>
-      </div>
-      <Modal isOpen={openControlPanel} style={MODAL_STYLING} ariaHideApp={false}>
-        <div className="bg-gradient-to-r from-cyan-500 to-blue-500">
-          <p className="text-center text-white py-3 text-3xl">Voice {voiceNumber}</p>
-        </div>
-        {openControlPanel && <ControlPanel 
+      </div>      
+      {openControlPanel && 
+        <ControlPanel 
           onSubmit={handleUpdateStaff} 
           voiceNumber={voiceNumber}
           randomizerParameters={randomizerParameters}
-          handleCloseControlPanel={handleCloseControlPanel} />
-        }
-      </Modal>
-      <Modal isOpen={openInfoBox} style={MODAL_STYLING} ariaHideApp={false}>
-        {openInfoBox && 
-          <InfoBox handleCloseInfoBox={handleCloseInfoBox} />
-        }
-      </Modal>
+          handleCloseControlPanel={() => setOpenControlPanel(false)}
+          openControlPanel={openControlPanel} />
+      }
+      {openInfoBox && 
+        <InfoBox handleCloseInfoBox={handleCloseInfoBox} openInfoBox={openInfoBox} />
+      }
       {openRemoveStaffDialog &&
         <ConfirmDialog
           openDialog={openRemoveStaffDialog}
