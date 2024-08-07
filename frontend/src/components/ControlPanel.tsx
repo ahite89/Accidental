@@ -19,6 +19,8 @@ import { pitchNumberMap } from "../constants/pitchRange";
 import { MIN_PITCH_DISTANCE, MIN_PITCH_NUMBER, MAX_PITCH_NUMBER } from "../constants/pitchRange";
 import { MIN_VOLUME, MAX_VOLUME, VOLUME_INTERVAL } from "../constants/volume";
 import { MODAL_STYLING } from "../constants/modal";
+import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
+
 import * as Tempo from "../constants/tempo";
 import * as Steps from "../constants/steps";
 
@@ -27,8 +29,7 @@ export default function ControlPanel({
     onSubmit, 
     handleCloseControlPanel, 
     openControlPanel, 
-    randomizerParameters, 
-    handleResetParameters 
+    randomizerParameters
 }: ControlPanelProps) {
 
     const handleSubmitParameters = (): void => {
@@ -44,6 +45,18 @@ export default function ControlPanel({
             durationSelection
         }, voiceNumber)
     };
+
+    const handleResetParameters = (): void => {
+        setScaleSelection(DEFAULT_RANDOMIZER_PARAMS.scaleSelection);
+        setKeySelection(DEFAULT_RANDOMIZER_PARAMS.keySelection);
+        setInstrumentSelection(DEFAULT_RANDOMIZER_PARAMS.instrumentSelection);
+        setStepsSelection(DEFAULT_RANDOMIZER_PARAMS.stepsSelection);
+        setRepeatNoteSelection(DEFAULT_RANDOMIZER_PARAMS.repeatNoteSelection);
+        setPitchRangeSelection(DEFAULT_RANDOMIZER_PARAMS.pitchRangeSelection);
+        setTempoSelection(DEFAULT_RANDOMIZER_PARAMS.tempoSelection);
+        setVolumeSelection(DEFAULT_RANDOMIZER_PARAMS.volumeSelection);
+        setDurationSelection(DEFAULT_RANDOMIZER_PARAMS.durationSelection);
+    }
 
     // Scale
     const [scaleSelection, setScaleSelection] = useState<Scales>(randomizerParameters.scaleSelection);

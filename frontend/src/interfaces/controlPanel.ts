@@ -8,8 +8,7 @@ export interface ControlPanelProps {
     voiceNumber: number,
     onSubmit: (controlPanelParameters: RandomizerParameters, voiceNumber: number) => void,
     handleCloseControlPanel: () => void,
-    openControlPanel: boolean,
-    handleResetParameters: () => void
+    openControlPanel: boolean
 }
 
 export interface RandomizerParameters {

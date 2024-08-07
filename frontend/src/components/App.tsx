@@ -323,10 +323,6 @@ export default function App() {
     }
   };
 
-  const handleResetParameters = () => {
-    // TBD
-  };
-
   // ----REMOVE STAFF DIALOG BEHAVIOR---- //
 
   const [openRemoveStaffDialog, setopenRemoveStaffDialog] = useState<boolean>(false);
@@ -456,7 +452,6 @@ export default function App() {
           randomizerParameters={randomizerParameters}
           handleCloseControlPanel={() => setOpenControlPanel(false)}
           openControlPanel={openControlPanel}
-          handleResetParameters={handleResetParameters}
         />
       }
       {openInfoBox && 
