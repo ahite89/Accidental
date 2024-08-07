@@ -23,7 +23,13 @@ import * as Tempo from "../constants/tempo";
 import * as Steps from "../constants/steps";
 
 export default function ControlPanel({ 
-    voiceNumber, onSubmit, handleCloseControlPanel, openControlPanel, randomizerParameters }: ControlPanelProps) {
+    voiceNumber, 
+    onSubmit, 
+    handleCloseControlPanel, 
+    openControlPanel, 
+    randomizerParameters, 
+    handleResetParameters 
+}: ControlPanelProps) {
 
     const handleSubmitParameters = (): void => {
         onSubmit({
@@ -181,6 +187,7 @@ export default function ControlPanel({
                             extraStyling="mr-4" 
                             onClick={handleSubmitParameters}>Save Changes</Button>
                         <Button onClick={handleCloseControlPanel}>Cancel</Button>
+                        <Button onClick={handleResetParameters}>Reset</Button>
                     </div>
                 </div>
             </div>
