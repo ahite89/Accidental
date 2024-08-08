@@ -181,6 +181,7 @@ export default function App() {
         break;
       }
       randomNote = getRandomizedNote(notationObj);
+      // maybe wait a few milliseconds here before rendering, so that each note is fetched within the same amount of time
       await renderNoteToStaff(randomNote, notationObj);
 
       // Need to pause to ensure note plays out for entire length
@@ -195,7 +196,7 @@ export default function App() {
     return note.abcName + tieNoteDuration?.abcSyntax + (firstNote ? (note.isRest ? '|' : '-|') : '');
   };
 
-  const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
+  const addTiesAndBarLines = (note: NoteProps, notationObj: NotationData): NotationData => {
     let newNote = '', tieNoteLeftover = '';
     // Deal with ties and bar lines
     if (notationObj.notesInBarCount + note.durationProps.audioDuration === MAX_BEATS_PER_BAR) {
@@ -243,11 +244,19 @@ export default function App() {
       notationObj.notationString += newNote;
       notationObj.notesInBarCount += note.durationProps.audioDuration;
     }
+
+    return notationObj;
+  };
+
+  const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
       
     // Add notes to playback array for playback functionality
     // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
     // probably need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches
 
+    // Add ties and bars for proper notation
+    notationObj = addTiesAndBarLines(note, notationObj);
+    
     // Set for steps functionality
     notationObj.previousNotePitch = note.pitchNumber;
 
