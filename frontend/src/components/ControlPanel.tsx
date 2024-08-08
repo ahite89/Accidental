@@ -156,7 +156,7 @@ export default function ControlPanel({
                         extraStyling="py-4"
                     />
                 </div>
-                <div className="w-96 border-solid border-0 border-l border-slate-200 pl-8 flex flex-col justify-between">
+                <div className="border-solid border-0 border-l border-slate-200 pl-8 flex flex-col justify-between">
                     <MultiRangeSlider 
                         min={MIN_PITCH_NUMBER}
                         max={MAX_PITCH_NUMBER}
