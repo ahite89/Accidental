@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import abcjs, { TuneObjectArray } from "abcjs";
-import Modal from 'react-modal';
-import '../index.css';
 import { MdPlaylistRemove, MdOutlinePlaylistAdd, MdEdit } from 'react-icons/md';
+import '../index.css';
 
 import Staff from './Staff';
 import ControlPanel from './ControlPanel';
@@ -18,16 +17,16 @@ import { NotationData } from '../interfaces/notation';
 import { getRandomizedNote } from '../services/noteRandomizer';
 import { fetchValidNotes } from '../services/noteFetcher';
 import { fetchClefBasedOnPitchRange } from '../services/clefFetcher';
+import { addNoteTiesAndBarLines } from '../services/notation';
 
 import { DEFAULT_RANDOMIZER_PARAMS } from '../constants/voices';
 import { instrumentMap } from '../constants/instruments';
-import { MAX_BEATS_PER_BAR, NONEXISTENT_DURATIONS, durationOptions, noteDurationSymbolMap } from "../constants/durations";
+import { noteDurationSymbolMap } from "../constants/durations";
 import { FIRST_EIGHT_BARS, Clefs, DEFAULT_CLEF, VOICE_NUMBERS } from '../constants/voices';
 import { DEFAULT_TEMPO } from '../constants/tempo';
 import * as AudioVisual from '../constants/audiovisual';
 import { pitchNumberMap } from '../constants/pitchRange';
 import { scaleKeyQualityMap, DEFAULT_KEY } from '../constants/keys';
-import { MODAL_STYLING } from '../constants/modal';
 
 export default function App() {
 
@@ -181,71 +180,11 @@ export default function App() {
         break;
       }
       randomNote = getRandomizedNote(notationObj);
-      // maybe wait a few milliseconds here before rendering, so that each note is fetched within the same amount of time
       await renderNoteToStaff(randomNote, notationObj);
 
       // Need to pause to ensure note plays out for entire length
       await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
     }
-  };
-
-  const getTiedNote = (firstNote: boolean, tieLength: number, note: NoteProps): string => {
-    const tieNoteDuration = durationOptions.filter(duration => note.isRest ? duration.isRest : duration)
-          .find(duration => duration.audioDuration ===  tieLength);
-
-    return note.abcName + tieNoteDuration?.abcSyntax + (firstNote ? (note.isRest ? '|' : '-|') : '');
-  };
-
-  const addTiesAndBarLines = (note: NoteProps, notationObj: NotationData): NotationData => {
-    let newNote = '', tieNoteLeftover = '';
-    // Deal with ties and bar lines
-    if (notationObj.notesInBarCount + note.durationProps.audioDuration === MAX_BEATS_PER_BAR) {
-      newNote = note.abcName + note.durationProps.abcSyntax + '|';
-      notationObj.notesInBarCount = 0;
-      notationObj.notationString += newNote;
-    }
-    // If note is too long for current bar, split it into two and tie it over the bar
-    else if (notationObj.notesInBarCount + note.durationProps.audioDuration > MAX_BEATS_PER_BAR) {
-      const firstNoteOfTieLength = MAX_BEATS_PER_BAR - notationObj.notesInBarCount;
-
-      // Check for note durations that don't exist (e.g. half + eighth)
-      if (!NONEXISTENT_DURATIONS.includes(firstNoteOfTieLength)) {
-        const firstNoteOfTie = getTiedNote(true, firstNoteOfTieLength, note);
-        notationObj.notationString += firstNoteOfTie;
-      }
-      else {
-        // If non-existent duration, add eighth note first so that the resulting duration is a half or dotted half
-        newNote = note.abcName + (note.isRest ? 'z' : '-');
-        notationObj.notationString += newNote;
-
-        // Add the remainder of the duration
-        tieNoteLeftover = getTiedNote(true, firstNoteOfTieLength - 1, note);
-        notationObj.notationString += tieNoteLeftover;
-      }
-      
-      notationObj.notesInBarCount = 0;   
-      const secondNoteOfTieLength = note.durationProps.audioDuration - firstNoteOfTieLength;
-
-      if (!NONEXISTENT_DURATIONS.includes(secondNoteOfTieLength)) {
-        const secondNoteOfTie = getTiedNote(false, secondNoteOfTieLength, note)
-        notationObj.notationString += secondNoteOfTie;
-      }
-      else {
-        newNote = note.abcName + (note.isRest ? 'z' : '-');
-        notationObj.notationString += newNote;
-
-        tieNoteLeftover = getTiedNote(false, secondNoteOfTieLength - 1, note);
-        notationObj.notationString += tieNoteLeftover;
-      }
-      notationObj.notesInBarCount = secondNoteOfTieLength;
-    }
-    else {
-      newNote += (note.abcName + note.durationProps.abcSyntax);
-      notationObj.notationString += newNote;
-      notationObj.notesInBarCount += note.durationProps.audioDuration;
-    }
-
-    return notationObj;
   };
 
   const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
@@ -254,8 +193,8 @@ export default function App() {
     // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
     // probably need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches
 
-    // Add ties and bars for proper notation
-    notationObj = addTiesAndBarLines(note, notationObj);
+    // Add note, ties, and bars for proper notation
+    notationObj = addNoteTiesAndBarLines(note, notationObj);
     
     // Set for steps functionality
     notationObj.previousNotePitch = note.pitchNumber;
