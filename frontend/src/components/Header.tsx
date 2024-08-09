@@ -3,7 +3,6 @@ import { MdInfoOutline } from "react-icons/md";
 import ConfirmDialog from "./ConfirmDialog";
 
 import Button from "./parameters/Button";
-import className from 'classnames';
 import { HeaderProps } from "../interfaces/header";
 
 export default function Header({ 
