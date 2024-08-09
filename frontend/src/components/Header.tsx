@@ -21,11 +21,6 @@ export default function Header({
         handleClearStaves();
         setOpenClearStavesDialog(false);
     };
-
-    const classes = className({
-        'button-info': !generating,
-        'button-disabled': generating      
-    });
     
     return (
         <>
@@ -53,7 +48,7 @@ export default function Header({
                 Play
             </Button> */}
             </div>
-                <Button onClick={handleOpenInfoBox} extraStyling={classes}>
+                <Button onClick={handleOpenInfoBox}>
                     <MdInfoOutline className="text-white text-4xl self-center" />
                 </Button>
             </header>
