@@ -6,6 +6,7 @@ export interface ButtonProps {
     disabled?: boolean
     primary?: boolean,
     secondary?: boolean,
+    cancel?: boolean,
     outline?: boolean,
     rounded?: boolean,
     extraStyling?: string,

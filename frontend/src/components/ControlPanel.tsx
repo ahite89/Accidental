@@ -199,8 +199,8 @@ export default function ControlPanel({
                             primary={validParams}
                             extraStyling="mr-4" 
                             onClick={handleSubmitParameters}>Save Changes</Button>
-                        <Button onClick={handleCloseControlPanel}>Cancel</Button>
-                        <Button onClick={handleResetParameters}>Reset</Button>
+                        <Button cancel onClick={handleCloseControlPanel}>Cancel</Button>
+                        <Button cancel onClick={handleResetParameters}>Reset</Button>
                     </div>
                 </div>
             </div>

@@ -26,7 +26,7 @@ export default function ConfirmDialog({
                 </div>
                 <div className="flex justify-center mb-4">
                     <Button primary extraStyling="mr-4" onClick={onSubmit}>{submitButtonText}</Button>
-                    <Button onClick={handleCloseConfirmDialog}>Cancel</Button>
+                    <Button cancel onClick={handleCloseConfirmDialog}>Cancel</Button>
                 </div>
             </div>
         </Modal>
