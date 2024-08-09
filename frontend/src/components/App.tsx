@@ -180,26 +180,26 @@ export default function App() {
         break;
       }
       randomNote = getRandomizedNote(notationObj);
-      await renderNoteToStaff(randomNote, notationObj);
+      await renderAndPlayNote(randomNote, notationObj);
 
       // Need to pause to ensure note plays out for entire length
       await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
     }
   };
 
-  const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
+  const renderAndPlayNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
       
     // Add notes to playback array for playback functionality
     // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
     // probably need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches
 
-    // Add note, ties, and bars for proper notation
+    // Update notation object with new note syntax
     notationObj = addNoteTiesAndBarLines(note, notationObj);
     
-    // Set for steps functionality
+    // Set previous pitch for steps functionality
     notationObj.previousNotePitch = note.pitchNumber;
 
-    // Add note to staff
+    // Re-render staff and conditionally play newly added note
     staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
     if (!note.isRest) {
       playNote(note, notationObj);
