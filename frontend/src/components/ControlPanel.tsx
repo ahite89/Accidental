@@ -86,6 +86,9 @@ export default function ControlPanel({
     const [repeatNoteSelection, setRepeatNoteSelection] = useState<boolean>(randomizerParameters.repeatNoteSelection);
     const handleRepeatNote = (repeat: boolean): void => {
         setRepeatNoteSelection(repeat);
+        if (!repeat && stepsSelection === 0) {
+            setStepsSelection(1);
+        }
     };
 
     // Pitch Range
