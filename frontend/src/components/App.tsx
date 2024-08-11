@@ -113,13 +113,11 @@ export default function App() {
     setNotesOnStaff(false);
   };
 
-  // Playback
+  // Replay
   const handlePlayback = async (): Promise<void> => {
-    //handleClearAllStaves();
     isGenerating.current = true;
     setGenerating(true);
     notationData.current.forEach(notationObj => {
-      //notationObj.notationString = notationObj.notationString.replace(FIRST_EIGHT_BARS, "");
       toggleMIDIDownloadButton(false, notationObj);
       replayNotes(notationObj);
     });
