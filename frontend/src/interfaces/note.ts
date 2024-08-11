@@ -7,5 +7,3 @@ export interface NoteProps {
     timeBetweenNotes: number,
     isRest?: boolean
 }
-
-export interface PlaybackNoteData extends Pick<NoteProps, "pitchNumber" | "durationProps">{};

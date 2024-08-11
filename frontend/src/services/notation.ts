@@ -56,6 +56,9 @@ export const addNoteTiesAndBarLines = (note: NoteProps, notationObj: NotationDat
       notationObj.notesInBarCount += note.durationProps.audioDuration;
     }
 
+    // Push notes for playback functionality
+    notationObj.playBackNotes.push(note);
+    
     return notationObj;
 };
 

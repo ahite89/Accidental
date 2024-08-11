@@ -10,6 +10,7 @@ export default function Header({
     handleStartGenerating, 
     handleStopGenerating,
     handleClearStaves,
+    handlePlayback,
     generating,
     notesOnStaff 
 }: HeaderProps) {
@@ -43,10 +44,12 @@ export default function Header({
                         Clear All
                     </Button>
                 }
-            {/* <Button disabled={isGenerating.current} extraStyling="mr-4 border border-2 border-white" primary rounded onClick={handlePlayback}>
-                Play
-            </Button> */}
-            </div>
+                {(!generating && notesOnStaff) &&
+                    <Button extraStyling="mr-4 text-xl" outline rounded onClick={handlePlayback}>
+                        Replay
+                    </Button>
+                }
+                </div>
                 <Button onClick={handleOpenInfoBox}>
                     <MdInfoOutline className="text-white text-4xl self-center" />
                 </Button>

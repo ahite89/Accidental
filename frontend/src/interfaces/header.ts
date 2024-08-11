@@ -4,5 +4,6 @@ export interface HeaderProps {
     notesOnStaff: boolean,
     handleStopGenerating: () => void,
     handleStartGenerating: () => Promise<void>,
-    handleClearStaves: () => void
+    handleClearStaves: () => void,
+    handlePlayback: () => void
 }

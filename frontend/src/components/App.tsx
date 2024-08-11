@@ -107,21 +107,39 @@ export default function App() {
       staffObj = abcjs.renderAbc(`staff-${i + 1}`, notationData.current[i].notationString, AudioVisual.notationOptions);
       notationData.current[i].notesInBarCount = 0;
       notationData.current[i].previousNotePitch = undefined;
+      notationData.current[i].playBackNotes = [];
       toggleMIDIDownloadButton(false, notationData.current[i]);
     }
     setNotesOnStaff(false);
   };
 
-  // const handlePlayback = (): void => {
-  //   // Find a way to only pass the notation object in; not the generated note props
-  //   // Loop through notation string characters
-  //   notationData.current[0].playBackNotes.forEach(note => {
-  //       playNote(
-  //       {abcName: 'F', pitchNumber: note.pitchNumber, duration: note.duration, timeBetweenNotes: 1000},
-  //       notationData.current[0]
-  //     )
-  //   });
-  // };
+  // Playback
+  const handlePlayback = async (): Promise<void> => {
+    //handleClearAllStaves();
+    isGenerating.current = true;
+    setGenerating(true);
+    notationData.current.forEach(notationObj => {
+      //notationObj.notationString = notationObj.notationString.replace(FIRST_EIGHT_BARS, "");
+      toggleMIDIDownloadButton(false, notationObj);
+      replayNotes(notationObj);
+    });
+  };
+
+  const replayNotes = async (notationObj: NotationData): Promise<void> => {
+    // maybe need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches    
+    for (let i = 0; i < notationObj.playBackNotes.length; i++) {
+      if (!isGenerating.current) {
+        break;
+      }
+
+      if (!notationObj.playBackNotes[i].isRest) {
+        playNote(notationObj.playBackNotes[i], notationObj);
+      }
+
+      // Need to pause to ensure note plays out for entire length
+      await new Promise(res => setTimeout(res, notationObj.playBackNotes[i].timeBetweenNotes));        
+    }
+  };
 
   // ----VOICE ACTIONS---- //
 
@@ -188,11 +206,6 @@ export default function App() {
   };
 
   const renderAndPlayNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
-      
-    // Add notes to playback array for playback functionality
-    // notationObj.playBackNotes.push({pitchNumber: note.pitchNumber, duration: note.duration});
-    // probably need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches
-
     // Update notation object with new note syntax
     notationObj = addNoteTiesAndBarLines(note, notationObj);
     
@@ -380,6 +393,7 @@ export default function App() {
         handleStartGenerating={handleStartGenerating}
         handleStopGenerating={handleStopGenerating}
         handleClearStaves={handleClearAllStaves}
+        handlePlayback={handlePlayback}
       />
       <div className="p-8 bg-slate-100">
         <div className="flex flex-col p-4">

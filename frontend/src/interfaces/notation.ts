@@ -1,13 +1,13 @@
 import { RandomizerParameters } from "./controlPanel"
-import { PlaybackNoteData } from "./note"
 import { Clefs } from "../constants/voices"
 import { NoteForScaleProps } from "./scale"
+import { NoteProps } from "./note"
 
 export interface NotationData {
     voiceNumber: number,
     randomizerParams: RandomizerParameters
     notationString: string,
-    playBackNotes: PlaybackNoteData[],
+    playBackNotes: NoteProps[],
     notesInBarCount: number,
     instrumentMidiNumber: number,
     validNotesForRandomizing: NoteForScaleProps[],
