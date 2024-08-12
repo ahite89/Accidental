@@ -40,15 +40,15 @@ export default function Header({
                     </Button>
                 }
                 {(!generating && notesOnStaff) &&
-                    <Button extraStyling="mr-4 text-xl" outline rounded onClick={() => setOpenClearStavesDialog(true)}>
-                        Clear All
-                    </Button>
-                }
-                {(!generating && notesOnStaff) &&
                     <Button extraStyling="mr-4 text-xl" outline rounded onClick={handlePlayback}>
                         Replay
                     </Button>
                 }
+                {(!generating && notesOnStaff) &&
+                    <Button extraStyling="mr-4 text-xl" outline rounded onClick={() => setOpenClearStavesDialog(true)}>
+                        Clear All
+                    </Button>
+                }           
                 </div>
                 <Button onClick={handleOpenInfoBox}>
                     <MdInfoOutline className="text-white text-4xl self-center" />

@@ -125,6 +125,7 @@ export default function App() {
 
   const replayNotes = async (notationObj: NotationData): Promise<void> => {
     // maybe need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches    
+    const noteElems = document.getElementsByClassName("abcjs-note");
     for (let i = 0; i < notationObj.playBackNotes.length; i++) {
       if (!isGenerating.current) {
         break;
@@ -132,11 +133,17 @@ export default function App() {
 
       if (!notationObj.playBackNotes[i].isRest) {
         playNote(notationObj.playBackNotes[i], notationObj);
+        noteElems[i].setAttribute("fill", "red");
+        if (i > 0) {
+          noteElems[i - 1].setAttribute("fill", "black");
+        }
       }
 
       // Need to pause to ensure note plays out for entire length
       await new Promise(res => setTimeout(res, notationObj.playBackNotes[i].timeBetweenNotes));        
     }
+    isGenerating.current = false;
+    setGenerating(false);
   };
 
   // ----VOICE ACTIONS---- //
