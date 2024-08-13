@@ -41,7 +41,7 @@ export default function Header({
                 }
                 {(!generating && notesOnStaff) &&
                     <Button extraStyling="mr-4 text-xl" outline rounded onClick={handlePlayback}>
-                        Replay
+                        Play
                     </Button>
                 }
                 {(!generating && notesOnStaff) &&

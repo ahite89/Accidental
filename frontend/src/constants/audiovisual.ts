@@ -9,5 +9,7 @@ export const notationOptions: AbcVisualParams = {
     }, 
     viewportHorizontal: true,
     staffwidth: 1200,
-    scrollHorizontal: true
+    scrollHorizontal: true,
+    dragging: true,
+    selectTypes: ["note"]
 };

@@ -113,19 +113,22 @@ export default function App() {
     setNotesOnStaff(false);
   };
 
-  // Replay
+  // Play
   const handlePlayback = async (): Promise<void> => {
     isGenerating.current = true;
     setGenerating(true);
     notationData.current.forEach(notationObj => {
       toggleMIDIDownloadButton(false, notationObj);
-      replayNotes(notationObj);
+      playNotes(notationObj); // each notation object needs to have its own collection of note elements - could do in stop function
     });
   };
 
-  const replayNotes = async (notationObj: NotationData): Promise<void> => {
+  const playNotes = async (notationObj: NotationData): Promise<void> => {
     // maybe need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches    
     const noteElems = document.getElementsByClassName("abcjs-note");
+
+    // target children of each staff instead
+
     for (let i = 0; i < notationObj.playBackNotes.length; i++) {
       if (!isGenerating.current) {
         break;
@@ -203,25 +206,22 @@ export default function App() {
         break;
       }
       randomNote = getRandomizedNote(notationObj);
-      await renderAndPlayNote(randomNote, notationObj);
+      await renderNoteToStaff(randomNote, notationObj);
 
-      // Need to pause to ensure note plays out for entire length
-      await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes));
+      // Increase speed 5x for initial render
+      await new Promise(res => setTimeout(res, randomNote.timeBetweenNotes/5));
     }
   };
 
-  const renderAndPlayNote = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
+  const renderNoteToStaff = async (note: NoteProps, notationObj: NotationData): Promise<void> => {
     // Update notation object with new note syntax
     notationObj = addNoteTiesAndBarLines(note, notationObj);
     
     // Set previous pitch for steps functionality
     notationObj.previousNotePitch = note.pitchNumber;
 
-    // Re-render staff and conditionally play newly added note
+    // Re-render staff with newly added note
     staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
-    if (!note.isRest) {
-      playNote(note, notationObj);
-    }
   };
 
   const playNote = (note: NoteProps, notationObj: NotationData): void => {
