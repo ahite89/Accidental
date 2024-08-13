@@ -31,7 +31,7 @@ export default function Header({
                 <div className="flex flex-row justify-center self-center">
                 {!generating &&
                     <Button extraStyling="mr-4 text-xl" outline rounded onClick={handleStartGenerating}>
-                        Start
+                        {notesOnStaff ? "Resume" : "Start"}
                     </Button>
                 }
                 {generating &&
