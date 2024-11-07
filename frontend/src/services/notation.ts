@@ -57,6 +57,7 @@ export const addNoteTiesAndBarLines = (note: NoteProps, notationObj: NotationDat
     }
 
     // Push notes for playback functionality
+    // *** ADD NOTES WITH BAR LINES SYNTAX? *** //
     notationObj.playBackNotes.push(note);
     
     return notationObj;

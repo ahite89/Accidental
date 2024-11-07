@@ -124,6 +124,7 @@ export default function App() {
     setGenerating(true);
     toggleMIDIDownloadButtons(false);
     notationData.current.forEach(notationObj => {
+      notationObj.notationString = notationObj.notationString.replace(notationObj.notationString, "");
       playNotes(notationObj); // each notation object needs to have its own collection of note elements - could do in stop function
     });
   };
@@ -134,10 +135,14 @@ export default function App() {
 
     // target children of each staff instead
 
-    for (let i = 0; i < notationObj.playBackNotes.length; i++) {
+    // ** FIGURE OUT WHY THIS KEEPS LOOPING ** //
+    let i = 0;
+    while (i < notationObj.playBackNotes.length) {
       if (!isGenerating.current) {
         break;
       }
+
+      await renderNoteToStaff(notationObj.playBackNotes[i], notationObj);
 
       if (!notationObj.playBackNotes[i].isRest) {
         playNote(notationObj.playBackNotes[i], notationObj);
@@ -148,11 +153,27 @@ export default function App() {
       }
 
       // Need to pause to ensure note plays out for entire length
-      await new Promise(res => setTimeout(res, notationObj.playBackNotes[i].timeBetweenNotes));        
+      await new Promise(res => setTimeout(res, notationObj.playBackNotes[i].timeBetweenNotes));
+      i++;       
     }
     isGenerating.current = false;
     setGenerating(false);
   };
+
+  const playNote = (note: NoteProps, notationObj: NotationData): void => {
+    abcjs.synth.playEvent(
+      [
+        {
+          "pitch": note.pitchNumber!,
+          "volume": notationObj.randomizerParams.volumeSelection,
+          "start": 0,
+          "duration": note.durationProps.audioDuration,
+          "instrument": notationObj.instrumentMidiNumber,
+          "gap": 0
+        },
+      ], [], 1000 // a measure takes one second.
+    )
+  }
 
   // ----VOICE ACTIONS---- //
 
@@ -208,6 +229,8 @@ export default function App() {
       if (!isGenerating.current) {
         break;
       }
+
+      // *** MOVE RANDOMIZE FUNCTION TO RENDER NOTE FUNCTION? *** //
       randomNote = getRandomizedNote(notationObj);
       await renderNoteToStaff(randomNote, notationObj);
 
@@ -226,21 +249,6 @@ export default function App() {
     // Re-render staff with newly added note
     staffObj = abcjs.renderAbc(`staff-${notationObj.voiceNumber}`, notationObj.notationString, AudioVisual.notationOptions);
   };
-
-  const playNote = (note: NoteProps, notationObj: NotationData): void => {
-    abcjs.synth.playEvent(
-      [
-        {
-          "pitch": note.pitchNumber!,
-          "volume": notationObj.randomizerParams.volumeSelection,
-          "start": 0,
-          "duration": note.durationProps.audioDuration,
-          "instrument": notationObj.instrumentMidiNumber,
-          "gap": 0
-        },
-      ], [], 1000 // a measure takes one second.
-    )
-  }
 
   // ----UPDATE STAFF AND PARAMETERS FOR SPECIFIC VOICE---- //
 
