@@ -51,13 +51,18 @@ export default function App() {
   const isGenerating = useRef<boolean>(false);  // for stopping/starting
   const [generating, setGenerating] = useState<boolean>(false); // for disabling buttons
   const [notesOnStaff, setNotesOnStaff] = useState<boolean>(false);
+  const [activeVoices, setActiveVoices] = useState<number[]>([1]);
 
   // Toggle MIDI Download Button
-  const toggleMIDIDownloadButton = (display: Boolean, notationObj: NotationData, midi = ""): void => {
-    const midiLink = document.getElementById("midi-link-" + notationObj.voiceNumber.toString())!;
-    midiLink.innerHTML = display ? midi: "";
-    const buttonClasses = ["px-3", "py-1.5", "text-xl", "self-center", "justify-end", "rounded-full", "border", "button-primary", "bg-cyan-500", "text-white"];
-    buttonClasses.forEach(className => display ? midiLink.classList.add(className): midiLink.classList.remove(className));
+  const toggleMIDIDownloadButtons = (display: Boolean, midi = ""): void => {
+    // Only target active voices
+    // *** FIX MIDI LINK NUMBER BUG *** //
+    activeVoices.forEach(voice => {
+      const midiLink = document.getElementById("midi-link-" + voice.toString())!;
+      midiLink.innerHTML = display ? midi: "";
+      const buttonClasses = ["px-3", "py-1.5", "text-xl", "self-center", "justify-end", "rounded-full", "border", "button-primary", "bg-cyan-500", "text-white"];
+      buttonClasses.forEach(className => display ? midiLink.classList.add(className): midiLink.classList.remove(className));
+    });
   };
 
   // Download MIDI
@@ -71,7 +76,7 @@ export default function App() {
         downloadLabel: `Download MIDI`
       }
     );
-    toggleMIDIDownloadButton(true, notationObj, midi.toString());
+    toggleMIDIDownloadButtons(true, midi.toString());
   };
 
   // Stop
@@ -91,8 +96,8 @@ export default function App() {
   const handleStartGenerating = async (): Promise<void> => {
     isGenerating.current = true;
     setGenerating(true);
+    toggleMIDIDownloadButtons(false);
     notationData.current.forEach(notationObj => {
-      toggleMIDIDownloadButton(false, notationObj);
       notationObj.notationString = notationObj.notationString.replace(FIRST_EIGHT_BARS, "");
       randomizeAndRenderNotes(notationObj);
     });
@@ -108,8 +113,8 @@ export default function App() {
       notationData.current[i].notesInBarCount = 0;
       notationData.current[i].previousNotePitch = undefined;
       notationData.current[i].playBackNotes = [];
-      toggleMIDIDownloadButton(false, notationData.current[i]);
     }
+    toggleMIDIDownloadButtons(false);
     setNotesOnStaff(false);
   };
 
@@ -117,15 +122,15 @@ export default function App() {
   const handlePlayback = async (): Promise<void> => {
     isGenerating.current = true;
     setGenerating(true);
+    toggleMIDIDownloadButtons(false);
     notationData.current.forEach(notationObj => {
-      toggleMIDIDownloadButton(false, notationObj);
       playNotes(notationObj); // each notation object needs to have its own collection of note elements - could do in stop function
     });
   };
 
   const playNotes = async (notationObj: NotationData): Promise<void> => {
     // maybe need to use the abcjs.synth.playEvent function below, first by passing all the notes into it as an array of abcjs.MidiPitches    
-    const noteElems = document.getElementsByClassName("abcjs-note");
+    // const noteElems = document.getElementsByClassName("abcjs-note");
 
     // target children of each staff instead
 
@@ -136,10 +141,10 @@ export default function App() {
 
       if (!notationObj.playBackNotes[i].isRest) {
         playNote(notationObj.playBackNotes[i], notationObj);
-        noteElems[i].setAttribute("fill", "red");
-        if (i > 0) {
-          noteElems[i - 1].setAttribute("fill", "black");
-        }
+        // noteElems[i].setAttribute("fill", "red");
+        // if (i > 0) {
+        //   noteElems[i - 1].setAttribute("fill", "black");
+        // }
       }
 
       // Need to pause to ensure note plays out for entire length
@@ -150,8 +155,6 @@ export default function App() {
   };
 
   // ----VOICE ACTIONS---- //
-
-  const [activeVoices, setActiveVoices] = useState<number[]>([1]);
 
   const getNextVoiceToAdd = (): number => {
     // Always add the lowest voice number next
